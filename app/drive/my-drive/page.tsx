@@ -1,3 +1,5 @@
-export default function MyDrivePage() {
-  return <div>My Drive</div>;
+export default async function MyDrivePage() {
+  return (
+    <div className="text-2xl cursor-pointer">My Drive</div>
+  );
 }

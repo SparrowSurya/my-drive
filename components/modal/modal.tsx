@@ -2,18 +2,16 @@
 
 import React, { useEffect, useRef } from "react";
 
+export type ModalProps = {
+	children: React.ReactNode,
+	onClickOutside?: () => void,
+} & React.HTMLAttributes<HTMLDivElement>;
+
 export default function Modal({
 	children,
-	className,
-	style,
 	onClickOutside,
-}: Readonly<{
-	children: React.ReactNode,
-	className?: string,
-	style?: React.CSSProperties,
-	divProps?: React.HTMLAttributes<HTMLDivElement>,
-	onClickOutside: () => void,
-}>) {
+	...restProps
+}: Readonly<ModalProps>) {
 	const modalRef = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
@@ -22,6 +20,7 @@ export default function Modal({
 				modalRef.current
 				&& event.target instanceof Node
 				&& !modalRef.current.contains(event.target)
+				&& onClickOutside
 			) {
 				onClickOutside();
 			}
@@ -32,7 +31,7 @@ export default function Modal({
 	}, [onClickOutside]);
 
 	return (
-		<div className={className} style={style} ref={modalRef}>
+		<div ref={modalRef} {...restProps}>
 			{children}
 		</div>
 	);

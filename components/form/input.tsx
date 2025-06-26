@@ -5,7 +5,7 @@ export type InputProps = {
   required?: boolean,
   name: string,
   placeholder?: string,
-  labelText: string,
+  labelText?: string,
   errorText?: string,
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
@@ -20,10 +20,14 @@ export default function Input({
 }: InputProps) {
   return (
     <div className="flex flex-col">
-      <label
-        htmlFor={id}
-        className="text-md mb-1"
-      >{labelText}</label>
+      {
+        labelText && (
+          <label
+            htmlFor={id}
+            className="text-md mb-1"
+          >{labelText}</label>
+        )
+      }
       <input
         type="text"
         id={id}

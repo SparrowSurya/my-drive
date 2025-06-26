@@ -25,5 +25,24 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  folders Folder[]
+
   @@map("users")
+}
+
+model Folder {
+  id Int @id @default(autoincrement())
+
+  userId Int?
+  user   User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  name     String?
+  parentId Int?
+  parent   Folder?  @relation("FolderToParent", fields: [parentId], references: [id], onDelete: NoAction)
+  children Folder[] @relation("FolderToParent")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("folders")
 }
