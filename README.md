@@ -17,7 +17,7 @@ GOOGLE_CLIENT_SECRET="google-client-secret"
 ## Setup, Build & Run
 ```sh
 npm i
-npx prisma migrate dev --name init
+npx prisma generate
 npm build
 npm run start
 ```
