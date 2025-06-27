@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Form, EmailInput, PasswordInput } from "@/components/form";
 import signinSchema  from "@/lib/validation/signin";
@@ -17,6 +17,7 @@ type FormError = {
 
 export default function SigninPage() {
   const router = useRouter();
+  const callbackUrl = useSearchParams().get("callbackUrl");
   const [errors, setErrors] = useState<FormError | null>(null);
   const [submit, setSubmit] = useState<boolean>(false);
 
@@ -40,7 +41,8 @@ export default function SigninPage() {
       setErrors({ message: error! });
       setSubmit(false);
     } else {
-      router.push("/drive");
+      const url = callbackUrl ? decodeURIComponent(callbackUrl) : "/drive/my-drive";
+      router.push(url);
     }
   }
 
