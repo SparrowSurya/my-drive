@@ -3,13 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
+import useAuthRedirect from "@/hooks/authRedirect";
 import Modal from "@/components/modal";
 import { Avatar } from "@/components/avatar";
 
 export default function ProfileInfo() {
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { session, status } = useAuthRedirect();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const user = session?.user;
 
