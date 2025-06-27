@@ -4,14 +4,7 @@ import { useState } from "react";
 import { faCaretDown, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { Icon } from "@/components/icon";
 import { FolderGridView } from "@/components/folderView";
-
-const folders = [
-  { name: "Documents" },
-  { name: "Images" },
-  { name: "Notes" },
-  { name: "Movies" },
-  { name: "Projects" },
-];
+import { folders } from "@/data/folders";
 
 export default function FolderSuggestions() {
   const [show, setShow] = useState<boolean>(true);

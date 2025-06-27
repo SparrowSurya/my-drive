@@ -30,7 +30,11 @@ export default function RootLayout({
       <body
         className={`${notoSans.variable} ${notoSansMono.variable} ${poppins.variable} ${notoSans.className} bg-crust antialiased`}
       >
-        <SessionProvider>
+        <SessionProvider
+          refetchInterval={parseInt(process.env.NEXT_PUBLIC_SESSION_REFETCH_INTERVAL!)}
+          refetchOnWindowFocus={!!parseInt(process.env.NEXT_PUBLIC_SESSION_REFETCH_ON_WINDOW_FOCUS!)}
+          refetchWhenOffline={false}
+        >
           {children}
         </SessionProvider>
       </body>

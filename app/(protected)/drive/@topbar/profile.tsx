@@ -27,9 +27,9 @@ export default function ProfileInfo() {
   if (status === "unauthenticated" || user === null) {
     return (
       <Link
-        href="/auth/signin"
+        href="/auth/login"
         className="bg-lavender text-base cursor-pointer hover:bg-text rounded-lg p-2"
-      >Signin</Link>
+      >Login</Link>
     );
   }
 

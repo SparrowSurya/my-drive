@@ -7,6 +7,8 @@ import prisma from "@/lib/prisma";
 export const authOptions = {
 	session: {
 		strategy: "jwt",
+		maxAge: parseInt(process.env.SESSION_MAX_AGE!),
+		updateAge: parseInt(process.env.SESSION_MAX_AGE!),
 	},
 	pages: {
 		signIn: "/auth/signin",

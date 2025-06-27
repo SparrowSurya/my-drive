@@ -6,99 +6,13 @@ import { Icon } from "@/components/icon";
 import { FileListView, FileGridView } from "@/components/fileView";
 import { type FileInfo } from "@/components/fileView/types";
 import { Avatar } from "@/components/avatar";
+import { filesData } from "@/data/files";
 
 const headings = [
   "Name",
   "Reason",
   "Owner",
   "",
-];
-
-const filesData = [
-  {
-    name: "Weekly Report.xlsx",
-    type: "excel",
-    owner: "Shelly",
-    reason: "You modified",
-    bg: "bg-lavender",
-  },
-  {
-    name: "ProjectReport1.docx",
-    type: "docx",
-    owner: "Bea",
-    reason: "Bea modified",
-    bg: "bg-peach",
-  },
-  {
-    type: "image",
-    owner: "Shelly",
-    name: "bird.png",
-    reason: "You created",
-    bg: "bg-lavender",
-  },
-  {
-    type: "file",
-    owner: "Shelly",
-    name: "password.txt",
-    reason: "You modified",
-    bg: "bg-lavender",
-  },
-  {
-    type: "excel",
-    name: "TeamDetails.xlsx",
-    owner: "Piper",
-    reason: "Jessie modified",
-    bg: "bg-pink",
-  },
-  {
-    type: "excel",
-    name: "Tasks.xlsx",
-    owner: "Shelly",
-    reason: "You created",
-    bg: "bg-lavender",
-  },
-  {
-    type: "file",
-    name: "Training Plan",
-    owner: "Crow",
-    reason: "Crow modified",
-    bg: "bg-yellow",
-  },
-  {
-    type: "pdf",
-    name: "computer networking.pdf",
-    owner: "Shelly",
-    reason: "You created",
-    bg: "bg-lavender",
-  },
-  {
-    type: "video",
-    name: "memories.mp4",
-    owner: "Shelly",
-    reason: "You modified",
-    bg: "bg-lavender",
-  },
-  {
-    type: "file",
-    name: "invoice",
-    owner: "Shelly",
-    reason: "You created",
-    bg: "bg-lavender",
-  },
-  {
-    type: "excel",
-    name: "Monthly Report.xlsx",
-    owner: "Shelly",
-    reason: "You modified",
-    bg: "bg-lavender",
-  },
-  {
-    type: "docx",
-    name: "ProjectReport.docx",
-    owner: "Bea",
-    reason: "Bea modified",
-    bg: "bg-peach",
-  },
 ];
 
 export default function FileSuggestions() {
