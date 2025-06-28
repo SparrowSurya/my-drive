@@ -1,10 +1,8 @@
-import { JSX } from "react";
-import { type FileType } from "./fileIcon";
+import { FileType } from "./fileIcon";
 
 export type FileInfo = {
-  name: string,
+  name: string | null,
   type: FileType,
-  owner: string,
-  avatar: JSX.Element,
-  reason: string,
+  lastModified: string,
+  size: string | null,
 };

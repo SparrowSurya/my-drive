@@ -25,7 +25,7 @@ export default async function Navbar() {
 
     const childExists = rootFolder.children.filter(f => f.name == folderName).length !== 0;
     if (!childExists) {
-      return await prisma.folder.create({ data: { userId: user?.id, name: folderName } });
+      return await prisma.folder.create({ data: { userId: user?.id, name: folderName, parentId: rootFolder.id } });
     }
     return null;
   }

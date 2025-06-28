@@ -20,7 +20,7 @@ export default function AddButton({
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const { folderName } = Object.fromEntries(formData.entries());
-    await createFolder(folderName.toString());
+    await createFolder(folderName.toString().trim());
     setIsFileModalOpen(false);
   }
 

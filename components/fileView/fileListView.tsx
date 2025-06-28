@@ -1,14 +1,14 @@
-import FileListRow, { FileListRowProp } from "./fileListRow";
+import FileListRow from "./fileListRow";
+import { FileInfo } from "./types";
+
 
 export type FileListViewProps = {
   headings: string[],
-  files: FileListRowProp[],
+  files: FileInfo[],
 };
 
-export default function FileListView({
-  headings,
-  files,
-}: Readonly<FileListViewProps>) {
+
+export default function FileListView({ headings, files }: Readonly<FileListViewProps>) {
   return (
     <table className="w-full text-left">
       <thead>
@@ -20,7 +20,7 @@ export default function FileListView({
       </thead>
       <tbody>
         {
-          files.map((file, index) => <FileListRow key={index} {...file}/>)
+          files.map((file, index) => <FileListRow key={index} file={file} />)
         }
       </tbody>
     </table>
