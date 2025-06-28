@@ -14,8 +14,7 @@ export type NavItemProps = {
 export default function NavItem({ label, icon, url }: Readonly<NavItemProps>) {
   const router = useRouter();
   const path = usePathname();
-
-  const active = path.endsWith(label.toLowerCase());
+  const active = (path === url);
 
   return (
     <div

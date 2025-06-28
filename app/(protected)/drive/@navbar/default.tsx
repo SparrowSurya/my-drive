@@ -1,6 +1,7 @@
 import NavItem from "./item";
 import MenuButton from "./menu-button";
 import { navGroups } from "./data";
+import { slugify } from "@/lib/utils/string";
 
 
 export default async function Navbar() {
@@ -16,7 +17,7 @@ export default async function Navbar() {
                   <NavItem
                     key={index}
                     {...item}
-                    url={`/drive/${item.label.replaceAll(" ", "-").toLowerCase()}`}
+                    url={`/drive/${slugify(item.label)}`}
                   />
                 ))
               }
