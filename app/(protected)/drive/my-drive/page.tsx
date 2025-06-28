@@ -1,32 +1,19 @@
 import Image from "next/image";
 import { getServerSession } from "next-auth";
-import prisma from "@/lib/prisma";
 import { FileListView } from "@/components/fileView";
 import { FileType } from "@/components/fileView/fileIcon";
 import { FileData } from "@/components/fileView/types";
 import { formatDate } from "@/lib/utils/date";
+import { getOrCreateRootFolder, getFolders } from "@/lib/query/folder";
 
 const headings = ["Name", "Last modified", "File size", ""];
 
 async function getRootFolders(): Promise<FileData[] | null> {
   const session = await getServerSession();
-  const { user: { email } } = session!;
+  const { email } = session?.user ?? {};
 
-  let folders = null;
-
-  const user = await prisma.user.findFirst({ where: { email }, select: { id: true } });
-  if (user === null) return null;
-
-  const rootFolder = await prisma.folder.findFirst({
-    where: { userId: user.id, parentId: null },
-    select: { id: true },
-  });
-  if (rootFolder) {
-    folders = await prisma.folder.findMany({
-      where: { userId: user.id, parentId: rootFolder.id },
-      select: { id: true, name: true, parentId: true, updatedAt: true },
-    });
-  }
+  const root = await getOrCreateRootFolder({ email }, { id: true });
+  const folders = await getFolders({ email }, { parentId: root.id }, { name: true, updatedAt: true });
 
   return folders?.map(f => ({
     name: f.name,

@@ -2,27 +2,14 @@
 
 import React, { useState } from "react";
 import { faFileUpload, faFolderPlus, faPlus, faUpload } from "@fortawesome/free-solid-svg-icons";
-import { Folder } from "@/app/generated/prisma";
 import Modal from "@/components/modal";
 import Icon from "@/components/icon";
-import { Form, Input } from "@/components/form";
+import CreateFolderModal from "./createFolderModal";
 
 
-export default function MenuButton({
-  createFolder,
-}: Readonly<{
-  createFolder: (name: string) => Promise<Folder | null>,
-}>) {
+export default function MenuButton() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [isFileModalOpen, setIsFileModalOpen] = useState<boolean>(false);
-
-  async function handleCreateFolder(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const { folderName } = Object.fromEntries(formData.entries());
-    await createFolder(folderName.toString().trim());
-    setIsFileModalOpen(false);
-  }
+  const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState<boolean>(false);
 
   return (
     <>
@@ -34,7 +21,7 @@ export default function MenuButton({
           >
             <div className="flex flex-col gap-0 my-2 w-80">
               <div
-                onClick={() => { setIsFileModalOpen(true); setIsMenuOpen(false); }}
+                onClick={() => { setIsCreateFolderModalOpen(true); setIsMenuOpen(false); }}
                 className="h-8 flex flex-row items-center hover:bg-overlay0 cursor-pointer"
               >
                 <Icon icon={faFolderPlus} className="mx-4 w-8" />
@@ -56,29 +43,7 @@ export default function MenuButton({
         )
       }
       {
-        isFileModalOpen && (
-          <Modal
-            onClickOutside={() => setIsFileModalOpen(false)}
-            className="bg-surface0 w-80 px-8 py-5 rounded-2xl z-[100] shadow-sm shadow-overlay0"
-            style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50%, -50%)"}}
-          >
-            <Form onSubmit={handleCreateFolder} className="flex flex-col gap-3">
-              <h3 className="text-2xl">Folder Name</h3>
-              <Input
-                required
-                id="id_folder"
-                name="folderName"
-                placeholder="folder name"
-                autoFocus={true}
-                className="p-3 border-2 border-overlay0 focus:border-lavender rounded-lg outline-none"
-              />
-              <div className="flex flex-row justify-end items-center gap-3">
-                <button type="button" onClick={() => setIsFileModalOpen(false)} className="text-button">Cancel</button>
-                <button type="submit" className="text-button">Create</button>
-              </div>
-            </Form>
-          </Modal>
-        )
+        isCreateFolderModalOpen && <CreateFolderModal closeModal={() => setIsCreateFolderModalOpen(false)} />
       }
       <button
         onClick={() => setIsMenuOpen(true)}
