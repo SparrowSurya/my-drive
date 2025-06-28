@@ -8,7 +8,7 @@ import Icon from "@/components/icon";
 import { Form, Input } from "@/components/form";
 
 
-export default function AddButton({
+export default function MenuButton({
   createFolder,
 }: Readonly<{
   createFolder: (name: string) => Promise<Folder | null>,
@@ -59,14 +59,21 @@ export default function AddButton({
         isFileModalOpen && (
           <Modal
             onClickOutside={() => setIsFileModalOpen(false)}
-            className="bg-surface0 w-80 px-8 py-5 rounded-2xl"
+            className="bg-surface0 w-80 px-8 py-5 rounded-2xl z-[100] shadow-sm shadow-overlay0"
             style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50%, -50%)"}}
           >
             <Form onSubmit={handleCreateFolder} className="flex flex-col gap-3">
               <h3 className="text-2xl">Folder Name</h3>
-              <Input id="id_folder" required name="folderName" className="p-3 border-2 border-overlay0 focus:border-lavender rounded-lg outline-none" />
+              <Input
+                required
+                id="id_folder"
+                name="folderName"
+                placeholder="folder name"
+                autoFocus={true}
+                className="p-3 border-2 border-overlay0 focus:border-lavender rounded-lg outline-none"
+              />
               <div className="flex flex-row justify-end items-center gap-3">
-                <button type="button" className="text-button">Cancel</button>
+                <button type="button" onClick={() => setIsFileModalOpen(false)} className="text-button">Cancel</button>
                 <button type="submit" className="text-button">Create</button>
               </div>
             </Form>
