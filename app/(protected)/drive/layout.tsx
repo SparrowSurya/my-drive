@@ -16,7 +16,7 @@ export default function DriveLayout({
         <div className="col-span-2 bg-crust">
           { navbar }
         </div>
-        <main className="col-span-8 flex flex-col bg-base p-6 rounded-4xl ml-2 overflow-hidden">
+        <main className="col-span-8 flex flex-col bg-mantle p-6 rounded-4xl ml-2 overflow-hidden">
           { children }
         </main>
       </div>

@@ -1,10 +1,10 @@
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
-import { IconButton } from "@/components/icon";
+import Icon from "@/components/icon";
 import FileIcon from "./fileIcon";
-import { type FileInfo } from "./types";
+import { type FileData } from "./types";
 
 export type FileListRowProp = {
-  file: FileInfo,
+  file: FileData,
 };
 
 export default function FileListRow({ file }: Readonly<FileListRowProp>) {
@@ -19,7 +19,7 @@ export default function FileListRow({ file }: Readonly<FileListRowProp>) {
       <td>{ file.lastModified }</td>
       <td className={`${!file.size && "select-none"}`}>{ file.size ?? "—"}</td>
       <td className="w-12">
-        <IconButton icon={faEllipsisVertical} />
+        <Icon icon={faEllipsisVertical} hover />
       </td>
     </tr>
   );

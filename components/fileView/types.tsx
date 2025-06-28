@@ -1,6 +1,6 @@
 import { FileType } from "./fileIcon";
 
-export type FileInfo = {
+export type FileData = {
   name: string | null,
   type: FileType,
   lastModified: string,

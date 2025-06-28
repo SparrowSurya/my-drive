@@ -50,3 +50,19 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@layer components {
+
+	.icon {
+		@apply size-[16] p-[6];
+	}
+
+	.icon-button {
+		@apply  cursor-pointer rounded-full hover:bg-overlay0;
+	}
+
+	.text-button {
+		@apply bg-transparent font-semibold text-lavender hover:bg-lavender/25 py-2 px-3 rounded-4xl;
+	}
+
+}

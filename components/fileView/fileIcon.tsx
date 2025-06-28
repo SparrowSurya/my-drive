@@ -1,6 +1,6 @@
 import { faFile, faFileLines, faFileExcel, faFilePdf, faFileImage, faFileVideo, faFileAudio, faFilePowerpoint, faFileWord, faFileZipper, faFileCsv, faFileCode, faFolder } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { Icon } from "@/components/icon";
+import Icon from "@/components/icon";
 
 export type FileType = "excel" | "pptx" | "docx" | "pdf" | "zip" | "txt" | "csv" | "file" | "audio" | "video" | "image" | "code" | "folder";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { Icon } from "@/components/icon";
+import Icon from "@/components/icon";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 

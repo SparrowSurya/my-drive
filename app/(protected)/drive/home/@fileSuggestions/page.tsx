@@ -2,9 +2,9 @@
 
 // import { useState } from "react";
 // import { faCaretDown, faCaretRight, faCheck, faBars, faTableCellsLarge } from "@fortawesome/free-solid-svg-icons";
-// import { Icon } from "@/components/icon";
+// import Icon from "@/components/icon";
 // import { FileListView, FileGridView } from "@/components/fileView";
-// import { type FileInfo } from "@/components/fileView/types";
+// import { type FileData } from "@/components/fileView/types";
 // import { Avatar } from "@/components/avatar";
 // import { filesData } from "@/data/files";
 
@@ -25,7 +25,7 @@
 //     owner: file.owner,
 //     reason: file.reason,
 //     avatar: <Avatar char={file.owner[0].toUpperCase()} className={`${file.bg} text-base`} size="medium" />
-//   })) as FileInfo[];
+//   })) as FileData[];
 
 //   return (
 //     <>

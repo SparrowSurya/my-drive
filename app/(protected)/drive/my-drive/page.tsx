@@ -3,12 +3,12 @@ import { getServerSession } from "next-auth";
 import prisma from "@/lib/prisma";
 import { FileListView } from "@/components/fileView";
 import { FileType } from "@/components/fileView/fileIcon";
-import { FileInfo } from "@/components/fileView/types";
+import { FileData } from "@/components/fileView/types";
 import { formatDate } from "@/lib/utils/date";
 
 const headings = ["Name", "Last modified", "File size", ""];
 
-async function getRootFolders(): Promise<FileInfo[] | null> {
+async function getRootFolders(): Promise<FileData[] | null> {
   const session = await getServerSession();
   const { user: { email } } = session!;
 

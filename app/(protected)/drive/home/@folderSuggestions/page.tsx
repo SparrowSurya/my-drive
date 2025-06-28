@@ -2,7 +2,7 @@
 
 // import { useState } from "react";
 // import { faCaretDown, faCaretRight } from "@fortawesome/free-solid-svg-icons";
-// import { Icon } from "@/components/icon";
+// import Icon from "@/components/icon";
 // import { FolderGridView } from "@/components/folderView";
 // import { folders } from "@/data/folders";
 

@@ -1,10 +1,10 @@
 import FileListRow from "./fileListRow";
-import { FileInfo } from "./types";
+import { FileData } from "./types";
 
 
 export type FileListViewProps = {
   headings: string[],
-  files: FileInfo[],
+  files: FileData[],
 };
 
 

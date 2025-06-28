@@ -1,16 +1,16 @@
 import React from "react";
 import { FontAwesomeIcon, type FontAwesomeIconProps } from "@fortawesome/react-fontawesome";
-import { IconProp as FaIconProp } from "@fortawesome/fontawesome-svg-core";
+
 
 export type IconProp = {
-  icon: FaIconProp,
-} & Omit<FontAwesomeIconProps, "icon">;
+  hover?: boolean,
+} & FontAwesomeIconProps;
 
-export default function IconButton({ icon, ...restProps }: Readonly<IconProp>) {
+
+export default function Icon({ hover, className, ...restProps }: Readonly<IconProp>) {
   return (
     <FontAwesomeIcon
-      icon={icon}
-      style={{ fontSize: "18px" }}
+      className={`icon ${hover && "icon-button"} ${className}`}
       {...restProps}
     />
   );

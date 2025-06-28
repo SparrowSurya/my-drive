@@ -4,9 +4,9 @@ import React, { useState } from "react";
 import { faFileUpload, faFolderPlus, faPlus, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { Folder } from "@/app/generated/prisma";
 import Modal from "@/components/modal";
-import { Icon } from "@/components/icon";
+import Icon from "@/components/icon";
 import { Form, Input } from "@/components/form";
-import { TextButton } from "@/components/button";
+
 
 export default function AddButton({
   createFolder,
@@ -30,9 +30,9 @@ export default function AddButton({
         isMenuOpen && (
           <Modal
             onClickOutside={() => setIsMenuOpen(!isMenuOpen)}
-            className="absolute bg-surface0 drop-shadow-md rounded-sm drop-shadow-surface0"
+            className="absolute bg-surface0 drop-shadow-sm rounded-sm border-overlay0 drop-shadow-overlay0"
           >
-            <div className="flex flex-col gap-0 my-2 w-80 drop-shadow-overlay2">
+            <div className="flex flex-col gap-0 my-2 w-80">
               <div
                 onClick={() => { setIsFileModalOpen(true); setIsMenuOpen(false); }}
                 className="h-8 flex flex-row items-center hover:bg-overlay0 cursor-pointer"
@@ -66,8 +66,8 @@ export default function AddButton({
               <h3 className="text-2xl">Folder Name</h3>
               <Input id="id_folder" required name="folderName" className="p-3 border-2 border-overlay0 focus:border-lavender rounded-lg outline-none" />
               <div className="flex flex-row justify-end items-center gap-3">
-                <TextButton type="button">Cancel</TextButton>
-                <TextButton type="submit">Create</TextButton>
+                <button type="button" className="text-button">Cancel</button>
+                <button type="submit" className="text-button">Create</button>
               </div>
             </Form>
           </Modal>

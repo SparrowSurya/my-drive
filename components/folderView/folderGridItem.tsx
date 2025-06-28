@@ -1,5 +1,5 @@
 import { faFolder, faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
-import { Icon, IconButton } from "@/components/icon";
+import Icon from "@/components/icon";
 
 export type FolderGridItemProps = {
   name: string,
@@ -12,7 +12,7 @@ export default function FolderGridItem({ name }: Readonly<FolderGridItemProps>) 
     >
       <Icon icon={faFolder} />
       <div className="flex-1 text-poppins">{ name }</div>
-      <IconButton icon={faEllipsisVertical}  />
+      <Icon icon={faEllipsisVertical} hover />
     </div>
   );
 }
