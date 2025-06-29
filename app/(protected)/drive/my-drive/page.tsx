@@ -45,14 +45,6 @@ export default async function MyDrivePage() {
       {
         (contents === null || contents.length == 0) && (
           <div className="w-full h-full flex flex-col justify-center items-center">
-            <hr
-              className="absolute bg-overlay0 z-[20]"
-              style={{
-                transform: "translate(-5px, 8px)",
-                width: "128px",
-                height: "1px",
-              }}
-            />
             <Image
               src="/assets/svg/cat.svg"
               alt="cat with a file"
