@@ -21,7 +21,7 @@ export async function addFiles(
     select: { id: true },
   });
 
-  const createdFiles = await Promise.all(
+  return await Promise.all(
     files.map(file =>
       prisma.file.create({
         data: {
@@ -32,6 +32,22 @@ export async function addFiles(
       })
     )
   );
+}
 
-  return createdFiles;
+export async function getFiles(
+  userWhere: Prisma.UserWhereUniqueInput,
+  folderWhere: Prisma.FolderWhereInput,
+  fileWhere?: Prisma.FileWhereInput | undefined,
+  select?: Prisma.FileSelect | undefined,
+): Promise<Prisma.FileGetPayload<{ select?: Prisma.FileSelect }>[]> {
+  return await prisma.file.findMany({
+    where: {
+      folder: {
+        user: userWhere,
+        ...folderWhere,
+      },
+      ...(fileWhere ?? {}),
+    },
+    select,
+  });
 }

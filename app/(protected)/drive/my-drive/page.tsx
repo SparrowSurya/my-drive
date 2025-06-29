@@ -1,30 +1,41 @@
 import Image from "next/image";
 import { getServerSession } from "next-auth";
 import { FileListView } from "@/components/fileView";
-import { FileType } from "@/components/fileView/fileIcon";
+import { FileType, getFileType } from "@/components/fileView/fileIcon";
 import { FileData } from "@/components/fileView/types";
 import { formatDate } from "@/lib/utils/date";
 import { getOrCreateRootFolder, getFolders } from "@/lib/query/folder";
+import { getFiles } from "@/lib/query/file";
+import { formatBytes } from "@/lib/utils/string";
 
 const headings = ["Name", "Last modified", "File size", ""];
 
-async function getRootFolders(): Promise<FileData[] | null> {
+async function getFilesAndFolders(): Promise<FileData[]> {
   const session = await getServerSession();
   const { email } = session?.user ?? {};
 
   const root = await getOrCreateRootFolder({ email }, { id: true });
   const folders = await getFolders({ email }, { parentId: root.id }, { name: true, updatedAt: true });
+  const files = await getFiles({ email }, { id: root.id }, undefined, { name: true, size: true, updatedAt: true });
 
-  return folders?.map(f => ({
-    name: f.name,
-    type: "folder" as FileType,
-    lastModified: formatDate(f.updatedAt),
-    size: null,
-  })) ?? null;
+  return [
+    ...folders.map(f => ({
+      name: f.name,
+      type: "folder" as FileType,
+      lastModified: formatDate(f.updatedAt),
+      size: null,
+    })),
+    ...files.map(f => ({
+      name: f.name,
+      type: getFileType(f.name),
+      lastModified: formatDate(f.updatedAt),
+      size: formatBytes(f.size),
+    })),
+  ];
 }
 
 export default async function MyDrivePage() {
-  const files = await getRootFolders();
+  const contents = await getFilesAndFolders();
 
   return (
     <>
@@ -32,7 +43,7 @@ export default async function MyDrivePage() {
         <div className="text-2xl cursor-pointer">My Drive</div>
       </div>
       {
-        (files === null || files.length == 0) && (
+        (contents === null || contents.length == 0) && (
           <div className="w-full h-full flex flex-col justify-center items-center">
             <hr
               className="absolute bg-overlay0 z-[20]"
@@ -54,12 +65,12 @@ export default async function MyDrivePage() {
         )
       }
       {
-        files && files.length > 0 && (
+        contents && contents.length > 0 && (
           <>
             <div className="my-5">
               {/* TODO: filters */}
             </div>
-            <FileListView headings={headings} files={files} />
+            <FileListView headings={headings} files={contents} />
           </>
         )
       }
