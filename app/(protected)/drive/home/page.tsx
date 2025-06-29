@@ -7,7 +7,7 @@ export default function DriveHomePage() {
       <div className="w-full h-full flex flex-col justify-center items-center">
         <Image
           src="/assets/svg/empty_state_home.svg"
-          alt="cat with a file"
+          alt="empty home page"
           width="160"
           height="160"
         />

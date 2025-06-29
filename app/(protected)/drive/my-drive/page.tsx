@@ -46,8 +46,8 @@ export default async function MyDrivePage() {
         (contents === null || contents.length == 0) && (
           <div className="w-full h-full flex flex-col justify-center items-center">
             <Image
-              src="/assets/svg/cat.svg"
-              alt="cat with a file"
+              src="/assets/svg/empty_state_my_drive.svg"
+              alt="empty my drive page"
               width="160"
               height="160"
             />
