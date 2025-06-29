@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { faFileUpload, faFolderPlus, faPlus, faUpload } from "@fortawesome/free-solid-svg-icons";
 import Modal from "@/components/modal";
 import Icon from "@/components/icon";
@@ -8,6 +9,8 @@ import CreateFolderModal from "./createFolderModal";
 import { uploadFilesAction } from "./actions";
 
 export default function MenuButton() {
+  const router = useRouter();
+  const [isTransition, startTransition] = useTransition(); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState<boolean>(false);
   const fileUploadRef = useRef<HTMLInputElement>(null);
@@ -27,6 +30,7 @@ export default function MenuButton() {
       );
       try {
         await uploadFilesAction(fileData);
+        startTransition(() =>router.refresh());
       } catch (error) {
         console.log("Error:", error);
       }

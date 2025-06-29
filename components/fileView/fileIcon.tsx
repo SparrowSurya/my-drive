@@ -34,7 +34,6 @@ export type FileIconProps = {
 
 export function getFileType(name: string): FileType {
   const ext = fileExt(name);
-  console.log(name, "->", ext);
   for (const [key, values] of Object.entries(fileExtGroup)) {
     if (values.includes(ext)) return key as FileType;
   }

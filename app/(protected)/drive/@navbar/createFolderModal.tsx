@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import Modal from "@/components/modal";
 import { Form, Input } from "@/components/form";
 import { createFolderAction } from "./actions";
@@ -11,6 +12,9 @@ export default function CreateFolderModal({
 }: Readonly<{
   closeModal: () => void,
 }>) {
+  const router = useRouter();
+  const [isTransition, startTransition] = useTransition(); // eslint-disable-line @typescript-eslint/no-unused-vars
+
   const [error, setError] = useState<string | undefined>(undefined);
 
   async function handleCreateFolder(event: React.FormEvent<HTMLFormElement>) {
@@ -26,6 +30,7 @@ export default function CreateFolderModal({
     const [ok, value_or_err] = await createFolderAction(folderName.toString().trim());
     if (ok) {
       closeModal();
+      startTransition(() => router.refresh());
     } else {
       setError(value_or_err);
     }
