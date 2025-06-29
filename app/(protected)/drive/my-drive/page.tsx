@@ -48,8 +48,8 @@ export default async function MyDrivePage() {
             <Image
               src="/assets/svg/empty_state_my_drive.svg"
               alt="empty my drive page"
-              width="160"
-              height="160"
+              width="240"
+              height="240"
             />
             <div className="text-2xl mt-10">A place for all of your files</div>
             <div className="text-md text-subtext0 mt-2">Drag your files and folders here or use the &apos;New&apos; button to upload</div>

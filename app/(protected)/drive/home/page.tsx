@@ -8,8 +8,8 @@ export default function DriveHomePage() {
         <Image
           src="/assets/svg/empty_state_home.svg"
           alt="empty home page"
-          width="160"
-          height="160"
+          width="240"
+          height="240"
         />
         <div className="text-md text-subtext0 mt-2">Drag your files and folders here or use the &apos;New&apos; button to upload</div>
       </div>

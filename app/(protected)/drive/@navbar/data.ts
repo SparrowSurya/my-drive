@@ -11,7 +11,7 @@ export const navGroups = [
     { label: "Starred", icon: faStar },
   ],
   [
-    { label: "Trash", icon: faTrash },
+    { label: "Bin", icon: faTrash },
     { label: "Storage", icon: faCloud },
   ]
 ];
