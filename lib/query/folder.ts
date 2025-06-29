@@ -5,14 +5,14 @@ import { Prisma } from "@/app/generated/prisma";
 export async function getOrCreateRootFolder(
   userWhere: Prisma.UserWhereUniqueInput,
   select?: Prisma.FolderSelect | undefined,
-): Promise<Prisma.FolderGetPayload<{ select?: Prisma.FolderSelect | undefined }>> {
+): Promise<Prisma.FolderGetPayload<{ select?: Prisma.FolderSelect }>> {
   const user = await prisma.user.findUniqueOrThrow({
     where: userWhere,
     select: { id: true },
   });
 
   const root = await prisma.folder.findFirst({
-    where: { userId: user.id, parentId: null },
+    where: { userId: user.id, parentId: 0 },
     select,
   });
 
@@ -21,8 +21,9 @@ export async function getOrCreateRootFolder(
   return prisma.folder.create({
     data: {
       userId: user.id,
-      name: null,
-      parentId: null,
+      id: 0,
+      name: "",
+      parentId: 0
     },
     select,
   });
@@ -37,6 +38,7 @@ export async function getFolders(
     where: {
       user: userWhere,
       ...(folderWhere ?? {}),
+      NOT: { id: 0 },
     },
     select,
   });

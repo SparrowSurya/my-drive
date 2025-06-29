@@ -32,20 +32,29 @@ export default async function MyDrivePage() {
         <div className="text-2xl cursor-pointer">My Drive</div>
       </div>
       {
-        (files === null) && (
+        (files === null || files.length == 0) && (
           <div className="w-full h-full flex flex-col justify-center items-center">
+            <hr
+              className="absolute bg-overlay0 z-[20]"
+              style={{
+                transform: "translate(-5px, 8px)",
+                width: "128px",
+                height: "1px",
+              }}
+            />
             <Image
               src="/assets/svg/cat.svg"
               alt="cat with a file"
               width="160"
               height="160"
             />
-            <div className="text-2xl">A place for all of your files</div>
+            <div className="text-2xl mt-10">A place for all of your files</div>
+            <div className="text-md text-subtext0 mt-2">Drag your files and folders here or use the &apos;New&apos; button to upload</div>
           </div>
         )
       }
       {
-        files && (
+        files && files.length > 0 && (
           <>
             <div className="my-5">
               {/* TODO: filters */}
