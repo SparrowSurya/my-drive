@@ -1,41 +1,52 @@
 import Image from "next/image";
-import { getServerSession } from "next-auth";
-import { FileListView } from "@/components/fileView";
-import { FileType, getFileType } from "@/components/fileView/fileIcon";
-import { FileData } from "@/components/fileView/types";
-import { formatDate } from "@/lib/utils/date";
-import { getOrCreateRootFolder, getFolders } from "@/lib/query/folder";
-import { getFiles } from "@/lib/query/file";
-import { formatBytes } from "@/lib/utils/string";
+import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { getFilesAndFolders } from "./query";
+import Icon from "@/components/icon";
+import FileListView from "@/components/fileView/list";
+import FileIcon from "@/components/fileView/fileIcon";
+import type { FileType, RowData } from "@/components/fileView/types";
 
-const headings = ["Name", "Last modified", "File size", ""];
-
-async function getFilesAndFolders(): Promise<FileData[]> {
-  const session = await getServerSession();
-  const { email } = session?.user ?? {};
-
-  const root = await getOrCreateRootFolder({ email }, { id: true });
-  const folders = await getFolders({ email }, { parentId: root.id }, { name: true, updatedAt: true });
-  const files = await getFiles({ email }, { id: root.id }, undefined, { name: true, size: true, updatedAt: true });
-
-  return [
-    ...folders.map(f => ({
-      name: f.name,
-      type: "folder" as FileType,
-      lastModified: formatDate(f.updatedAt),
-      size: null,
-    })),
-    ...files.map(f => ({
-      name: f.name,
-      type: getFileType(f.name),
-      lastModified: formatDate(f.updatedAt),
-      size: formatBytes(f.size),
-    })),
-  ];
-}
 
 export default async function MyDrivePage() {
-  const contents = await getFilesAndFolders();
+  const data = await getFilesAndFolders();
+
+  const columns = [
+    {
+      key: "name",
+      heading: "Name",
+      render: (row: RowData, key: string) => (
+        <td key={key} className="flex flex-row items-center">
+          <FileIcon type={row.type as FileType} />
+          <span>{ row.name }</span>
+        </td>
+      ),
+    },
+    {
+      key: "lastModified",
+      heading: "Last modified",
+      render: (row: RowData, key: string) => (
+        <td key={key}>{ row.lastModified }</td>
+      ),
+    },
+    {
+      key: "size",
+      heading: "File size",
+      render: (row: RowData, key: string) => (
+        <td key={key} className={`${!row.size && "select-none"}`}>
+          { row.size ?? "—" }
+        </td>
+      ),
+    },
+    {
+      key: "moreOptions",
+      heading: "",
+      render: (row: RowData, key: string) => (
+        <td key={key} className="w-12">
+          <Icon icon={faEllipsisVertical} hover />
+        </td>
+      ),
+    },
+  ];
 
   return (
     <>
@@ -43,7 +54,7 @@ export default async function MyDrivePage() {
         <div className="text-2xl cursor-pointer">My Drive</div>
       </div>
       {
-        (contents === null || contents.length == 0) && (
+        (data === null || data.length == 0) && (
           <div className="w-full h-full flex flex-col justify-center items-center">
             <Image
               src="/assets/svg/empty_state_my_drive.svg"
@@ -57,13 +68,8 @@ export default async function MyDrivePage() {
         )
       }
       {
-        contents && contents.length > 0 && (
-          <>
-            <div className="my-5">
-              {/* TODO: filters */}
-            </div>
-            <FileListView headings={headings} files={contents} />
-          </>
+        data && data.length > 0 && (
+          <FileListView data={data} columns={columns} />
         )
       }
     </>

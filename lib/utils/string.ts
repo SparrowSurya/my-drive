@@ -1,10 +1,6 @@
 
 export const slugify = (s: string): string => {
   return s.toLowerCase().replaceAll(" ", "-");
-};
-
-export const fileExt = (filename: string): string => {
-  return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2).toLowerCase();
 }
 
 export function formatBytes(bytes: number): string {

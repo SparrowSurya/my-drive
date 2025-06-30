@@ -1,4 +1,3 @@
-import FileListView from "./fileListView";
-// import FileGridView from "./fileGridView";
+import FileListView from "./list/view";
 
 export { FileListView };
