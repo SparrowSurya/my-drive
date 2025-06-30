@@ -1,10 +1,9 @@
 import Image from "next/image";
-import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { getFilesAndFolders } from "./query";
-import Icon from "@/components/icon";
 import FileListView from "@/components/fileView/list";
 import FileIcon from "@/components/fileView/fileIcon";
 import type { FileType, RowData } from "@/components/fileView/types";
+import FileOption from "@/components/fileView/components/options";
 
 
 const columns = [
@@ -40,9 +39,7 @@ const columns = [
     key: "moreOptions",
     heading: "",
     render: (row: RowData, key: string) => (
-      <td key={key} className="w-12">
-        <Icon icon={faEllipsisVertical} hover />
-      </td>
+      <FileOption key={key} row={row} />
     ),
   },
 ];
