@@ -1,9 +1,9 @@
 "use server";
 
 import { getServerSession } from "next-auth";
-import { getOrCreateRootFolder, createFolder, folderExists } from "@/lib/query/folder";
+import { getOrCreateRootFolder, createFolder, folderExists, createFileTree } from "@/lib/query/folder";
 import { addFiles } from "@/lib/query/file";
-
+import { buildDirectory } from "@/lib/utils/tree";
 
 export async function createFolderAction(folderName: string): Promise<[boolean, string]> {
   const session = await getServerSession();
@@ -40,4 +40,26 @@ export async function uploadFilesAction(files: {
   } catch {
     return "Something went wrong";
   }
+}
+
+export async function uploadFolderAction(files: {
+  name: string,
+  size: number,
+  data: Uint8Array,
+  path: string,
+}[]): Promise<true | string> {
+
+  const session = await getServerSession();
+  const { email } = session?.user ?? {};
+  if (!email) return "Something went wrong";
+
+  try {
+    const tree = buildDirectory(files);
+    const root = await getOrCreateRootFolder({ email });
+    await createFileTree({ email }, { name_parentId: { parentId: root.id, name: root.name } }, tree);
+  } catch {
+    return "Something went wrong";
+  }
+
+  return true;
 }

@@ -1,19 +1,27 @@
 "use client";
 
-import React, { useState, useRef, useTransition } from "react";
+import React, { useState, useEffect, useRef, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { faFileUpload, faFolderPlus, faPlus, faUpload } from "@fortawesome/free-solid-svg-icons";
 import Modal from "@/components/modal";
 import Icon from "@/components/icon";
 import CreateFolderModal from "./createFolderModal";
-import { uploadFilesAction } from "./actions";
+import { uploadFilesAction, uploadFolderAction } from "./actions";
 
 export default function MenuButton() {
   const router = useRouter();
+  const fileUploadRef = useRef<HTMLInputElement>(null);
+  const folderUploadRef = useRef<HTMLInputElement>(null);
+
   const [isTransition, startTransition] = useTransition(); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState<boolean>(false);
-  const fileUploadRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (folderUploadRef.current) {
+      folderUploadRef.current.setAttribute("webkitdirectory", "");
+    }
+  }, []);
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
@@ -28,12 +36,42 @@ export default function MenuButton() {
           };
         })
       );
+
       try {
         await uploadFilesAction(fileData);
-        startTransition(() =>router.refresh());
+        startTransition(() => router.refresh());
       } catch (error) {
         console.log("Error:", error);
       }
+    }
+    if (fileUploadRef.current) {
+      fileUploadRef.current.value = "";
+    }
+  }
+
+  async function handleFolderChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (files) {
+      const fileData = await Promise.all(
+        Array.from(files).map(async (file) => {
+          const arrayBuf = await file.arrayBuffer();
+          return {
+            name: file.name,
+            size: file.size,
+            data: new Uint8Array(arrayBuf),
+            path: file.webkitRelativePath,
+          };
+        })
+      );
+      try {
+        await uploadFolderAction(fileData);
+        startTransition(() => router.refresh());
+      } catch (error) {
+        console.log("Error:", error);
+      }
+    }
+    if (folderUploadRef.current) {
+      folderUploadRef.current.value = "";
     }
   }
 
@@ -68,12 +106,19 @@ export default function MenuButton() {
                   fileUploadRef.current?.click();
                   setTimeout(() => setIsMenuOpen(false), 0);
                 }}
-              >
+                >
                 <Icon icon={faFileUpload} className="mx-4 w-8" />
                 <span className="text-subtext1">File Upload</span>
               </div>
 
-              <div className="h-8 flex flex-row items-center hover:bg-overlay0 cursor-pointer">
+              <div
+                className="h-8 flex flex-row items-center hover:bg-overlay0 cursor-pointer"
+                onClick={() => {
+                  folderUploadRef.current?.click();
+                  console.log("Opening dialog ...");
+                  setTimeout(() => setIsMenuOpen(false), 0);
+                }}
+              >
                 <Icon icon={faUpload} className="mx-4 w-8" />
                 <span className="text-subtext1">Folder Upload</span>
               </div>
@@ -98,6 +143,13 @@ export default function MenuButton() {
         multiple
         style={{ display: "none" }}
         onChange={handleFileChange}
+      />
+      <input
+        ref={folderUploadRef}
+        type="file"
+        multiple
+        style={{ display: "none" }}
+        onChange={handleFolderChange}
       />
     </>
   );

@@ -66,3 +66,76 @@ export async function createFolder(
     select,
   });
 }
+
+export type FileTree<T> = {
+  [key: string]: T[] | FileTree<T>,
+};
+
+export async function createFileTree(
+  userWhere: Prisma.UserWhereUniqueInput,
+  parentWhere: Prisma.FolderWhereUniqueInput,
+  tree: FileTree<Omit<Prisma.FileCreateInput, "folder">>,
+): Promise<void> {
+  const user = await prisma.user.findUniqueOrThrow({
+    where: userWhere,
+    select: { id: true },
+  });
+
+  const parent = await prisma.folder.findUniqueOrThrow({
+    where: {
+      ...parentWhere,
+      userId: user.id,
+    },
+    select: { id: true },
+  });
+
+  type QueueItem = {
+    parentId: number,
+    subtree: FileTree<Omit<Prisma.FileCreateInput, "folder">>,
+  };
+
+  const stack: QueueItem[] = [
+    { parentId: parent.id, subtree: tree },
+  ];
+
+  while (stack.length > 0) {
+    const { parentId, subtree } = stack.pop()!;
+
+    for (const [name, value] of Object.entries(subtree)) {
+      if (Array.isArray(value)) {
+        for (const file of value) {
+          const existingFile = await prisma.file.findUnique({
+            where: { name_folderId: { folderId: parentId, name: file.name } },
+            select: { id: true },
+          });
+          if (existingFile) continue;
+
+          await prisma.file.create({
+            data: {
+              ...file,
+              folder: { connect: { id: parentId } },
+            },
+          });
+        }
+      } else {
+        const existingFolder = await prisma.folder.findUnique({
+          where: { name_parentId: { parentId: parentId, name }},
+          select: { id: true },
+        });
+        if (existingFolder) {
+          stack.push({ parentId: existingFolder.id, subtree: value });
+        } else {
+          const newFolder = await prisma.folder.create({
+            data: {
+              name,
+              parent: { connect: { id: parentId } },
+              user: { connect: { id: user.id } },
+            },
+            select: { id: true },
+          });
+          stack.push({ parentId: newFolder.id, subtree: value });
+        }
+      }
+    }
+  }
+}
