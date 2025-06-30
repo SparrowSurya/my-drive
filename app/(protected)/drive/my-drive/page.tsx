@@ -7,46 +7,49 @@ import FileIcon from "@/components/fileView/fileIcon";
 import type { FileType, RowData } from "@/components/fileView/types";
 
 
-export default async function MyDrivePage() {
-  const data = await getFilesAndFolders();
-
-  const columns = [
-    {
-      key: "name",
-      heading: "Name",
-      render: (row: RowData, key: string) => (
-        <td key={key} className="flex flex-row items-center">
+const columns = [
+  {
+    key: "name",
+    heading: "Name",
+    render: (row: RowData, key: string) => (
+      <td key={key}>
+        <div className="flex flex-row items-center">
           <FileIcon type={row.type as FileType} />
           <span>{ row.name }</span>
-        </td>
-      ),
-    },
-    {
-      key: "lastModified",
-      heading: "Last modified",
-      render: (row: RowData, key: string) => (
-        <td key={key}>{ row.lastModified }</td>
-      ),
-    },
-    {
-      key: "size",
-      heading: "File size",
-      render: (row: RowData, key: string) => (
-        <td key={key} className={`${!row.size && "select-none"}`}>
-          { row.size ?? "—" }
-        </td>
-      ),
-    },
-    {
-      key: "moreOptions",
-      heading: "",
-      render: (row: RowData, key: string) => (
-        <td key={key} className="w-12">
-          <Icon icon={faEllipsisVertical} hover />
-        </td>
-      ),
-    },
-  ];
+        </div>
+      </td>
+    ),
+  },
+  {
+    key: "lastModified",
+    heading: "Last modified",
+    render: (row: RowData, key: string) => (
+      <td key={key}>{ row.lastModified }</td>
+    ),
+  },
+  {
+    key: "size",
+    heading: "File size",
+    render: (row: RowData, key: string) => (
+      <td key={key} className={`${!row.size && "select-none"}`}>
+        { row.size ?? "—" }
+      </td>
+    ),
+  },
+  {
+    key: "moreOptions",
+    heading: "",
+    render: (row: RowData, key: string) => (
+      <td key={key} className="w-12">
+        <Icon icon={faEllipsisVertical} hover />
+      </td>
+    ),
+  },
+];
+
+
+export default async function MyDrivePage() {
+  const data = await getFilesAndFolders();
 
   return (
     <>

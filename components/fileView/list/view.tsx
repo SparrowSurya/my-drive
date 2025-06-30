@@ -24,7 +24,7 @@ export default function FileListView<T>({ data, columns }: Readonly<ListViewProp
       <tbody>
         {
           data.map((row, rowIndex) => (
-            <tr key={rowIndex} className="h-12 hover:bg-surface1 border-b-2 border-surface0 cursor-pointer">
+            <tr key={rowIndex} className="h-12 border-b-2 border-surface0 cursor-pointer hover:bg-surface1">
               { columns.map((col) => col.render(row, col.key)) }
             </tr>
           ))
