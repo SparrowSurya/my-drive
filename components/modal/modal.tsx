@@ -9,6 +9,7 @@ export type ModalProps = {
 
 export default function Modal({
 	children,
+	className,
 	onClickOutside,
 	...restProps
 }: Readonly<ModalProps>) {
@@ -31,7 +32,7 @@ export default function Modal({
 	}, [onClickOutside]);
 
 	return (
-		<div ref={modalRef} {...restProps}>
+		<div ref={modalRef} className={`modal ${className}`} {...restProps}>
 			{children}
 		</div>
 	);
