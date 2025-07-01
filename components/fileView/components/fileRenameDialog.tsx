@@ -3,19 +3,19 @@
 import { useEffect, useActionState } from "react";
 import Dialog from "@/components/dialog";
 import { Form, Input } from "@/components/form";
-import { FolderRenameAction } from "./actions";
+import { FileRenameAction } from "./actions";
 import type { RowData } from "../types";
 
 
-export type RenameFolderDialogProps = {
+export type RenameFileDialogProps = {
   data: RowData,
   closeModal: () => void,
 };
 
-export default function RenameFolderDialog({ data, closeModal }: Readonly<RenameFolderDialogProps>) {
-  const [state, formAction, isSubmitting] = useActionState(FolderRenameAction, {
-    folderName: data.name,
-    folderId: data.id,
+export default function RenameFileDialog({ data, closeModal }: Readonly<RenameFileDialogProps>) {
+  const [state, formAction, isSubmitting] = useActionState(FileRenameAction, {
+    fileName: data.name,
+    fileId: data.id,
   });
 
   useEffect(() => {
@@ -27,17 +27,17 @@ export default function RenameFolderDialog({ data, closeModal }: Readonly<Rename
   return (
     <Dialog className="py-5 px-8">
       <Form action={formAction} className="flex flex-col gap-3 w-60">
-        <h3 className="text-2xl">Rename Folder</h3>
-        <input type="hidden" name="folderId" defaultValue={state.folderId} />
+        <h3 className="text-2xl">Rename File</h3>
+        <input type="hidden" name="fileId" defaultValue={state.fileId} />
         <Input
           required
-          id="id_folder"
-          name="folderName"
-          placeholder="folder name"
+          id="id_file"
+          name="fileName"
+          placeholder="file name"
           autoFocus={true}
           className="p-3 border-2 border-overlay0 focus:border-lavender rounded-lg outline-none"
-          defaultValue={state.folderName}
-          errorText={state.errors?.folderName?.[0]}
+          defaultValue={state.fileName}
+          errorText={state.errors?.fileName?.[0]}
         />
         <div className="flex flex-row justify-end items-center gap-3">
           <button type="button" disabled={isSubmitting} onClick={() => closeModal()} className="text-button">Cancel</button>

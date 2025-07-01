@@ -139,3 +139,19 @@ export async function createFileTree(
     }
   }
 }
+
+export async function updateFolder(
+  userWhere: Prisma.UserWhereUniqueInput,
+  folderWhere: Prisma.FolderWhereUniqueInput,
+  values: Prisma.FolderUpdateInput,
+  select?: Prisma.FolderSelect,
+): Promise<Prisma.FolderGetPayload<{ select?: Prisma.FolderSelect }>> {
+  return await prisma.folder.update({
+    where: {
+      user: userWhere,
+      ...folderWhere,
+    },
+    data: values,
+    select,
+  })
+}

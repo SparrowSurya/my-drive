@@ -51,3 +51,21 @@ export async function getFiles(
     select,
   });
 }
+
+export async function updateFile(
+  userWhere: Prisma.UserWhereUniqueInput,
+  fileWhere: Prisma.FileWhereUniqueInput,
+  values: Prisma.FileUpdateInput,
+  select?: Prisma.FileSelect,
+): Promise<Prisma.FileGetPayload<{ select?: Prisma.FileSelect }>> {
+  return await prisma.file.update({
+    where: {
+      folder: {
+        user: userWhere,
+      },
+      ...fileWhere,
+    },
+    data: values,
+    select,
+  })
+}
