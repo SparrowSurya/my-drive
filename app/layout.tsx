@@ -36,6 +36,7 @@ export default function RootLayout({
           refetchWhenOffline={false}
         >
           {children}
+          <div id="id_dialog"></div>
         </SessionProvider>
       </body>
     </html>

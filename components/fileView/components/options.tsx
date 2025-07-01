@@ -18,7 +18,7 @@ export default function FileOption({ row }: Readonly<{ row: RowData }>) { // esl
         showOptionMenu && (
           <OptionMenu
             onClickOutside={() => setShowOptionMenu(false)}
-            className="absolute top-[36] right-[18] bg-surface0 drop-shadow-md rounded-sm border-overlay0 drop-shadow-overlay0"
+            className="absolute top-[36] right-[18] bg-surface0 drop-shadow-md rounded-sm cursor-default border-overlay0 drop-shadow-overlay0"
           >
             <OptionItem
               leading={<Icon icon={faDownload} className={iconClassName} />}

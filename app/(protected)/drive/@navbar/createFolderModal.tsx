@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import Modal from "@/components/modal";
+import Dialog from "@/components/dialog";
 import { Form, Input } from "@/components/form";
 import { createFolderAction } from "./actions";
 
@@ -37,12 +37,8 @@ export default function CreateFolderModal({
   }
 
   return (
-    <Modal
-      onClickOutside={() => closeModal()}
-      className="bg-surface0 w-80 px-8 py-5 rounded-2xl z-[100] shadow-sm shadow-overlay0"
-      style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50%, -50%)"}}
-    >
-      <Form onSubmit={handleCreateFolder} className="flex flex-col gap-3">
+    <Dialog className="py-5 px-8">
+      <Form onSubmit={handleCreateFolder} className="flex flex-col gap-3 w-60">
         <h3 className="text-2xl">Folder Name</h3>
         <Input
           required
@@ -58,6 +54,6 @@ export default function CreateFolderModal({
           <button type="submit" className="text-button">Create</button>
         </div>
       </Form>
-    </Modal>
+    </Dialog>
   );
 }
