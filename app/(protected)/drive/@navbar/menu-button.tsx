@@ -4,9 +4,9 @@ import React, { useState, useEffect, useRef, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { faFileUpload, faFolderPlus, faPlus, faUpload } from "@fortawesome/free-solid-svg-icons";
 import Icon from "@/components/icon";
-import CreateFolderModal from "./createFolderModal";
+import CreateFolderDialog from "./createFolderDialog";
 import { OptionMenu, OptionItem, OptionSeperator } from "@/components/option";
-import { uploadFilesAction, uploadFolderAction } from "./actions";
+import { uploadFiles, uploadFolder } from "./actions";
 
 
 const iconClassName = "w-4 ml-4 mr-6";
@@ -18,7 +18,7 @@ export default function MenuButton() {
 
   const [isTransition, startTransition] = useTransition(); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [showOptionMenu, setShowOptionMenu] = useState<boolean>(false);
-  const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState<boolean>(false);
+  const [showCreateFolderDialog, setShowCreateFolderDialog] = useState<boolean>(false);
 
   useEffect(() => {
     if (folderUploadRef.current) {
@@ -41,7 +41,7 @@ export default function MenuButton() {
       );
 
       try {
-        await uploadFilesAction(fileData);
+        await uploadFiles(fileData);
         startTransition(() => router.refresh());
       } catch (error) {
         console.log("Error:", error);
@@ -67,7 +67,7 @@ export default function MenuButton() {
         })
       );
       try {
-        await uploadFolderAction(fileData);
+        await uploadFolder(fileData);
         startTransition(() => router.refresh());
       } catch (error) {
         console.log("Error:", error);
@@ -90,7 +90,7 @@ export default function MenuButton() {
               leading={<Icon icon={faFolderPlus} className={iconClassName} />}
               text="New Folder"
               onClick={() => {
-                setIsCreateFolderModalOpen(true);
+                setShowCreateFolderDialog(true);
                 setShowOptionMenu(false);
               }}
             />
@@ -115,7 +115,7 @@ export default function MenuButton() {
         )
       }
       {
-        isCreateFolderModalOpen && <CreateFolderModal closeModal={() => setIsCreateFolderModalOpen(false)} />
+        showCreateFolderDialog && <CreateFolderDialog closeModal={() => setShowCreateFolderDialog(false)} />
       }
       <button
         onClick={() => setShowOptionMenu(true)}

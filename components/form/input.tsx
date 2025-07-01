@@ -37,7 +37,7 @@ export default function Input({
         className={`bg-inherit border-1 rounded-sm text-md p-1 ${errorText ? "border-red" : "border-overlay0"}`}
         {...restProps}
       />
-      { errorText && <span className="text-red text-sm">{ errorText }</span> }
+      { errorText && <span className="text-red text-sm mt-1 ml-2">{ errorText }</span> }
     </div>
   );
 }

@@ -4,10 +4,9 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Dialog from "@/components/dialog";
 import { Form, Input } from "@/components/form";
-import { createFolderAction } from "./actions";
 
 
-export default function CreateFolderModal({
+export default function FolderRenameDialog({
   closeModal,
 }: Readonly<{
   closeModal: () => void,
