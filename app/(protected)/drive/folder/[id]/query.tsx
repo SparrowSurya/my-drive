@@ -1,44 +1,37 @@
 "use server";
 
-import { File, Folder } from "@/app/generated/prisma";
-import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
+import { getFolders } from "@/lib/query/folder";
+import { getFiles } from "@/lib/query/file";
+import type { RowData, FileData, FolderData } from "@/components/fileView/types";
+import utils from "@/lib/utils";
+import { getFileType } from "@/components/fileView/utilts";
 
 
-export async function getFolderContents(id: number): Promise<{
-  files: Omit<File, "data" | "createdAt">[],
-  folders: Omit<Folder, "userId" | "createdAt">[],
-}> {
+export async function getFolderContents(id: number): Promise<RowData[]> {
   const session = await getServerSession();
   const { email } = session?.user ?? {};
 
-  const files = await prisma.file.findMany({
-    where: {
-      folder: {
-        user: { email },
-      },
-      folderId: id,
-    },
-    select: {
-      id: true,
-      folderId: true,
-      name: true,
-      size: true,
-      updatedAt: true,
-    },
-  });
-  const folders = await prisma.folder.findMany({
-    where: {
-      user: { email },
-      id,
-    },
-    select: {
-      id: true,
-      parentId: true,
-      name: true,
-      updatedAt: true,
-    },
-  });
+  const select = { id: true, name: true, updatedAt: true }
+  const folders = await getFolders({ email }, { parentId: id }, { ...select, parentId: true });
+  const files = await getFiles({ email }, { id: id }, undefined, { ...select, size: true, folderId: true });
 
-  return { files, folders };
+  return [
+    ...folders.map(f => ({
+      id: f.id,
+      name: f.name,
+      type: "folder",
+      size: null,
+      parentId: f.parentId,
+      lastModified: utils.formatDate(f.updatedAt),
+    } as unknown as FolderData)),
+    ...files.map(f => ({
+      id: f.id,
+      name: f.name,
+      type: getFileType(f.name),
+      size: utils.formatBytes(f.size),
+      folderId: f.folderId,
+      lastModified: utils.formatDate(f.updatedAt),
+    } as unknown as FileData)),
+  ] as RowData[];
 }
