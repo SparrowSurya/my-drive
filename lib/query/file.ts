@@ -69,3 +69,15 @@ export async function updateFile(
     select,
   })
 }
+
+export async function getStorageUsed(
+  userWhere: Prisma.UserWhereInput,
+): Promise<number> {
+  const result = await prisma.file.aggregate({
+    where: {
+      folder: { user: userWhere },
+    },
+    _sum: { size: true }
+  });
+  return result._sum.size ?? 0;
+}
