@@ -10,6 +10,7 @@ import { CreateFolderSchema } from "@/lib/validation/folder";
 export type CreateFolderFormState = {
   success?: true,
   message?: string,
+  parentId: string | number,
   folderName: string,
   errors?: Partial<Record<keyof Omit<CreateFolderFormState, "errors">, string[]>> & { root?: string },
 };
@@ -29,15 +30,14 @@ export async function createFolderAction(state: CreateFolderFormState, formData:
     errors: { root: "Something went wrong" },
   };
 
-  const { folderName } = result.data;
-  if (await folderExists({ user: { email }, name: folderName })) return {
+  const { folderName, parentId } = result.data;
+  if (await folderExists({ user: { email }, name: folderName, parentId })) return {
     ...state,
     errors: { folderName: ["Folder already exists"] },
   };
 
   try {
-    const rootFolder = await getOrCreateRootFolder({ email }, { id: true });
-    const { name } = await createFolder({ email }, { id: rootFolder.id }, { name: folderName }, { name: true });
+    const { name } = await createFolder({ email }, { id: parentId }, { name: folderName }, { name: true });
     return {
       ...result.data,
       success: true,

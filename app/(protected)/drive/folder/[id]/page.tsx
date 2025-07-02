@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import { getFolderContents, getPathSegments } from "./query";
 import Breadcrumbs from "@/components/breadcrumbs";
 import { FileListView } from "@/components/fileView";
@@ -11,11 +12,20 @@ export default async function FolderPage({
   params: Promise<{ id: string }>,
 }>) {
   const id = parseInt((await params).id);
+  if (id === 0) {
+    return redirect("/drive/my-drive");
+  }
+
   const data = await getFolderContents(id);
-  const segments = (await getPathSegments(id)).map((segment) => ({
-    name: (segment.name.length === 0) ? "My Drive" : segment.name,
-    url: `/drive/folder/${segment.id}`,
-  }));
+  const segments = (await getPathSegments(id)).map((segment) => (
+    (segment.name.length === 0) ? {
+      name: "My Drive",
+      url: "/drive/my-drive",
+    } : {
+      name: segment.name,
+      url: `/drive/folder/${segment.id}`,
+    }
+  ));
 
   return (
     <>

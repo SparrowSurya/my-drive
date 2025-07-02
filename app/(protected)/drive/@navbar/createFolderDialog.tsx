@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useActionState } from "react";
+import { usePathname } from "next/navigation";
 import Dialog from "@/components/dialog";
 import { Form, Input } from "@/components/form";
 import { createFolderAction } from "./actions";
@@ -11,7 +12,13 @@ export default function CreateFolderDialog({
 }: Readonly<{
   closeModal: () => void,
 }>) {
-  const [state, formAction, isSubmitting] = useActionState(createFolderAction, { folderName: "" });
+  const path = usePathname();
+  const parentId = /^\/drive\/folder\/[0-9]+$/.test(path) ? path.split("/")[3] : "0";
+
+  const [state, formAction, isSubmitting] = useActionState(createFolderAction, {
+    parentId,
+    folderName: "",
+  });
 
   useEffect(() => {
     if (!!state.success) {
@@ -23,6 +30,7 @@ export default function CreateFolderDialog({
     <Dialog className="py-5 px-8">
       <Form action={formAction} className="flex flex-col gap-3 w-60">
         <h3 className="text-2xl">Folder Name</h3>
+        <input type="hidden" name="parentId" defaultValue={state.parentId} style={{ display: "none" }} />
         <Input
           required
           id="id_folder"

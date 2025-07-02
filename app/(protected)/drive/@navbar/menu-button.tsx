@@ -115,7 +115,14 @@ export default function MenuButton() {
         )
       }
       {
-        showCreateFolderDialog && <CreateFolderDialog closeModal={() => setShowCreateFolderDialog(false)} />
+        showCreateFolderDialog && (
+          <CreateFolderDialog
+            closeModal={() => {
+              setShowCreateFolderDialog(false);
+              startTransition(() => router.refresh());
+            }}
+          />
+        )
       }
       <button
         onClick={() => setShowOptionMenu(true)}
