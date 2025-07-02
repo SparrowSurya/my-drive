@@ -155,3 +155,40 @@ export async function updateFolder(
     select,
   })
 }
+
+export async function getFolderSegments(
+  userWhere: Prisma.UserWhereUniqueInput,
+  folderWhere: Prisma.FolderWhereUniqueInput,
+  select?: Prisma.FolderSelect,
+): Promise<Prisma.FolderGetPayload<{ select?: Prisma.FolderSelect }>[]> {
+  const folder = await prisma.folder.findUniqueOrThrow({
+    where: {
+      user: userWhere,
+      ...folderWhere,
+    },
+    select: { id: true, parentId: true },
+  });
+
+  const segments: Prisma.FolderGetPayload<{ select: Prisma.FolderSelect }>[] = [];
+  let id = folder.id;
+  const includeParentId = select ? !!select.parentId : true;
+
+  while (id !== 0) {
+    const folder = await prisma.folder.findUniqueOrThrow({
+      where: { id },
+      select: { parentId: true, ...(select ?? {}) },
+    });
+
+    id = folder.parentId;
+    if (!includeParentId) {
+      const { parentId, ...customFields } = folder; // eslint-disable-line @typescript-eslint/no-unused-vars
+      segments.push(customFields as Prisma.FolderGetPayload<{ select: Prisma.FolderSelect }>);
+    } else {
+      segments.push(folder as Prisma.FolderGetPayload<{ select: Prisma.FolderSelect }>);
+    }
+  };
+
+  const root = await getOrCreateRootFolder(userWhere, select);
+  segments.push(root as Prisma.FolderGetPayload<{ select: Prisma.FolderSelect }>);
+  return segments.reverse();
+}

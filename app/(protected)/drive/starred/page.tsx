@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function StarredPage() {
   return (
     <>
-      <div className="text-2xl mb-4">Starred</div>
+      <div className="text-2xl mb-4 text-lavender">Starred</div>
       <div className="w-full h-full flex flex-col justify-center items-center">
         <Image
           src="/assets/svg/empty_state_starred_files.svg"

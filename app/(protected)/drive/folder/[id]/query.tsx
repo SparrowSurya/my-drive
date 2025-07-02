@@ -1,7 +1,7 @@
 "use server";
 
 import { getServerSession } from "next-auth";
-import { getFolders } from "@/lib/query/folder";
+import { getFolders, getFolderSegments } from "@/lib/query/folder";
 import { getFiles } from "@/lib/query/file";
 import type { RowData, FileData, FolderData } from "@/components/fileView/types";
 import utils from "@/lib/utils";
@@ -34,4 +34,12 @@ export async function getFolderContents(id: number): Promise<RowData[]> {
       lastModified: utils.formatDate(f.updatedAt),
     } as unknown as FileData)),
   ] as RowData[];
+}
+
+export async function getPathSegments(id: number): Promise<{ id: number, name: string }[]> {
+  const session = await getServerSession();
+  const { email } = session?.user ?? {};
+
+  const select = { id: true, name: true };
+  return await getFolderSegments({ email }, { id }, select);
 }

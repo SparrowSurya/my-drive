@@ -9,13 +9,13 @@ import type { Column } from "./types";
 export type ListViewProps = {
   data: RowData[],
   columns: Column<RowData>[],
-};
+} & React.HTMLAttributes<HTMLTableElement>;
 
-export default function FileListView({ data, columns }: Readonly<ListViewProps>) {
+export default function FileListView({ data, columns, ...props }: Readonly<ListViewProps>) {
   const router = useRouter();
 
   return (
-    <table className="w-full">
+    <table {...props}>
       <thead>
         <tr className="text-left">
           {

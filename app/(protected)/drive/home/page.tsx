@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function DriveHomePage() {
   return (
     <>
-      <div className="text-2xl mb-4">Welcome to Drive</div>
+      <div className="text-2xl mb-4 text-lavender">Welcome to Drive</div>
       <div className="w-full h-full flex flex-col justify-center items-center">
         <Image
           src="/assets/svg/empty_state_home.svg"

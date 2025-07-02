@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { getFolderContents } from "./query";
+import { getFolderContents, getPathSegments } from "./query";
+import Breadcrumbs from "@/components/breadcrumbs";
 import { FileListView } from "@/components/fileView";
 import columns from "@/components/fileView/list/column";
 
@@ -11,11 +12,19 @@ export default async function FolderPage({
 }>) {
   const id = parseInt((await params).id);
   const data = await getFolderContents(id);
+  const segments = (await getPathSegments(id)).map((segment) => ({
+    name: (segment.name.length === 0) ? "My Drive" : segment.name,
+    url: `/drive/folder/${segment.id}`,
+  }));
 
   return (
     <>
       <div className="flex flex-row">
-        <div className="text-2xl cursor-pointer">My Drive</div>
+        <Breadcrumbs
+          className="text-2xl cursor-pointer"
+          style={{ transform: "translateX(-12px)" }}
+          data={segments}
+        />
       </div>
       {
         (data === null || data.length == 0) && (
