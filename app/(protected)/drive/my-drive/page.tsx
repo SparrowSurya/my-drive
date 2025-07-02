@@ -1,48 +1,7 @@
 import Image from "next/image";
 import { getFilesAndFolders } from "./query";
 import FileListView from "@/components/fileView/list";
-import FileIcon from "@/components/fileView/fileIcon";
-import type { FileType, RowData } from "@/components/fileView/types";
-import FileOption from "@/components/fileView/components/options";
-
-
-const columns = [
-  {
-    key: "name",
-    heading: "Name",
-    render: (row: RowData, key: string) => (
-      <td key={key}>
-        <div className="flex flex-row items-center">
-          <FileIcon type={row.type as FileType} />
-          <span>{ row.name }</span>
-        </div>
-      </td>
-    ),
-  },
-  {
-    key: "lastModified",
-    heading: "Last modified",
-    render: (row: RowData, key: string) => (
-      <td key={key}>{ row.lastModified }</td>
-    ),
-  },
-  {
-    key: "size",
-    heading: "File size",
-    render: (row: RowData, key: string) => (
-      <td key={key} className={`${!row.size && "select-none"}`}>
-        { row.size ?? "—" }
-      </td>
-    ),
-  },
-  {
-    key: "moreOptions",
-    heading: "",
-    render: (row: RowData, key: string) => (
-      <FileOption key={key} row={row} />
-    ),
-  },
-];
+import columns from "@/components/fileView/list/column";
 
 
 export default async function MyDrivePage() {
