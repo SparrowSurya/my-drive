@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { faFileUpload, faFolderPlus, faPlus, faUpload } from "@fortawesome/free-solid-svg-icons";
 import Icon from "@/components/icon";
 import CreateFolderDialog from "./createFolderDialog";
 import { OptionMenu, OptionItem, OptionSeperator } from "@/components/option";
 import { uploadFiles, uploadFolder } from "./actions";
+import { getFolderIdByPathname } from "./utils";
 
 
 const iconClassName = "w-4 ml-4 mr-6";
@@ -15,6 +16,9 @@ export default function MenuButton() {
   const router = useRouter();
   const fileUploadRef = useRef<HTMLInputElement>(null);
   const folderUploadRef = useRef<HTMLInputElement>(null);
+
+  const path = usePathname();
+  const folderId = getFolderIdByPathname(path);
 
   const [isTransition, startTransition] = useTransition(); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [showOptionMenu, setShowOptionMenu] = useState<boolean>(false);
@@ -41,7 +45,7 @@ export default function MenuButton() {
       );
 
       try {
-        await uploadFiles(fileData);
+        await uploadFiles(folderId, fileData);
         startTransition(() => router.refresh());
       } catch (error) {
         console.log("Error:", error);
@@ -67,7 +71,7 @@ export default function MenuButton() {
         })
       );
       try {
-        await uploadFolder(fileData);
+        await uploadFolder(folderId, fileData);
         startTransition(() => router.refresh());
       } catch (error) {
         console.log("Error:", error);

@@ -52,7 +52,7 @@ export async function createFolderAction(state: CreateFolderFormState, formData:
   }
 }
 
-export async function uploadFiles(files: {
+export async function uploadFiles(parentId: number, files: {
   name: string,
   size: number,
   data: Uint8Array,
@@ -62,14 +62,14 @@ export async function uploadFiles(files: {
   if (!email) return "Something went wrong";
 
   try {
-    const root = await getOrCreateRootFolder({ email });
-    return await addFiles({ email }, { id: root.id }, files, { name: true })
+    const id = (parentId === 0) ? (await getOrCreateRootFolder({ email }, { id: true })).id : parentId;
+    return await addFiles({ email }, { id }, files, { name: true })
   } catch {
     return "Something went wrong";
   }
 }
 
-export async function uploadFolder(files: {
+export async function uploadFolder(parentId: number, files: {
   name: string,
   size: number,
   data: Uint8Array,
@@ -82,8 +82,8 @@ export async function uploadFolder(files: {
 
   try {
     const tree = buildDirectory(files);
-    const root = await getOrCreateRootFolder({ email });
-    await createFileTree({ email }, { id: root.id }, tree);
+    const id = (parentId === 0) ? (await getOrCreateRootFolder({ email }, { id: true })).id : parentId;
+    await createFileTree({ email }, { id }, tree);
   } catch {
     return "Something went wrong";
   }
