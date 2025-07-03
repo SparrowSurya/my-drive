@@ -2,6 +2,7 @@ import React from "react";
 import Oauth from "./oauth";
 import Loading from "@/components/loader";
 
+
 export default async function Layout({
   children,
 }: Readonly<{

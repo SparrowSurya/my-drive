@@ -1,9 +1,9 @@
+import { Metadata } from "next";
 import Image from "next/image";
 import { getFilesAndFolders } from "./query";
 import FileListView from "@/components/fileView/list";
 import columns from "@/components/fileView/list/column";
 import Breadcrumbs from "@/components/breadcrumbs";
-import { Metadata } from "next";
 
 
 export const metadata: Metadata = {
