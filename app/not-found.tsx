@@ -1,4 +1,9 @@
+import { Metadata } from "next";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Error 404 (not found)",
+};
 
 export default function NotFound() {
   return (

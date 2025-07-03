@@ -1,12 +1,17 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { Metadata } from "next";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Form, EmailInput, PasswordInput } from "@/components/form";
 import signinSchema  from "@/lib/validation/signin";
 
+
+export const metadata: Metadata = {
+  title: "Drive: LogIn",
+};
 
 type FormError = {
   email?: string[],

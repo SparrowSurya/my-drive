@@ -1,4 +1,10 @@
+import { Metadata } from "next";
 import Image from "next/image";
+
+
+export const metadata: Metadata = {
+  title: "Trash - Drive",
+};
 
 export default function TrashPage() {
   return (

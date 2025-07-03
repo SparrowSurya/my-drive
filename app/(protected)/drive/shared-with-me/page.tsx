@@ -1,4 +1,10 @@
+import { Metadata } from "next";
 import Image from "next/image";
+
+
+export const metadata: Metadata = {
+  title: "Shared with me - Drive",
+};
 
 export default function SharedWithMePage() {
   return (
