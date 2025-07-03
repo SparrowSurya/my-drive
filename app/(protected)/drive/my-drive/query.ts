@@ -8,7 +8,7 @@ import { getFileType } from "@/components/fileView/utilts";
 
 export async function getFilesAndFolders(): Promise<RowData[]> {
   const session = await getServerSession();
-  const { email } = session?.user ?? {};
+  const { email } = session!.user ;
 
   const root = await getOrCreateRootFolder({ email }, { id: true });
   const select = { id: true, name: true, updatedAt: true }

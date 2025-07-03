@@ -9,7 +9,7 @@ import { getServerSession } from "next-auth";
 
 export default async function Navbar() {
   const session = await getServerSession();
-  const { email } = session?.user ?? {};
+  const { email } = session!.user;
   const storageSize = await getStorageUsed({ email });
 
   return (

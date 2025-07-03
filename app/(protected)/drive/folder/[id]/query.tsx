@@ -10,7 +10,7 @@ import { getFileType } from "@/components/fileView/utilts";
 
 export async function getFolderContents(id: number): Promise<RowData[]> {
   const session = await getServerSession();
-  const { email } = session?.user ?? {};
+  const { email } = session!.user ;
 
   const select = { id: true, name: true, updatedAt: true }
   const folders = await getFolders(
@@ -42,7 +42,7 @@ export async function getFolderContents(id: number): Promise<RowData[]> {
 
 export async function getPathSegments(id: number): Promise<{ id: number, name: string }[]> {
   const session = await getServerSession();
-  const { email } = session?.user ?? {};
+  const { email } = session!.user ;
 
   const select = { id: true, name: true };
   return await getParentHierarchy({ email }, { id }, select);

@@ -23,7 +23,7 @@ export async function FolderRenameAction(state: RenameFolderFormState, formData:
   };
 
   const session = await getServerSession();
-  const { email } = session?.user ?? {};
+  const { email } = session!.user ;
   if (!email) return {
     ...state,
     errors: { root: "Something went wrong" },
@@ -63,7 +63,7 @@ export async function FileRenameAction(state: RenameFileFormState, formData: For
   };
 
   const session = await getServerSession();
-  const { email } = session?.user ?? {};
+  const { email } = session!.user ;
   if (!email) return {
     ...state,
     errors: { root: "Something went wrong" },
