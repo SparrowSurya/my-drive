@@ -24,3 +24,34 @@ npx prisma generate
 npm build
 npm run start
 ```
+
+
+## Progress
+
+0. Misc
+* 404 page (common for all)
+* Database (local)
+* Home page
+
+1. Authentication
+* Signin
+* Login
+* Oauth (google)
+* Logout
+* middleware (protected routes)
+
+2. Drive
+* basic pages (home, shared-with-me, my-drive, recent, starred, trash, storage)
+* My drive: display files and folders (list view)
+* display folder contents (list view)
+
+3. Navbar
+* Display navlinks (with navigation)
+* Create folder (folder context)
+* Upload file (folder context)
+* Upload folder (folder context with structure)
+
+4. Files/Folder list view
+* Display files & folders in list view
+* Show options (download, rename, organise, share, move to trash)
+* Rename option
