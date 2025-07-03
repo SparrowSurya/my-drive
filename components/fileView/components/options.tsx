@@ -55,7 +55,7 @@ export default function FileOption({ row }: Readonly<{ row: RowData }>) {
             <OptionSeperator />
             <OptionItem
               leading={<Icon icon={faTrash} className={iconClassName} />}
-              text="Move to bin"
+              text="Move to trash"
             />
           </OptionMenu>
         )
