@@ -36,18 +36,29 @@ model Folder {
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: NoAction)
 
-  name     String
-  parentId Int
-  parent   Folder?  @relation("FolderToParent", fields: [parentId], references: [id], onDelete: NoAction)
-  children Folder[] @relation("FolderToParent")
+  name   String
+  isRoot Boolean @default(false)
 
-  files File[]
+  files    File[]
+  children Hierarchy[] @relation("FolderAsParent")
+  parent   Hierarchy?  @relation("FolderAsChild")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([name, parentId])
   @@map("folders")
+}
+
+model Hierarchy {
+  id Int @id @default(autoincrement())
+
+  folderId Int    @unique
+  folder   Folder @relation("FolderAsChild", fields: [folderId], references: [id])
+
+  parentId Int
+  parent   Folder @relation("FolderAsParent", fields: [parentId], references: [id])
+
+  @@map("hierarchy")
 }
 
 model File {
@@ -56,9 +67,9 @@ model File {
   folderId Int
   folder   Folder @relation(fields: [folderId], references: [id], onDelete: NoAction)
 
-  name     String
-  size     Int
-  data     Bytes
+  name String
+  size Int
+  data Bytes
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

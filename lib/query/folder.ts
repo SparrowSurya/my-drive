@@ -4,7 +4,7 @@ import { Prisma } from "@/app/generated/prisma";
 
 export async function getOrCreateRootFolder(
   userWhere: Prisma.UserWhereUniqueInput,
-  select?: Prisma.FolderSelect | undefined,
+  select?: Prisma.FolderSelect,
 ): Promise<Prisma.FolderGetPayload<{ select?: Prisma.FolderSelect }>> {
   const user = await prisma.user.findUniqueOrThrow({
     where: userWhere,
@@ -12,7 +12,7 @@ export async function getOrCreateRootFolder(
   });
 
   const root = await prisma.folder.findFirst({
-    where: { userId: user.id, parentId: 0 },
+    where: { userId: user.id, name: "", isRoot: true },
     select,
   });
 
@@ -21,9 +21,8 @@ export async function getOrCreateRootFolder(
   return prisma.folder.create({
     data: {
       userId: user.id,
-      id: 0,
       name: "",
-      parentId: 0
+      isRoot: true,
     },
     select,
   });
@@ -31,17 +30,21 @@ export async function getOrCreateRootFolder(
 
 export async function getFolders(
   userWhere: Prisma.UserWhereUniqueInput,
-  folderWhere?: Prisma.FolderWhereInput | undefined,
-  select?: Prisma.FolderSelect | undefined,
-): Promise<Prisma.FolderGetPayload<{ select?: Prisma.FolderSelect }>[]> {
-  return await prisma.folder.findMany({
+  parentWhere: Prisma.FolderWhereUniqueInput,
+  select: Prisma.FolderSelect,
+): Promise<Prisma.FolderGetPayload<{ select: Prisma.FolderSelect }>[]> {
+  const children = await prisma.hierarchy.findMany({
     where: {
-      user: userWhere,
-      ...(folderWhere ?? {}),
-      NOT: { id: 0 },
+      parent: {
+        is: { ...parentWhere, user: userWhere },
+      },
     },
-    select,
+    select: {
+      folder: { select },
+    },
   });
+
+  return children.map(child => child.folder);
 }
 
 export async function folderExists(
@@ -54,13 +57,17 @@ export async function folderExists(
 export async function createFolder(
   userWhere: Prisma.UserWhereUniqueInput,
   parentWhere: Prisma.FolderWhereUniqueInput,
-  folderValues: Omit<Prisma.FolderCreateInput, "user" | "parent" | "name"> & Record<"name", string>,
-  select?: Prisma.FolderSelect | undefined,
+  folderValues: Omit<Prisma.FolderCreateInput, "user" | "isRoot">,
+  select?: Prisma.FolderSelect,
 ): Promise<Prisma.FolderGetPayload<{ select?: Prisma.FolderSelect }>> {
   return await prisma.folder.create({
     data: {
       user: { connect: userWhere },
-      parent: { connect: parentWhere },
+      parent: {
+        create: {
+          parent: { connect: parentWhere },
+        },
+      },
       ...folderValues,
     },
     select,
@@ -71,6 +78,7 @@ export type FileTree<T> = {
   [key: string]: T[] | FileTree<T>,
 };
 
+// TODO - use transaction to handle failure
 export async function createFileTree(
   userWhere: Prisma.UserWhereUniqueInput,
   parentWhere: Prisma.FolderWhereUniqueInput,
@@ -89,12 +97,12 @@ export async function createFileTree(
     select: { id: true },
   });
 
-  type QueueItem = {
+  type StackItem = {
     parentId: number,
     subtree: FileTree<Omit<Prisma.FileCreateInput, "folder">>,
   };
 
-  const stack: QueueItem[] = [
+  const stack: StackItem[] = [
     { parentId: parent.id, subtree: tree },
   ];
 
@@ -118,8 +126,12 @@ export async function createFileTree(
           });
         }
       } else {
-        const existingFolder = await prisma.folder.findUnique({
-          where: { name_parentId: { parentId: parentId, name }},
+        const existingFolder = await prisma.folder.findFirst({
+          where: {
+            name,
+            userId: user.id,
+            parent: { is: { parentId } },
+          },
           select: { id: true },
         });
         if (existingFolder) {
@@ -128,7 +140,9 @@ export async function createFileTree(
           const newFolder = await prisma.folder.create({
             data: {
               name,
-              parent: { connect: { id: parentId } },
+              parent: {
+                create: { parentId },
+              },
               user: { connect: { id: user.id } },
             },
             select: { id: true },
@@ -156,7 +170,7 @@ export async function updateFolder(
   })
 }
 
-export async function getFolderSegments(
+export async function getParentHierarchy(
   userWhere: Prisma.UserWhereUniqueInput,
   folderWhere: Prisma.FolderWhereUniqueInput,
   select?: Prisma.FolderSelect,
@@ -166,29 +180,29 @@ export async function getFolderSegments(
       user: userWhere,
       ...folderWhere,
     },
-    select: { id: true, parentId: true },
+    select: { id: true, isRoot: true },
   });
 
-  const segments: Prisma.FolderGetPayload<{ select: Prisma.FolderSelect }>[] = [];
+  const segments: Prisma.FolderGetPayload<{ select?: Prisma.FolderSelect }>[] = [];
   let id = folder.id;
-  const includeParentId = select ? !!select.parentId : true;
 
-  while (id !== 0) {
+  while (true) {
     const folder = await prisma.folder.findUniqueOrThrow({
       where: { id },
-      select: { parentId: true, ...(select ?? {}) },
+      select: {
+        ...(select ?? {}),
+        parent: { select: { parentId: true }},
+        id: true,
+        isRoot: true,
+      },
     });
 
-    id = folder.parentId;
-    if (!includeParentId) {
-      const { parentId, ...customFields } = folder; // eslint-disable-line @typescript-eslint/no-unused-vars
-      segments.push(customFields as Prisma.FolderGetPayload<{ select: Prisma.FolderSelect }>);
-    } else {
-      segments.push(folder as Prisma.FolderGetPayload<{ select: Prisma.FolderSelect }>);
-    }
+    // FIXME - This may add extra fields due to above select
+    segments.push(folder as Prisma.FolderGetPayload<{ select: Prisma.FolderSelect }>);
+
+    if (folder.isRoot || !(folder.parent?.parentId)) break;
+    id = folder.parent?.parentId;
   };
 
-  const root = await getOrCreateRootFolder(userWhere, select);
-  segments.push(root as Prisma.FolderGetPayload<{ select: Prisma.FolderSelect }>);
   return segments.reverse();
 }

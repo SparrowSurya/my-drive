@@ -31,13 +31,14 @@ export async function createFolderAction(state: CreateFolderFormState, formData:
   };
 
   const { folderName, parentId } = result.data;
-  if (await folderExists({ user: { email }, name: folderName, parentId })) return {
+  if (parentId !== 0 && await folderExists({ user: { email }, name: folderName, parent: { parentId } })) return {
     ...state,
     errors: { folderName: ["Folder already exists"] },
   };
 
   try {
-    const { name } = await createFolder({ email }, { id: parentId }, { name: folderName }, { name: true });
+    const id = (parentId === 0) ? (await getOrCreateRootFolder({ email }, { id: true })).id : parentId;
+    const { name } = await createFolder({ email }, { id }, { name: folderName }, { name: true });
     return {
       ...result.data,
       success: true,
@@ -61,12 +62,8 @@ export async function uploadFiles(files: {
   if (!email) return "Something went wrong";
 
   try {
-    return await addFiles(
-      { email },
-      { name_parentId: { name: "", parentId: 0 } },
-      files,
-      { name: true },
-    )
+    const root = await getOrCreateRootFolder({ email });
+    return await addFiles({ email }, { id: root.id }, files, { name: true })
   } catch {
     return "Something went wrong";
   }
@@ -86,7 +83,7 @@ export async function uploadFolder(files: {
   try {
     const tree = buildDirectory(files);
     const root = await getOrCreateRootFolder({ email });
-    await createFileTree({ email }, { name_parentId: { parentId: root.id, name: root.name } }, tree);
+    await createFileTree({ email }, { id: root.id }, tree);
   } catch {
     return "Something went wrong";
   }

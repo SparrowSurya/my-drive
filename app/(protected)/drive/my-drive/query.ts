@@ -12,7 +12,7 @@ export async function getFilesAndFolders(): Promise<RowData[]> {
 
   const root = await getOrCreateRootFolder({ email }, { id: true });
   const select = { id: true, name: true, updatedAt: true }
-  const folders = await getFolders({ email }, { parentId: root.id }, { ...select, parentId: true });
+  const folders = await getFolders({ email }, { id: root.id }, { ...select, parent: { select: { parentId: true } } });
   const files = await getFiles({ email }, { id: root.id }, undefined, { ...select, size: true, folderId: true });
 
   return [
@@ -21,7 +21,7 @@ export async function getFilesAndFolders(): Promise<RowData[]> {
       name: f.name,
       type: "folder",
       size: null,
-      parentId: f.parentId,
+      parentId: f.parent?.parentId,
       lastModified: utils.formatDate(f.updatedAt),
     } as unknown as FolderData)),
     ...files.map(f => ({
