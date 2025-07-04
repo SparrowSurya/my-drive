@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useActionState } from "react";
+import { usePathname } from "next/navigation";
 import Modal from "@/components/modal";
 import { Form, Input } from "@/components/form";
 import { createFolderAction } from "./actions";
-import { getFolderIdByPathname } from "./utils";
-import { usePathname } from "next/navigation";
+import utils from "@/lib/utils";
+
 
 export default function CreateFolderDialog({
   closeModal,
@@ -13,7 +14,7 @@ export default function CreateFolderDialog({
   closeModal: () => void,
 }>) {
   const path  = usePathname();
-  const folderId = getFolderIdByPathname(path);
+  const folderId = utils.getFolderIdByPathname(path);
 
   const [state, formAction, isSubmitting] = useActionState(createFolderAction, {
     parentId: folderId,

@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { RowData } from "../types";
 import type { ListViewColumns, ListViewRow } from "./types";
+import useDropzone from "@/hooks/useDropzone";
 
 
 export type FileListViewProps = {
@@ -14,6 +15,7 @@ export type FileListViewProps = {
 
 export default function FileListView({ rows, cols, data }: Readonly<FileListViewProps>) {
   const router = useRouter();
+  const [dropRef, isDragging] = useDropzone(console.log); // TODO
 
   return (
     <div className="fileListView">
@@ -26,7 +28,10 @@ export default function FileListView({ rows, cols, data }: Readonly<FileListView
           ))
         }
       </div>
-      <div className="fileListViewBody">
+      <div
+        ref={dropRef}
+        className={`fileListViewBody border-2 rounded ${isDragging ? "border-sapphire" : "border-transparent"}`}
+      >
         {
           data.map((d) => (
             <div

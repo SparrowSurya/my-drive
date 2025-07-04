@@ -7,7 +7,7 @@ import Icon from "@/components/icon";
 import CreateFolderDialog from "./createFolderDialog";
 import { OptionMenu, OptionItem, OptionSeperator } from "@/components/option";
 import { uploadFiles, uploadFolder } from "./actions";
-import { getFolderIdByPathname } from "./utils";
+import utils from "@/lib/utils";
 
 
 const iconClassName = "w-4 ml-4 mr-6";
@@ -18,7 +18,7 @@ export default function MenuButton() {
   const folderUploadRef = useRef<HTMLInputElement>(null);
 
   const path = usePathname();
-  const folderId = getFolderIdByPathname(path);
+  const folderId = utils.getFolderIdByPathname(path);
 
   const [isTransition, startTransition] = useTransition(); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [showOptionMenu, setShowOptionMenu] = useState<boolean>(false);
