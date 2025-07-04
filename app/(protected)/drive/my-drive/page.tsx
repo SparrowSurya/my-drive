@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import Image from "next/image";
 import { getFilesAndFolders } from "./query";
+import EmptyState from "@/components/emptyState";
 import FileListView from "@/components/fileView/list";
 import columns from "@/components/fileView/list/column";
 import Breadcrumbs from "@/components/breadcrumbs";
@@ -25,16 +25,11 @@ export default async function MyDrivePage() {
       </div>
       {
         (data === null || data.length == 0) && (
-          <div className="w-full h-full flex flex-col justify-center items-center">
-            <Image
-              src="/assets/svg/empty_state_my_drive.svg"
-              alt="empty my drive page"
-              width="240"
-              height="240"
-            />
-            <div className="text-2xl mt-10">A place for all of your files</div>
-            <div className="text-md text-subtext0 mt-2">Drag your files and folders here or use the &apos;New&apos; button to upload</div>
-          </div>
+          <EmptyState
+            image="/assets/svg/empty_state_my_drive.svg"
+            title="A place for all of your files"
+            para="Drag your files and folders here or use the 'New' button to upload"
+          />
         )
       }
       {
