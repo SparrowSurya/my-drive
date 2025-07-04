@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import Image from "next/image";
+import EmptyState from "@/components/emptyState";
 
 
 export const metadata: Metadata = {
@@ -9,16 +9,11 @@ export const metadata: Metadata = {
 export default function DriveHomePage() {
   return (
     <>
-      <div className="text-2xl mb-4 text-lavender">Welcome to Drive</div>
-      <div className="w-full h-full flex flex-col justify-center items-center">
-        <Image
-          src="/assets/svg/empty_state_home.svg"
-          alt="empty home page"
-          width="240"
-          height="240"
-        />
-        <div className="text-md text-subtext0 mt-2">Drag your files and folders here or use the &apos;New&apos; button to upload</div>
-      </div>
+      <div className="drivePageHeading">Storage</div>
+      <EmptyState
+        image="/assets/svg/empty_state_home.svg"
+        title="Drag your files and folders here or use the 'New' button to upload"
+      />
     </>
   );
 }

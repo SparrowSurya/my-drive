@@ -22,7 +22,7 @@ export default function Breadcrumbs({ data, className, ...props }: Readonly<Brea
             {
               (index !== 0) && <Icon icon={faAngleRight} className="text-subtext1" style={{ fontSize: "medium" }} />
             }
-            <Link href={ segment.url } className="text-button">
+            <Link href={ segment.url } className="drivePageHeading text-button">
               { segment.name }
             </Link>
           </React.Fragment>

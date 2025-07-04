@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { redirect } from "next/navigation";
 import { getFolderContents, getPathSegments } from "./query";
 import Breadcrumbs from "@/components/breadcrumbs";
+import EmptyState from "@/components/emptyState";
 import { FileListView } from "@/components/fileView";
 import columns from "@/components/fileView/list/column";
 
@@ -38,16 +38,11 @@ export default async function FolderPage({
       </div>
       {
         (data === null || data.length == 0) && (
-          <div className="w-full h-full flex flex-col justify-center items-center">
-            <Image
-              src="/assets/svg/empty_state_empty_folder.svg"
-              alt="empty my drive page"
-              width="240"
-              height="240"
-            />
-            <div className="text-2xl mt-10">Drop files here</div>
-            <div className="text-md text-subtext0 mt-2">or use the “New” button.</div>
-          </div>
+          <EmptyState
+            image="/assets/svg/empty_state_empty_folder.svg"
+            title="Drop files here"
+            para="or use the “New” button"
+          />
         )
       }
       {

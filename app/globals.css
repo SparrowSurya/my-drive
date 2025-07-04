@@ -52,7 +52,6 @@ body {
 }
 
 @layer components {
-
 	.icon {
 		@apply size-[16] p-[6];
 	}
@@ -92,5 +91,13 @@ body {
 		.option-item-seperator {
 			@apply border-overlay0 my-2;
 		}
+	}
+
+	.drivePageHeading {
+		@apply text-2xl mb-4 text-lavender;
+	}
+
+	.emptyStatePara {
+		@apply text-subtext0;
 	}
 }

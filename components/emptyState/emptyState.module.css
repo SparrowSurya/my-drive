@@ -1,0 +1,14 @@
+@reference "../../app/globals.css";
+
+.emptyState {
+  @apply w-full h-full;
+  @apply flex flex-col justify-center items-center;
+}
+
+.emptyStateTitle {
+  @apply text-2xl mt-10;
+}
+
+.emptyStatePara {
+  @apply text-lg mt-2;
+}
