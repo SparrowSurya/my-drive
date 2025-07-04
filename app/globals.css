@@ -94,10 +94,50 @@ body {
 	}
 
 	.drivePageHeading {
-		@apply text-2xl mb-4 text-lavender;
+		@apply text-2xl text-lavender;
 	}
 
 	.emptyStatePara {
 		@apply text-subtext0;
+	}
+
+
+	.fileListView {
+		@apply flex flex-col select-none;
+	}
+
+	.fileListViewHead {
+		@apply h-12 border-b-2 border-surface0;
+		@apply flex flex-row items-center;
+		@apply font-bold;
+	}
+
+	.fileListViewBody {
+		@apply flex flex-col;
+	}
+
+	.fileListRow {
+		@apply h-12 border-b-2 border-surface0 hover:bg-overlay0/30;
+		@apply flex flex-row;
+
+		& > div {
+			@apply flex flex-row items-center;
+		}
+	}
+
+	.fileColumn_name {
+		@apply flex-[3];
+	}
+
+	.fileColumn_lastModified {
+		@apply min-w-[60px] flex-[2] shrink;
+	}
+
+	.fileColumn_fileSize {
+		@apply min-w-[40px] flex-[2] shrink;
+	}
+
+	.fileColumn_elipsis {
+		@apply w-8 mx-2;
 	}
 }

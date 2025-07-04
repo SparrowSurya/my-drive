@@ -1,13 +1,10 @@
+import { ReactNode } from "react";
+import { RowData } from "../types";
 
-// a single column in table
-export type Column<T> = {
 
-  // unique key of the cell (same as key in row)
-  key: string;
+export type ListViewColumns = "name" | "lastModified" | "fileSize" | "elipsis";
 
-  // column heading
-  heading: string;
-
-  // callback to render the column data
-  render: (row: T, key: string) => React.ReactNode;
-};
+export type ListViewRow = Record<ListViewColumns, {
+  head: string,
+  body: (data: RowData, key: string) => ReactNode,
+}>

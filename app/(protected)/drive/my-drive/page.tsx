@@ -1,8 +1,5 @@
 import { Metadata } from "next";
-import { getFilesAndFolders } from "./query";
-import EmptyState from "@/components/emptyState";
-import FileListView from "@/components/fileView/list";
-import columns from "@/components/fileView/list/column";
+import FileView from "./view";
 import Breadcrumbs from "@/components/breadcrumbs";
 
 
@@ -10,10 +7,9 @@ export const metadata: Metadata = {
   title: "My Drive - Drive",
 };
 
-export default async function MyDrivePage() {
-  const data = await getFilesAndFolders();
-  const segments = [{ name: "My Drive", url: "/drive/my-dive" }];
+const segments = [{ name: "My Drive", url: "/drive/my-dive" }];
 
+export default async function MyDrivePage() {
   return (
     <>
       <div className="flex flex-row">
@@ -23,20 +19,7 @@ export default async function MyDrivePage() {
           data={segments}
         />
       </div>
-      {
-        (data === null || data.length == 0) && (
-          <EmptyState
-            image="/assets/svg/empty_state_my_drive.svg"
-            title="A place for all of your files"
-            para="Drag your files and folders here or use the 'New' button to upload"
-          />
-        )
-      }
-      {
-        data && data.length > 0 && (
-          <FileListView data={data} columns={columns} />
-        )
-      }
+      <FileView />
     </>
   );
 }

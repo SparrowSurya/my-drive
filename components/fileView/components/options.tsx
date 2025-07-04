@@ -20,7 +20,7 @@ export default function FileOption({ row }: Readonly<{ row: RowData }>) {
   const [showFileRenameDialog, setShowFileRenameDialog] = useState<boolean>(false);
 
   return (
-    <td className="relative w-12">
+    <div className="relative w-12">
       {
         showOptionMenu && (
           <OptionMenu
@@ -83,6 +83,6 @@ export default function FileOption({ row }: Readonly<{ row: RowData }>) {
         )
       }
       <Icon hover icon={faEllipsisVertical} onClick={() => setShowOptionMenu(!showOptionMenu)} />
-    </td>
+    </div>
   );
 }

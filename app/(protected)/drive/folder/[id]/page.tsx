@@ -3,8 +3,11 @@ import { getFolderContents, getPathSegments } from "./query";
 import Breadcrumbs from "@/components/breadcrumbs";
 import EmptyState from "@/components/emptyState";
 import { FileListView } from "@/components/fileView";
-import columns from "@/components/fileView/list/column";
+import row from "@/components/fileView/list/row";
+import { ListViewColumns } from "@/components/fileView/list/types";
 
+
+const columns: ListViewColumns[] = ["name", "lastModified", "fileSize", "elipsis"];
 
 export default async function FolderPage({
   params,
@@ -30,11 +33,7 @@ export default async function FolderPage({
   return (
     <>
       <div className="flex flex-row">
-        <Breadcrumbs
-          className="text-2xl cursor-pointer"
-          style={{ transform: "translateX(-12px)" }}
-          data={segments}
-        />
+        <Breadcrumbs style={{ transform: "translateX(-12px)" }} data={segments} />
       </div>
       {
         (data === null || data.length == 0) && (
@@ -47,7 +46,7 @@ export default async function FolderPage({
       }
       {
         data && data.length > 0 && (
-          <FileListView data={data} columns={columns} />
+          <FileListView data={data} rows={row} cols={columns} />
         )
       }
     </>
