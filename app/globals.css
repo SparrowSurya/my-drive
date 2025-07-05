@@ -97,10 +97,23 @@ body {
 		@apply text-2xl text-lavender;
 	}
 
-	.emptyStatePara {
-		@apply text-subtext0;
+	/* EmptyState */
+
+	.emptyState {
+		@apply w-full h-full;
+		@apply flex flex-col justify-center items-center;
+
+		.emptyStateTitle {
+			@apply text-xl mt-10;
+		}
+
+		.emptyStatePara {
+			@apply mt-2;
+			@apply text-subtext0;
+		}
 	}
 
+	/* FileListView */
 
 	.fileListView {
 		@apply flex flex-col select-none;

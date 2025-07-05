@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import style from "./emptyState.module.css";
 
 
 export type EmptyStateProps = {
@@ -17,7 +16,7 @@ export default function EmptyState({
   ...props
 }: Readonly<EmptyStateProps>) {
   return (
-    <div className={className ?? style.emptyState} {...props}>
+    <div className={className ?? "emptyState"} {...props}>
       {
         (typeof image === "string") ? (
           <Image
@@ -25,13 +24,13 @@ export default function EmptyState({
             alt="empty state"
             width="240"
             height="240"
-            className={style.emptyStateImage}
+            className={"emptyStateImage"}
           />
         ) : image
       }
       {
         (typeof title === "string") ? (
-          <div className={style.emptyStateTitle}>{ title }</div>
+          <div className={"emptyStateTitle"}>{ title }</div>
         ) : title
       }
       {

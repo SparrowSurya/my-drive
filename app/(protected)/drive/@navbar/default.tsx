@@ -1,5 +1,5 @@
 import NavItem from "./item";
-import MenuButton from "./menu-button";
+import MenuButton from "./newButton";
 import { navGroups } from "./data";
 import { getStorageUsed } from "@/lib/query/file";
 import { slugify } from "@/lib/utils/string";
