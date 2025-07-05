@@ -35,6 +35,6 @@ export async function POST(req: NextRequest) {
     }, { id: true, name: true, folderId: true, updatedAt: true, size: true });
     return NextResponse.json({ file: newFile, success: true });
   } catch {
-    return NextResponse.json({ error: "something went wrong" })
+    return NextResponse.json({ error: "something went wrong" }, { status: 409 })
   }
 }

@@ -102,28 +102,30 @@ export async function addFileWithRelativePath(
     folderId = root.id;
   }
 
-  for (const folderName of file.path) {
-    const childFolder = await prisma.hierarchy.findFirst({
-      where: {
-        parentId: folderId,
-        folder: { name: folderName }
-      },
-      select: { folderId: true },
-    });
+  await prisma.$transaction(async (tx) => {
+    for (const folderName of file.path) {
+      const childFolder = await tx.hierarchy.findFirst({
+        where: {
+          parentId: folderId,
+          folder: { name: folderName }
+        },
+        select: { folderId: true },
+      });
 
-    if (childFolder) {
-      folderId = childFolder.folderId
-    } else {
-      const newFolder = await prisma.folder.create({
-        data: {
-          user: { connect: userWhere },
-          name: folderName,
-          parent: { create: { parentId: folderId } },
-        }
-      })
-      folderId = newFolder.id;
+      if (childFolder) {
+        folderId = childFolder.folderId
+      } else {
+        const newFolder = await tx.folder.create({
+          data: {
+            user: { connect: userWhere },
+            name: folderName,
+            parent: { create: { parentId: folderId } },
+          }
+        })
+        folderId = newFolder.id;
+      }
     }
-  }
+  })
 
   const existingFile = await prisma.file.findUnique({
     where: { name_folderId: { name: file.name, folderId }}
