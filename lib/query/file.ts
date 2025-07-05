@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { Prisma } from "@/app/generated/prisma";
+import { getOrCreateRootFolder } from "./folder";
 
 
 export async function addFiles(
@@ -71,7 +72,7 @@ export async function updateFile(
 }
 
 export async function getStorageUsed(
-  userWhere: Prisma.UserWhereInput,
+  userWhere: Prisma.UserWhereUniqueInput,
 ): Promise<number> {
   const result = await prisma.file.aggregate({
     where: {
@@ -80,4 +81,62 @@ export async function getStorageUsed(
     _sum: { size: true }
   });
   return result._sum.size ?? 0;
+}
+
+
+export type FileUploadData = {
+  name: string,
+  path: string[],
+  folderId: number,
+  data: Uint8Array,
+};
+
+export async function addFileWithRelativePath(
+  userWhere: Prisma.UserWhereUniqueInput,
+  file: FileUploadData,
+  select?: Prisma.FileSelect,
+): Promise<Prisma.FileGetPayload<{ select?: Prisma.FileSelect }>> {
+  let folderId = file.folderId;
+  if (folderId === 0) {
+    const root = await getOrCreateRootFolder(userWhere, { id: true });
+    folderId = root.id;
+  }
+
+  for (const folderName of file.path) {
+    const childFolder = await prisma.hierarchy.findFirst({
+      where: {
+        parentId: folderId,
+        folder: { name: folderName }
+      },
+      select: { folderId: true },
+    });
+
+    if (childFolder) {
+      folderId = childFolder.folderId
+    } else {
+      const newFolder = await prisma.folder.create({
+        data: {
+          user: { connect: userWhere },
+          name: folderName,
+          parent: { create: { parentId: folderId } },
+        }
+      })
+      folderId = newFolder.id;
+    }
+  }
+
+  const existingFile = await prisma.file.findUnique({
+    where: { name_folderId: { name: file.name, folderId }}
+  });
+  if (existingFile) throw new Error("file already exists");
+
+  return await prisma.file.create({
+    data: {
+      folderId,
+      name: file.name,
+      size: file.data.length,
+      data: file.data,
+    },
+    select,
+  });
 }

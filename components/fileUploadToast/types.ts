@@ -10,4 +10,5 @@ export type FileUpload = {
   type: FileType,
   status: FileUploadStatus,
   progress: number,
+  error?: string,
 };

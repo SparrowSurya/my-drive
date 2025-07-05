@@ -16,7 +16,7 @@ export type FileUploadToastProps = {
 export default function FileUploadToast({ uploads, onClose, ...props }: Readonly<FileUploadToastProps>) {
   const [showDetail, setShowDetail] = useState(true);
   const uploadCount = useMemo(() => {
-    return uploads.filter(item => item.progress === 100).length;
+    return uploads.filter(item => item.status === "success").length;
   }, [uploads]);
 
   return (
