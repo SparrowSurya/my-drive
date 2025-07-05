@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { RowData } from "../types";
 import type { ListViewColumns, ListViewRow } from "./types";
 import useDropzone from "@/hooks/useDropzone";
+import useFileUpload from "@/hooks/useFileUpload";
 
 
 export type FileListViewProps = {
@@ -15,7 +16,8 @@ export type FileListViewProps = {
 
 export default function FileListView({ rows, cols, data }: Readonly<FileListViewProps>) {
   const router = useRouter();
-  const [dropRef, isDragging] = useDropzone(console.log); // TODO
+  const { uploadFile } = useFileUpload();
+  const [dropRef, isDragging] = useDropzone(uploadFile);
 
   return (
     <div className="fileListView">

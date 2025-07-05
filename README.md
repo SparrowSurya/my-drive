@@ -55,3 +55,15 @@ npm run start
 * Display files & folders in list view
 * Show options (download, rename, organise, share, move to trash)
 * Rename option
+
+
+## Todo
+* Breadcrumbs
+  - show only last three segments
+  - show dropdown button for hidden segments for navigation
+* FileUploadToast
+  - add scroll to the toast when exceeds threshold height
+* FileListView
+  - add scroll when exceeds some height threshold
+* Upload Route
+  - upload file with path

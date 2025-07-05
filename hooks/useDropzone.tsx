@@ -1,7 +1,11 @@
 import { useState, useCallback, useRef, useEffect, type RefObject } from "react";
 
 
-export default function useDropzone(onDrop: (files: File[]) => void): [RefObject<HTMLDivElement | null>, boolean]  {
+export interface FileWithRelativePath extends File {
+  relativePath: string;
+}
+
+export default function useDropzone(onDrop: (files: FileWithRelativePath) => void): [RefObject<HTMLDivElement | null>, boolean] {
   const [isDragging, setIsDragging] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -19,9 +23,30 @@ export default function useDropzone(onDrop: (files: File[]) => void): [RefObject
   const handleDrop = useCallback((e: DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    const files = Array.from(e.dataTransfer?.files || []);
-    onDrop(files);
+
+    const uploadEntry = (entry: FileSystemEntry, path: string = "") => {
+      if (entry.isFile) {
+        (entry as FileSystemFileEntry).file((file) => {
+          (file as any).relativePath = path + file.name; // eslint-disable-line @typescript-eslint/no-explicit-any
+          onDrop(file as FileWithRelativePath);
+        });
+      } else if (entry.isDirectory) {
+        const reader = (entry as FileSystemDirectoryEntry).createReader();
+        reader.readEntries((entries: FileSystemEntry[]) => {
+          entries.forEach((child) => uploadEntry(child, path + entry.name + "/"));
+        });
+      }
+    };
+
+    const items = e.dataTransfer?.items || [];
+    for (const item of items) {
+      const entry = item.webkitGetAsEntry && item.webkitGetAsEntry();
+      if (entry) {
+        uploadEntry(entry);
+      }
+    }
   }, [onDrop]);
+
 
   useEffect(() => {
     const ele = ref.current;
@@ -39,3 +64,4 @@ export default function useDropzone(onDrop: (files: File[]) => void): [RefObject
 
   return [ref, isDragging];
 }
+

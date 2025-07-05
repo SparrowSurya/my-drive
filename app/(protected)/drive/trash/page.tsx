@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function TrashPage() {
   return (
     <>
-      <div className="drivePageHeading">Storage</div>
+      <div className="drivePageHeading">Trash</div>
       <EmptyState
         image="/assets/svg/empty_state_trash.svg"
         title="Trash is empty"
