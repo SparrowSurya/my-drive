@@ -1,7 +1,7 @@
 "use client";
 
-import React, { createContext, useState } from "react";
-import { usePathname } from "next/navigation";
+import React, { createContext, useState, useTransition } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import FileUploadToast from "@/components/fileUploadToast";
 import { getFileType } from "@/components/fileView/utilts";
 import { type FileUpload } from "@/components/fileUploadToast/types";
@@ -17,6 +17,8 @@ export type UploadContextType = {
 export const FileUploadContext = createContext<UploadContextType | undefined>(undefined);
 
 export default function FileUploadProvider({ children }: Readonly<{ children: React.ReactNode }>) {
+  const router = useRouter();
+  const [isTransition, startTransition] = useTransition(); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [uploads, setUploads] = useState<FileUpload[]>([]);
   const [showUpload, setShowUpload] = useState(true);
   const path = usePathname();
@@ -51,6 +53,7 @@ export default function FileUploadProvider({ children }: Readonly<{ children: Re
         prev.map((item) =>
           (item.id === id) ? { ...item, status: success ? "success" : "error", error } : item
       ));
+      startTransition(() => router.refresh());
     };
     xhr.onerror = () => {
       setUploads((prev) =>
