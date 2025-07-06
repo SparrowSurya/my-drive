@@ -206,3 +206,17 @@ export async function getParentHierarchy(
 
   return segments.reverse();
 }
+
+export async function getFolder(
+  userWhere: Prisma.UserWhereUniqueInput,
+  folderWhere: Prisma.FolderWhereUniqueInput,
+  select?: Prisma.FolderSelect,
+): Promise<Prisma.FolderGetPayload<{ select?: Prisma.FolderSelect }>> {
+  return await prisma.folder.findUniqueOrThrow({
+    where: {
+      user: userWhere,
+      ...folderWhere,
+    },
+    select,
+  });
+}

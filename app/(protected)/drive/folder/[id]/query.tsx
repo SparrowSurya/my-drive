@@ -1,7 +1,7 @@
 "use server";
 
 import { getServerSession } from "next-auth";
-import { getFolders, getParentHierarchy } from "@/lib/query/folder";
+import { getFolder, getFolders, getParentHierarchy } from "@/lib/query/folder";
 import { getFiles } from "@/lib/query/file";
 import type { RowData, FileData, FolderData } from "@/components/fileView/types";
 import utils from "@/lib/utils";
@@ -46,4 +46,16 @@ export async function getPathSegments(id: number): Promise<{ id: number, name: s
 
   const select = { id: true, name: true };
   return await getParentHierarchy({ email }, { id }, select);
+}
+
+export async function getFolderName(id: number): Promise<{ name: string }> {
+  const session = await getServerSession();
+  const { email } = session!.user ;
+
+  const select = { name: true };
+  try {
+    return await getFolder({ email }, { id }, select);
+  } catch {
+    return { name: "" };
+  }
 }
