@@ -2,6 +2,7 @@
 
 import React, { createContext, useState, useTransition } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import useDebounce from "@/hooks/useDebounce";
 import FileUploadToast from "@/components/fileUploadToast";
 import { getFileType } from "@/components/fileView/utilts";
 import { type FileUpload } from "@/components/fileUploadToast/types";
@@ -22,6 +23,7 @@ export default function FileUploadProvider({ children }: Readonly<{ children: Re
   const [uploads, setUploads] = useState<FileUpload[]>([]);
   const [showUpload, setShowUpload] = useState(true);
   const path = usePathname();
+  const { refresh: refreshTransition } = useDebounce(() => startTransition(() => router.refresh()), 1000);
 
   const uploadFile = (file: FileWithRelativePath) => {
     const id = crypto.randomUUID();
@@ -54,7 +56,7 @@ export default function FileUploadProvider({ children }: Readonly<{ children: Re
         prev.map((item) =>
           (item.id === id) ? { ...item, status: success ? "success" : "error", error } : item
       ));
-      startTransition(() => router.refresh());
+      refreshTransition();
     };
     xhr.onerror = (e) => {
       console.log(`Error (${file.relativePath}):`, e);
