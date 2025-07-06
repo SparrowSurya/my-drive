@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { faDownload, faEllipsisVertical, faFolderOpen, faPencil, faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import Icon from "@/components/icon";
 import type { RowData } from "../types";
-import { OptionMenu, OptionItem, OptionSeperator} from "@/components/option";
+import { OptionMenu, Option } from "@/components/option";
 import FolderRenameDialog from "./folderRenameDialog";
 import FileRenameDialog from "./fileRenameDialog";
 
@@ -19,45 +19,49 @@ export default function FileOption({ row }: Readonly<{ row: RowData }>) {
   const [showFolderRenameDialog, setShowFolderRenameDialog] = useState<boolean>(false);
   const [showFileRenameDialog, setShowFileRenameDialog] = useState<boolean>(false);
 
+  const options: (Option | null)[] = [
+    {
+      leading: <Icon icon={faDownload} className={iconClassName} />,
+      label: "Download",
+    },
+    {
+      leading: <Icon icon={faPencil} className={iconClassName} />,
+      label: "Rename",
+      props: {
+        onClick() {
+          setShowOptionMenu(false);
+          if (row.type === "folder") {
+            setShowFolderRenameDialog(true);
+          } else {
+            setShowFileRenameDialog(true);
+          }
+        }
+      }
+    },
+    null,
+    {
+      leading: <Icon icon={faFolderOpen} className={iconClassName} />,
+      label: "Organise",
+    },
+    {
+      leading: <Icon icon={faUserPlus} className={iconClassName} />,
+      label: "Share",
+    },
+    {
+      leading: <Icon icon={faTrash} className={iconClassName} />,
+      label: "Move to Trash",
+    },
+  ];
+
   return (
     <div className="relative w-12">
       {
         showOptionMenu && (
           <OptionMenu
             onClickOutside={() => setShowOptionMenu(false)}
-            className="absolute top-[36] right-[18] bg-surface0 drop-shadow-md rounded-sm cursor-default border-overlay0 drop-shadow-overlay0"
-          >
-            <OptionItem
-              leading={<Icon icon={faDownload} className={iconClassName} />}
-              text="Download"
-            />
-            <OptionItem
-              leading={<Icon icon={faPencil} className={iconClassName} />}
-              text="Rename"
-              onClick={() => {
-                setShowOptionMenu(false);
-                if (row.type === "folder") {
-                  setShowFolderRenameDialog(true);
-                } else {
-                  setShowFileRenameDialog(true);
-                }
-              }}
-            />
-            <OptionSeperator />
-            <OptionItem
-              leading={<Icon icon={faFolderOpen} className={iconClassName} />}
-              text="Organise"
-            />
-            <OptionItem
-              leading={<Icon icon={faUserPlus} className={iconClassName} />}
-              text="Share"
-            />
-            <OptionSeperator />
-            <OptionItem
-              leading={<Icon icon={faTrash} className={iconClassName} />}
-              text="Move to trash"
-            />
-          </OptionMenu>
+            className="absolute top-[36] right-[18]"
+            options={options}
+          />
         )
       }
       {

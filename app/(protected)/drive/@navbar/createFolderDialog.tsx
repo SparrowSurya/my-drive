@@ -28,7 +28,7 @@ export default function CreateFolderDialog({
   }, [state.success, closeModal]);
 
   return (
-    <div className="fixed top-0 right-0 left-0 bottom-0 bg-crust/60">
+    <div className="fixed top-0 right-0 left-0 bottom-0 bg-crust/60 z-[50]">
       <Modal
         className="absolute left-[50%] top-[50%] rounded-2xl py-5 px-8 bg-surface0 shadow-md shadow-crust"
         portal="id_modal"
@@ -48,8 +48,8 @@ export default function CreateFolderDialog({
             errorText={state.errors?.folderName?.[0]}
           />
           <div className="flex flex-row justify-end items-center gap-3">
-            <button type="button" disabled={isSubmitting} onClick={() => closeModal()} className="text-button">Cancel</button>
-            <button type="submit" disabled={isSubmitting} className="text-button">Create</button>
+            <button type="button" disabled={isSubmitting} onClick={() => closeModal()} className="text-button font-medium">Cancel</button>
+            <button type="submit" disabled={isSubmitting} className="text-button font-medium">Create</button>
           </div>
         </Form>
       </Modal>

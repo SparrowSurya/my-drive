@@ -1,30 +1,24 @@
 import React from "react";
+import { Option } from "./types";
 
 
 export type OptionItemProps = {
-  leading?: string | React.ReactNode,
-  text: string,
-  trailing?: string | React.ReactNode,
-} & React.HTMLAttributes<HTMLDivElement>;
+  option: Option,
+} & Omit<React.HTMLAttributes<HTMLDivElement>, "children">;
 
-
-export default function OptionItem({ leading, text, trailing, className, ...restProps }: Readonly<OptionItemProps>) {
+export default function OptionItem({ option, className, ...restProps }: Readonly<OptionItemProps>) {
   return (
-    <div className={`option-item ${className}`} {...restProps}>
+    <div className={className ?? "option-item"} {...restProps}>
+      { option.leading ?? null }
       {
-        leading && ((typeof leading === "string") ? (
-            <span className="option-item-leading">{ leading }</span>
-          ) : leading)
+        (typeof option.label === "string") ? (
+          <span className="option-item-text">{ option.label }</span>
+        ) : option.label
       }
       {
-        (typeof text === "string") ? (
-          <span className="option-item-text">{ text }</span>
-        ) : text
-      }
-      {
-        trailing && ((typeof trailing === "string") ? (
-          <span className="option-item-trailing">{ trailing }</span>
-        ) : trailing)
+        option.trailing && (typeof option.trailing === "string") ? (
+          <span className="option-item-trailing">{ option.trailing }</span>
+        ) : option.trailing
       }
     </div>
   );

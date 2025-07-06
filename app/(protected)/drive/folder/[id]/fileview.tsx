@@ -19,7 +19,7 @@ export default function FileView({ data }: Readonly<{ data: RowData[] }>) {
     <>
       {
         (data === null || data.length == 0) && (
-          <div ref={dropRef} className={`border-2 rounded ${isDragging ? "border-sapphire" : "border-transparent"}`}>
+          <div ref={dropRef} className={`flex-1 flex justify-center items-center border-2 rounded ${isDragging ? "border-sapphire" : "border-transparent"}`}>
             <EmptyState
               image="/assets/svg/empty_state_empty_folder.svg"
               title="Drop files here"

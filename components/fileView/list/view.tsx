@@ -24,7 +24,7 @@ export default function FileListView({ rows, cols, data }: Readonly<FileListView
       <div className="fileListViewHead">
         {
           cols.map((col) => (
-            <div key={col} className={`fileColumn_${col}`}>
+            <div key={col} className={`listColumn_${col}`}>
               { rows[col].head }
             </div>
           ))

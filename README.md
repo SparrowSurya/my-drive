@@ -44,6 +44,7 @@ npm run start
 * basic pages (home, shared-with-me, my-drive, recent, starred, trash, storage)
 * My drive: display files and folders (list view)
 * display folder contents (list view)
+* file(s)/folder(s) upload via drag drop
 
 3. Navbar
 * Display navlinks (with navigation)
@@ -58,12 +59,7 @@ npm run start
 
 
 ## Todo
-* Breadcrumbs
-  - show only last three segments
-  - show dropdown button for hidden segments for navigation
 * FileUploadToast
   - add scroll to the toast when exceeds threshold height
 * FileListView
   - add scroll when exceeds some height threshold
-* Upload Route
-  - upload file with path

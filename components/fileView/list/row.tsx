@@ -11,9 +11,9 @@ const row: ListViewRow = {
     head: "Name",
     body: (row: RowData, key: string) => {
       return (
-        <div  key={key} className="fileColumn_name">
+        <div  key={key} className="listColumn_name">
           <FileIcon type={row.type as FileType} />
-          <span className="select-none">{ row.name }</span>
+          <span className="truncate overflow-hidden whitespace-nowrap">{ row.name }</span>
         </div>
       );
     },
@@ -22,7 +22,7 @@ const row: ListViewRow = {
     head: "Last modified",
     body: (row: RowData, key: string) => {
       return (
-        <div key={key} className="fileColumn_lastModified">
+        <div key={key} className="listColumn_lastModified">
           <span className="ml-2">
             { row.lastModified }
           </span>
@@ -34,7 +34,7 @@ const row: ListViewRow = {
     head: "File size",
     body: (row: RowData, key: string) => {
       return (
-        <div key={key} className="fileColumn_fileSize">
+        <div key={key} className="listColumn_fileSize">
           <span className="ml-2">
             { row.size ?? "—" }
           </span>
@@ -46,7 +46,7 @@ const row: ListViewRow = {
     head: "",
     body: (row: RowData, key: string) => {
       return (
-        <div key={key} className="fileColumn_elipsis">
+        <div key={key} className="listColumn_elipsis">
           <FileOption row={row} />
         </div>
       );

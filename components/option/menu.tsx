@@ -1,13 +1,26 @@
 import React from "react";
 import Modal, { type ModalProps } from "@/components/modal";
+import OptionItem from "./item";
+import OptionSeperator from "./seperator";
+import { Option } from "./types";
 
 
-export type OptionMenuProps = ModalProps & React.HTMLAttributes<HTMLDivElement>;
+export type OptionMenuProps = {
+  options: (Option | null)[]
+} & Omit<ModalProps, "children"> & Omit<React.HTMLAttributes<HTMLDivElement>, "children">;
 
-export default function OptionMenu({ children, onClickOutside, className, ...props }: Readonly<OptionMenuProps>) {
+export default function OptionMenu({ options, className, ...props }: Readonly<OptionMenuProps>) {
   return (
-    <Modal onClickOutside={onClickOutside} className={`option-menu ${className}`} {...props}>
-      { children }
+    <Modal className={`option-menu ${className}`} {...props}>
+      {
+        options.map((opt, index) => (
+          opt ? (
+            <OptionItem key={index} option={opt} {...opt.props} />
+          ) : (
+            <OptionSeperator key={index} />
+          )
+        ))
+      }
     </Modal>
   );
 }

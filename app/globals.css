@@ -51,6 +51,10 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+#id_modal {
+	z-index: 100;
+}
+
 @layer components {
 	.icon {
 		@apply size-[16] p-[6];
@@ -66,18 +70,26 @@ body {
 	}
 
 	.modal {
-		@apply z-[100];
+		@apply z-[1000000];
 	}
 
 	.option-menu {
-		@apply flex flex-col w-60;
+		@apply flex flex-col w-72 bg-surface0 border-overlay1 shadow-sm shadow-overlay2 rounded-sm cursor-default;
 
 		.option-item {
-			@apply flex flex-row items-center py-1 hover:bg-overlay0 cursor-pointer;
+			@apply flex flex-row items-center py-1 hover:bg-overlay2/20 cursor-pointer;
+
+			.icon {
+				@apply w-4 ml-4;
+			}
 
 			.option-item-text {
 				@apply text-text;
 			}
+		}
+
+		.option-item > .option-item-text:first-child {
+			@apply pl-4;
 		}
 
 		.option-item:first-child {
@@ -88,7 +100,7 @@ body {
 			@apply mb-2;
 		}
 
-		.option-item-seperator {
+		.option-seperator {
 			@apply border-overlay0 my-2;
 		}
 	}
@@ -116,41 +128,33 @@ body {
 	/* FileListView */
 
 	.fileListView {
-		@apply flex flex-col select-none;
-	}
+		@apply select-none w-full;
 
-	.fileListViewHead {
-		@apply h-12 border-b-2 border-surface0;
-		@apply flex flex-row items-center;
-		@apply font-bold;
-	}
+		.fileListViewHead {
+			@apply h-12 border-2 border-b-surface0 border-t-transparent border-l-transparent border-r-transparent;
+			@apply grid grid-cols-[minmax(0,3fr)_minmax(0,2fr)_minmax(0,2fr)_64px];
+			@apply font-bold;
 
-	.fileListViewBody {
-		@apply flex flex-col;
-	}
-
-	.fileListRow {
-		@apply h-12 border-b-2 border-surface0 hover:bg-overlay0/30;
-		@apply flex flex-row;
-
-		& > div {
-			@apply flex flex-row items-center;
+			& > div {
+				@apply flex items-center;
+			}
 		}
-	}
 
-	.fileColumn_name {
-		@apply flex-[3];
-	}
+		.fileListViewBody {
+			@apply w-full;
 
-	.fileColumn_lastModified {
-		@apply min-w-[60px] flex-[2] shrink;
-	}
+			.fileListRow {
+				@apply h-12 border-b-2 border-surface0 hover:bg-overlay0/30;
+				@apply grid grid-cols-[minmax(0,3fr)_minmax(0,2fr)_minmax(0,2fr)_64px];
 
-	.fileColumn_fileSize {
-		@apply min-w-[40px] flex-[2] shrink;
-	}
+				& > div {
+					@apply flex flex-row items-center;
+				}
 
-	.fileColumn_elipsis {
-		@apply w-8 mx-2;
+				.listColumn_elipsis {
+					@apply mx-2 shrink-0;
+				}
+			}
+		}
 	}
 }

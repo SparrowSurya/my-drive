@@ -5,7 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { faFileUpload, faFolderPlus, faPlus, faUpload } from "@fortawesome/free-solid-svg-icons";
 import Icon from "@/components/icon";
 import CreateFolderDialog from "./createFolderDialog";
-import { OptionMenu, OptionItem, OptionSeperator } from "@/components/option";
+import { OptionMenu, Option } from "@/components/option";
 import { uploadFiles, uploadFolder } from "./actions";
 import utils from "@/lib/utils";
 
@@ -82,40 +82,49 @@ export default function MenuButton() {
     }
   }
 
+  const options: (Option | null)[] = [
+    {
+      leading: <Icon icon={faFolderPlus} className={iconClassName} />,
+      label: "New Folder",
+      props: {
+        onClick() {
+          setShowCreateFolderDialog(true);
+          setShowOptionMenu(false);
+        }
+      }
+    },
+    null,
+    {
+      leading: <Icon icon={faFileUpload} className={iconClassName} />,
+      label: "File Upload",
+      props: {
+        onClick() {
+          fileUploadRef.current?.click();
+          setTimeout(() => setShowOptionMenu(false), 0);
+        }
+      }
+    },
+    {
+      leading: <Icon icon={faUpload} className={iconClassName} />,
+      label: "Folder Upload",
+      props: {
+        onClick() {
+          folderUploadRef.current?.click();
+          setTimeout(() => setShowOptionMenu(false), 0);
+        }
+      }
+    },
+  ];
+
   return (
     <>
       {
         showOptionMenu && (
           <OptionMenu
             onClickOutside={() => setShowOptionMenu(!showOptionMenu)}
-            className="absolute bg-surface0 drop-shadow-md rounded-sm border-overlay0 drop-shadow-overlay0"
-          >
-            <OptionItem
-              leading={<Icon icon={faFolderPlus} className={iconClassName} />}
-              text="New Folder"
-              onClick={() => {
-                setShowCreateFolderDialog(true);
-                setShowOptionMenu(false);
-              }}
-            />
-            <OptionSeperator />
-            <OptionItem
-              leading={<Icon icon={faFileUpload} className={iconClassName} />}
-              text="File Upload"
-              onClick={() => {
-                fileUploadRef.current?.click();
-                setTimeout(() => setShowOptionMenu(false), 0);
-              }}
-            />
-            <OptionItem
-              leading={<Icon icon={faUpload} className={iconClassName} />}
-              text="Folder Upload"
-              onClick={() => {
-                folderUploadRef.current?.click();
-                setTimeout(() => setShowOptionMenu(false), 0);
-              }}
-            />
-          </OptionMenu>
+            className="absolute"
+            options={options}
+          />
         )
       }
       {
@@ -135,20 +144,8 @@ export default function MenuButton() {
         <Icon icon={faPlus} className="size-[16] cursor-pointer mx-2 rounded-full" />
         <span className="text-lg pr-2">New</span>
       </button>
-      <input
-        ref={fileUploadRef}
-        type="file"
-        multiple
-        style={{ display: "none" }}
-        onChange={handleFileChange}
-      />
-      <input
-        ref={folderUploadRef}
-        type="file"
-        multiple
-        style={{ display: "none" }}
-        onChange={handleFolderChange}
-      />
+      <input ref={fileUploadRef} type="file" multiple style={{ display: "none" }} onChange={handleFileChange} />
+      <input ref={folderUploadRef} type="file" multiple style={{ display: "none" }} onChange={handleFolderChange} />
     </>
   );
 }
