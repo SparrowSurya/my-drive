@@ -148,7 +148,7 @@ export async function getFile(
   fileWhere: Prisma.FileWhereUniqueInput,
   select?: Prisma.FileSelect,
 ): Promise<Prisma.FileGetPayload<{ select?: Prisma.FileSelect }>> {
-  return await prisma.file.findUniqueOrThrow({
+  return await prisma.file.findFirstOrThrow({
     where: {
       folder: { user: userWhere },
       ...fileWhere,

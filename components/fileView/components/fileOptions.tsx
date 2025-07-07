@@ -17,10 +17,26 @@ export default function FileOption({ row }: Readonly<{ row: RowData }>) {
   const [showFolderRenameDialog, setShowFolderRenameDialog] = useState<boolean>(false);
   const [showFileRenameDialog, setShowFileRenameDialog] = useState<boolean>(false);
 
+  function handleDownload() {
+    const a = document.createElement("a");
+    const isFolder = row.type === "folder";
+    a.href = `/api/download/${isFolder ? "folder" : "file"}/${row.id}`;
+    a.download = row.name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   const options: (Option | null)[] = [
     {
       leading: <Icon icon={faDownload} />,
       label: "Download",
+      props: {
+        onClick() {
+          handleDownload();
+          setShowOptionMenu(false);
+        }
+      }
     },
     {
       leading: <Icon icon={faPencil} />,

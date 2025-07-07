@@ -1,6 +1,6 @@
 "use client";
 
-import FileOption from "../components/options";
+import FileOption from "../components/fileOptions";
 import FileIcon from "../fileIcon";
 import { type RowData } from "../types";
 import { type ListViewRow } from "./types";

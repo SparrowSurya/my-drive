@@ -50,15 +50,13 @@ export default function FileUploadProvider({ children }: Readonly<{ children: Re
     xhr.onload = () => {
       const success = xhr.status >= 200 && xhr.status < 300;
       const error = success ? undefined : xhr.response;
-      console.log(file.relativePath, xhr.status)
       setUploads((prev) =>
         prev.map((item) =>
           (item.id === id) ? { ...item, status: success ? "success" : "error", error } : item
       ));
       refreshTransition();
     };
-    xhr.onerror = (e) => {
-      console.log(`Error (${file.relativePath}):`, e);
+    xhr.onerror = () => {
       setUploads((prev) =>
         prev.map((item) =>
           item.id === id ? { ...item, status: "error", error: "upload failed" } : item

@@ -16,5 +16,5 @@ export function getFirstZodError<T>(error: ZodError<T>): string {
     }
   }
 
-  return "something went wrong";
+  return "invalid input";
 }
