@@ -10,8 +10,6 @@ import { uploadFiles, uploadFolder } from "./actions";
 import utils from "@/lib/utils";
 
 
-const iconClassName = "w-4 ml-4 mr-6";
-
 export default function MenuButton() {
   const router = useRouter();
   const fileUploadRef = useRef<HTMLInputElement>(null);
@@ -84,7 +82,7 @@ export default function MenuButton() {
 
   const options: (Option | null)[] = [
     {
-      leading: <Icon icon={faFolderPlus} className={iconClassName} />,
+      leading: <Icon icon={faFolderPlus} />,
       label: "New Folder",
       props: {
         onClick() {
@@ -95,7 +93,7 @@ export default function MenuButton() {
     },
     null,
     {
-      leading: <Icon icon={faFileUpload} className={iconClassName} />,
+      leading: <Icon icon={faFileUpload} />,
       label: "File Upload",
       props: {
         onClick() {
@@ -105,7 +103,7 @@ export default function MenuButton() {
       }
     },
     {
-      leading: <Icon icon={faUpload} className={iconClassName} />,
+      leading: <Icon icon={faUpload} />,
       label: "Folder Upload",
       props: {
         onClick() {
@@ -141,7 +139,7 @@ export default function MenuButton() {
         onClick={() => setShowOptionMenu(true)}
         className="flex flex-rpw justify-center items-center bg-lavender text-base hover:bg-lavender/95 rounded-lg cursor-pointer p-2"
         >
-        <Icon icon={faPlus} className="size-[16] cursor-pointer mx-2 rounded-full" />
+        <Icon icon={faPlus} className="size-[16] cursor-pointer ml-1 mr-2 rounded-full" />
         <span className="text-lg pr-2">New</span>
       </button>
       <input ref={fileUploadRef} type="file" multiple style={{ display: "none" }} onChange={handleFileChange} />

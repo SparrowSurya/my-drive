@@ -11,7 +11,7 @@ export type OptionMenuProps = {
 
 export default function OptionMenu({ options, className, ...props }: Readonly<OptionMenuProps>) {
   return (
-    <Modal className={`option-menu ${className}`} {...props}>
+    <Modal className={`option-menu ${className ?? ""}`} {...props}>
       {
         options.map((opt, index) => (
           opt ? (

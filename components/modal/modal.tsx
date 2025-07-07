@@ -35,7 +35,7 @@ export default function Modal({
 	}, [onClickOutside]);
 
 	const modal = (
-		<div ref={modalRef} className={`modal ${className}`} {...restProps}>
+		<div ref={modalRef} className={`modal ${className ?? ""}`} {...restProps}>
 			{children}
 		</div>
 	);

@@ -13,7 +13,7 @@ export default function FileIcon({ type, style, className }: Readonly<FileIconPr
   return (
     <Icon
       icon={icon}
-      className={`mx-4 ${className}`}
+      className={`mx-4 ${className ?? ""}`}
       style={{ color, ...style }}
     />
   );

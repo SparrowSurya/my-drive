@@ -10,8 +10,6 @@ import FolderRenameDialog from "./folderRenameDialog";
 import FileRenameDialog from "./fileRenameDialog";
 
 
-const iconClassName = "w-4 ml-4 mr-6";
-
 export default function FileOption({ row }: Readonly<{ row: RowData }>) {
   const router = useRouter();
   const [isTransition, startTransition] = useTransition(); // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -21,11 +19,11 @@ export default function FileOption({ row }: Readonly<{ row: RowData }>) {
 
   const options: (Option | null)[] = [
     {
-      leading: <Icon icon={faDownload} className={iconClassName} />,
+      leading: <Icon icon={faDownload} />,
       label: "Download",
     },
     {
-      leading: <Icon icon={faPencil} className={iconClassName} />,
+      leading: <Icon icon={faPencil} />,
       label: "Rename",
       props: {
         onClick() {
@@ -40,15 +38,15 @@ export default function FileOption({ row }: Readonly<{ row: RowData }>) {
     },
     null,
     {
-      leading: <Icon icon={faFolderOpen} className={iconClassName} />,
+      leading: <Icon icon={faFolderOpen} />,
       label: "Organise",
     },
     {
-      leading: <Icon icon={faUserPlus} className={iconClassName} />,
+      leading: <Icon icon={faUserPlus} />,
       label: "Share",
     },
     {
-      leading: <Icon icon={faTrash} className={iconClassName} />,
+      leading: <Icon icon={faTrash} />,
       label: "Move to Trash",
     },
   ];

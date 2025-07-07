@@ -35,7 +35,7 @@ export default function Breadcrumbs({ data, className, ...props }: Readonly<Brea
   }));
 
   return (
-    <div className={`flex flex-row items-center ${className}`} {...props}>
+    <div className={`flex flex-row items-center ${className ?? ""}`} {...props}>
       {
         (initial.length > 0) && (
           <>

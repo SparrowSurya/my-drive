@@ -10,7 +10,7 @@ export type IconProp = {
 export default function Icon({ hover, className, ...restProps }: Readonly<IconProp>) {
   return (
     <FontAwesomeIcon
-      className={`icon ${hover && "icon-button"} ${className}`}
+      className={`icon ${hover && "icon-button"} ${className ?? ""}`}
       {...restProps}
     />
   );

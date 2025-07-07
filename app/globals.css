@@ -80,7 +80,7 @@ body {
 			@apply flex flex-row items-center py-1 hover:bg-overlay2/20 cursor-pointer;
 
 			.icon {
-				@apply w-4 ml-4;
+				@apply w-4 mx-4 mr-4;
 			}
 
 			.option-item-text {
