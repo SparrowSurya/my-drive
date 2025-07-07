@@ -218,3 +218,55 @@ export async function getFolder(
     select,
   });
 }
+
+export async function getFolderContents(
+  userWhere: Prisma.UserWhereUniqueInput,
+  folderWhere: Prisma.FolderWhereUniqueInput,
+  select: Prisma.FileSelect,
+): Promise<Array<Prisma.FileGetPayload<{ select: Prisma.FileSelect }> & { filepath: string }>> {
+  const parent = await prisma.folder.findUniqueOrThrow({
+    where: {
+      ...folderWhere,
+      user: userWhere,
+    },
+    select: { id: true, name: true },
+  });
+
+  type StackItem = {
+    folderId: number,
+    folderName: string,
+  };
+
+  const files: Array<Prisma.FileGetPayload<{ select: Prisma.FileSelect }> & { filepath: string }> = [];
+  const stack: StackItem[] = [{ folderId: parent.id, folderName: parent.name }];
+
+  while (stack.length > 0) {
+    const { folderId: parentId, folderName: segment } = stack.pop()!;
+
+    const foundFiles = await prisma.file.findMany({
+      where: { folderId: parentId },
+      select: { ...select, name: true },
+    });
+
+    for (const file of foundFiles) {
+      files.push({ ...file, filepath: `${segment}/${file.name}` });
+    }
+
+    const folders = await prisma.hierarchy.findMany({
+      where: { parentId },
+      select: {
+        folderId: true,
+        folder: { select: { name: true } },
+      },
+    });
+
+    for (const { folderId, folder } of folders) {
+      stack.push({
+        folderId: folderId,
+        folderName: `${segment}/${folder.name}`,
+      });
+    }
+  }
+
+  return files;
+}

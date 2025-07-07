@@ -40,3 +40,7 @@ export const FileUploadSchema = z.object({
 export const FileDownloadSchema = z.object({
   id: field.fileId,
 });
+
+export const FolderDownloadSchema = z.object({
+  id: field.folderId,
+});
