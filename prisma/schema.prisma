@@ -58,6 +58,7 @@ model Hierarchy {
   parentId Int
   parent   Folder @relation("FolderAsParent", fields: [parentId], references: [id])
 
+  @@unique([parentId, folderId])
   @@map("hierarchy")
 }
 

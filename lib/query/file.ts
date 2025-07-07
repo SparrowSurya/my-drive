@@ -102,33 +102,41 @@ export async function addFileWithRelativePath(
     folderId = root.id;
   }
 
-  await prisma.$transaction(async (tx) => {
-    for (const folderName of file.path) {
-      const childFolder = await tx.hierarchy.findFirst({
-        where: {
-          parentId: folderId,
-          folder: { name: folderName }
-        },
-        select: { folderId: true },
-      });
+  // HACK: Try to run this atmost 3 times to make sure we did our best
+  for (let i=0; i<3; i++) {
+    try {
+      await prisma.$transaction(async (tx) => {
+        for (const folderName of file.path) {
+          const childFolder = await tx.hierarchy.findFirst({
+            where: {
+              parentId: folderId,
+              folder: { name: folderName }
+            },
+            select: { folderId: true },
+          });
 
-      if (childFolder) {
-        folderId = childFolder.folderId
-      } else {
-        const newFolder = await tx.folder.create({
-          data: {
-            user: { connect: userWhere },
-            name: folderName,
-            parent: { create: { parentId: folderId } },
+          if (childFolder) {
+            folderId = childFolder.folderId
+          } else {
+            const newFolder = await tx.folder.create({
+              data: {
+                user: { connect: userWhere },
+                name: folderName,
+                parent: { create: { parentId: folderId } },
+              }
+            })
+            folderId = newFolder.id;
           }
-        })
-        folderId = newFolder.id;
-      }
+        }
+      });
+    } catch {
+      continue;
     }
-  })
+    break;
+  }
 
   const existingFile = await prisma.file.findUnique({
-    where: { name_folderId: { name: file.name, folderId }}
+    where: { name_folderId: { name: file.name, folderId } }
   });
   if (existingFile) throw new Error("file already exists");
 
