@@ -1,6 +1,6 @@
 import Icon, { type IconProp } from "@/components/icon";
 import { fileIcons } from "./data";
-import type { FileType } from "./types";
+import type { FileType } from "@/lib/types/file";
 
 
 export type FileIconProps = {

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Form, EmailInput, PasswordInput } from "@/components/form";
-import loginSchema  from "@/lib/validation/login";
+import { LoginSchema }  from "@/lib/schema";
 
 
 type FormError = {
@@ -26,7 +26,7 @@ export default function LoginForm() {
 
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
-    const result = loginSchema.safeParse(data);
+    const result = LoginSchema.safeParse(data);
     if (!result.success) {
       setErrors(result.error.flatten().fieldErrors);
       setSubmit(false);

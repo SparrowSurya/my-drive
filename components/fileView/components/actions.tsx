@@ -3,8 +3,7 @@
 import { getServerSession } from "next-auth";
 import { updateFolder } from "@/lib/query/folder";
 import { updateFile } from "@/lib/query/file";
-import { RenameFolderSchema } from "@/lib/validation/folder";
-import { RenameFileSchema } from "@/lib/validation/file";
+import { RenameFolderSchema, RenameFileSchema } from "@/lib/schema";
 
 
 export type RenameFolderFormState = {

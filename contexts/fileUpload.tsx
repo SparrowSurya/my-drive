@@ -4,7 +4,6 @@ import React, { createContext, useState, useTransition } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import useDebounce from "@/hooks/useDebounce";
 import FileUploadToast from "@/components/fileUploadToast";
-import { getFileType } from "@/components/fileView/utilts";
 import { type FileUpload } from "@/components/fileUploadToast/types";
 import { type FileWithRelativePath } from "@/hooks/useDropzone";
 import utils from "@/lib/utils";
@@ -32,7 +31,7 @@ export default function FileUploadProvider({ children }: Readonly<{ children: Re
       id,
       name: file.name,
       path: file.relativePath,
-      type: getFileType(file.name),
+      type: utils.getFileType(file.name),
       progress: 0,
       status: "uploading",
     };

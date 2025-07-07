@@ -142,3 +142,17 @@ export async function addFileWithRelativePath(
     select,
   });
 }
+
+export async function getFile(
+  userWhere: Prisma.UserWhereUniqueInput,
+  fileWhere: Prisma.FileWhereUniqueInput,
+  select?: Prisma.FileSelect,
+): Promise<Prisma.FileGetPayload<{ select?: Prisma.FileSelect }>> {
+  return await prisma.file.findUniqueOrThrow({
+    where: {
+      folder: { user: userWhere },
+      ...fileWhere,
+    },
+    select,
+  });
+}

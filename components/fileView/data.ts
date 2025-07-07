@@ -1,14 +1,7 @@
 import { faFile, faFileLines, faFileExcel, faFilePdf, faFileImage, faFileVideo, faFileAudio, faFilePowerpoint, faFileWord, faFileZipper, faFileCsv, faFileCode, faFolder } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import type { FileType } from "./types";
+import type { FileType } from "@/lib/types/file";
 
-
-export const fileExtGroup: Record<"image" | "audio" | "video" | "code", string[]> = {
-  image: [ "jpg", "jpeg", "png", "gif", "bmp", "svg", "webp", "heic", "tiff", "ico", "avif" ],
-  audio: [ "mp3", "wav", "ogg", "flac", "aac", "m4a", "wma", "aiff", "alac", "opus" ],
-  video: [ "mp4", "mkv", "avi", "mov", "wmv", "webm", "mpeg", "m4v" ],
-  code: [ "js", "ts", "tsx", "jsx", "py", "java", "c", "cpp", "cs", "go", "php", "html", "css", "json", "xml", "yml", "yaml", "sh", "rs", "swift", "kt", "dart", "sql" ],
-};
 
 export const fileIcons = {
   excel: { icon: faFileExcel, color: "#A6E3A1" },

@@ -2,8 +2,9 @@
 
 import FileOption from "../components/options";
 import FileIcon from "../fileIcon";
-import { RowData, FileType } from "../types";
-import { ListViewRow } from "./types";
+import { type RowData } from "../types";
+import { type ListViewRow } from "./types";
+import { type FileType } from "@/lib/types/file";
 
 
 const row: ListViewRow = {

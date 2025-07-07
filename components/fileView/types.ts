@@ -1,6 +1,4 @@
-
-
-export type FileType = "excel" | "pptx" | "docx" | "pdf" | "zip" | "txt" | "csv" | "file" | "audio" | "video" | "image" | "code" | "folder";
+import { type FileType } from "@/lib/types/file";
 
 
 export interface FileData {

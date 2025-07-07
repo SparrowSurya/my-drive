@@ -3,8 +3,8 @@
 import { getServerSession } from "next-auth";
 import { getOrCreateRootFolder, createFolder, folderExists, createFileTree } from "@/lib/query/folder";
 import { addFiles } from "@/lib/query/file";
-import { buildDirectory } from "@/lib/utils/tree";
-import { CreateFolderSchema } from "@/lib/validation/folder";
+import utils from "@/lib/utils";
+import { CreateFolderSchema } from "@/lib/schema";
 
 
 export type CreateFolderFormState = {
@@ -81,7 +81,7 @@ export async function uploadFolder(parentId: number, files: {
   if (!email) return "Something went wrong";
 
   try {
-    const tree = buildDirectory(files);
+    const tree = utils.buildDirectory(files);
     const id = (parentId === 0) ? (await getOrCreateRootFolder({ email }, { id: true })).id : parentId;
     await createFileTree({ email }, { id }, tree);
   } catch {

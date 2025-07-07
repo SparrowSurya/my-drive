@@ -2,8 +2,7 @@ import NavItem from "./item";
 import MenuButton from "./newButton";
 import { navGroups } from "./data";
 import { getStorageUsed } from "@/lib/query/file";
-import { slugify } from "@/lib/utils/string";
-import { formatBytes } from "@/lib/utils/string";
+import utils from "@/lib/utils";
 import { getServerSession } from "next-auth";
 
 
@@ -24,14 +23,14 @@ export default async function Navbar() {
                   <NavItem
                     key={index}
                     {...item}
-                    url={`/drive/${slugify(item.label)}`}
+                    url={`/drive/${utils.slugify(item.label)}`}
                   />
                 ))
               }
             </div>
           ))
         }
-        <div className="text-subtext0">{ formatBytes(storageSize) } used</div>
+        <div className="text-subtext0">{ utils.formatBytes(storageSize) } used</div>
       </div>
     </nav>
   );

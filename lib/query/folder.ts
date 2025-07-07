@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { Prisma } from "@/app/generated/prisma";
+import { type FileTree } from "@/lib/types/file";
 
 
 export async function getOrCreateRootFolder(
@@ -74,9 +75,6 @@ export async function createFolder(
   });
 }
 
-export type FileTree<T> = {
-  [key: string]: T[] | FileTree<T>,
-};
 
 // TODO - use transaction to handle failure
 export async function createFileTree(

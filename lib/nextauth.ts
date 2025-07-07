@@ -4,6 +4,7 @@ import Google from "next-auth/providers/google";
 import bcrypt from "bcrypt";
 import prisma from "@/lib/prisma";
 
+
 export const authOptions = {
 	session: {
 		strategy: "jwt",

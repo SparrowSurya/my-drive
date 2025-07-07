@@ -1,4 +1,4 @@
-import { FileType } from "../fileView/types";
+import { type FileType } from "@/lib/types/file";
 
 
 export type FileUploadStatus = "success" | "error" | "uploading";
