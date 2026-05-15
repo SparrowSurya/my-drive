@@ -11,7 +11,10 @@ export const fileId = z.number({ coerce: true });
 export const folderName = z.string().trim();
 export const folderId = z.number({ coerce: true });
 
-export const file = z.instanceof(File);
+export const file = z.custom<File>((val) => {
+  return typeof File !== "undefined" && val instanceof File;
+}, "Invalid file");
+
 export const relativePath = z.string().trim().transform(path => {
   const segments = path.split("/");
   segments.pop();
