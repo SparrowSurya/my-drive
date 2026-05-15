@@ -28,7 +28,8 @@ export async function GET(
     const files = await getFolderContents({ email }, { id: folderId }, { name: true, data: true });
     const folder = await getFolder({ email }, { id: folderId }, { name: true });
     const zipData = await zipFiles(files);
-    return new NextResponse(zipData, {
+    const bytes = new Uint8Array(zipData);
+    return new NextResponse(bytes, {
       headers: {
         "Content-Type": "application/zip",
         "Content-Disposition": `attachment; filename="${folder.name}.zip"`,

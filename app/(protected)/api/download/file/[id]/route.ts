@@ -26,7 +26,8 @@ export async function GET(
   try {
     const file = await getFile({ email }, { id: fileId }, { name: true, data: true });
     const type = utils.getFileType(file.name);
-    return new NextResponse(file.data, {
+    const bytes = new Uint8Array(file.data);
+    return new NextResponse(bytes, {
       headers: {
         "Content-Type": utils.getContentType(type),
         "Content-Disposition": `attachment; filename="${file.name}"`,

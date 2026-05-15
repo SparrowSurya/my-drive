@@ -21,7 +21,7 @@ NEXT_PUBLIC_SESSION_REFETCH_ON_WINDOW_FOCUS=0
 ```sh
 npm i
 npx prisma generate
-npm build
+npm run build
 npm run start
 ```
 
