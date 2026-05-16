@@ -35,7 +35,7 @@ export default function Breadcrumbs({ data, className, ...props }: Readonly<Brea
   }));
 
   return (
-    <div className={`flex flex-row items-center ${className ?? ""}`} {...props}>
+    <div className={`flex flex-row items-center ml-3 ${className ?? ""}`} {...props}>
       {
         (initial.length > 0) && (
           <>
@@ -48,8 +48,17 @@ export default function Breadcrumbs({ data, className, ...props }: Readonly<Brea
                 />
               )
             }
-            <Icon icon={faEllipsis} hover onClick={() => setShowMenu((prev) => !prev)} />
-            <Icon icon={faAngleRight} className="text-subtext1 cursor-default" style={{ fontSize: "medium" }} />
+            <Icon
+              icon={faEllipsis}
+              hover
+              onClick={() => setShowMenu((prev) => !prev)}
+              className="w-4 h-2"
+            />
+            <Icon
+              icon={faAngleRight}
+              className="text-subtext1 cursor-default"
+              style={{ fontSize: "medium" }}
+            />
           </>
         )
       }
