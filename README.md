@@ -1,7 +1,7 @@
 # Drive
 A google drive clone for storing and sharing files
 
-## Files
+## Environment
 * `.env`
 ```env
 DB_URL="file:./db.sqlite3"
