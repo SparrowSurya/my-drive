@@ -75,7 +75,7 @@ export default function FileUploadProvider({ children }: Readonly<{ children: Re
     <FileUploadContext.Provider value={{ uploads, uploadFile }}>
       { children }
       {
-        uploads.length && showUpload && (
+        (uploads.length > 0) && showUpload && (
           <FileUploadToast
             uploads={uploads}
             onClose={() => {
