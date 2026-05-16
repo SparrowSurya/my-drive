@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { RowData } from "../types";
+import { ContentData } from "../types";
 import type { ListViewColumns, ListViewRow } from "./types";
 import useDropzone from "@/hooks/useDropzone";
 import useFileUpload from "@/hooks/useFileUpload";
@@ -11,7 +11,7 @@ import useFileUpload from "@/hooks/useFileUpload";
 export type FileListViewProps = {
   rows: ListViewRow,
   cols: ListViewColumns[],
-  data: RowData[],
+  data: ContentData[],
 };
 
 export default function FileListView({ rows, cols, data }: Readonly<FileListViewProps>) {

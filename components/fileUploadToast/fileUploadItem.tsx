@@ -1,7 +1,7 @@
 "use client";
 
 import { faCheckCircle, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
-import FileIcon from "../fileView/fileIcon";
+import FileIcon from "../content/fileIcon";
 import Icon from "../icon";
 import { FileUpload } from "./types";
 import { CircularProgress } from "../progress";

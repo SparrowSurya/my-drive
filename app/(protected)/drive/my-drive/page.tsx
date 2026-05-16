@@ -1,28 +1,18 @@
 import { Metadata } from "next";
-import Breadcrumbs from "@/components/breadcrumbs";
-import FileView from "./fileView";
 import { getFilesAndFolders } from "./query";
+import FolderView from "./view";
 
 
 export const metadata: Metadata = {
   title: "My Drive - Drive",
 };
 
-const segments = [{ name: "My Drive", url: "/drive/my-dive" }];
 
 export default async function MyDrivePage() {
   const data = await getFilesAndFolders();
+  const segments = [{ name: "My Drive", url: "/drive/my-drive" }];
 
   return (
-    <>
-      <div className="flex flex-row">
-        <Breadcrumbs
-          className="text-2xl cursor-pointer"
-          style={{ transform: "translateX(-12px)" }}
-          data={segments}
-        />
-      </div>
-      <FileView data={data} />
-    </>
+    <FolderView data={data} segments={segments} />
   );
 }

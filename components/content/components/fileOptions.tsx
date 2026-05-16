@@ -4,13 +4,13 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { faDownload, faEllipsisVertical, faFolderOpen, faPencil, faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import Icon from "@/components/icon";
-import type { RowData } from "../types";
+import type { ContentData } from "../types";
 import { OptionMenu, Option } from "@/components/option";
 import FolderRenameDialog from "./folderRenameDialog";
 import FileRenameDialog from "./fileRenameDialog";
 
 
-export default function FileOption({ row }: Readonly<{ row: RowData }>) {
+export default function FileOption({ row }: Readonly<{ row: ContentData }>) {
   const router = useRouter();
   const [isTransition, startTransition] = useTransition(); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [showOptionMenu, setShowOptionMenu] = useState<boolean>(false);
@@ -68,7 +68,7 @@ export default function FileOption({ row }: Readonly<{ row: RowData }>) {
   ];
 
   return (
-    <div className="relative w-12">
+    <div className="relative w-7">
       {
         showOptionMenu && (
           <OptionMenu

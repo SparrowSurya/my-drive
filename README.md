@@ -52,8 +52,8 @@ npm run start
 * Upload file (folder context)
 * Upload folder (folder context with structure)
 
-4. Files/Folder list view
-* Display files & folders in list view
+4. Files/Folder views
+* Display files & folders in list/grid view
 * Show options (download, rename, organise, share, move to trash)
 * Rename option
 

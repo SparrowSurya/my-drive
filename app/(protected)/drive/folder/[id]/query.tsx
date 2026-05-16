@@ -3,11 +3,11 @@
 import { getServerSession } from "next-auth";
 import { getFolder, getFolders, getParentHierarchy } from "@/lib/query/folder";
 import { getFiles } from "@/lib/query/file";
-import type { RowData, FileData, FolderData } from "@/components/fileView/types";
+import type { ContentData, FileData, FolderData } from "@/components/content/types";
 import utils from "@/lib/utils";
 
 
-export async function getFolderContents(id: number): Promise<RowData[]> {
+export async function getFolderContents(id: number): Promise<ContentData[]> {
   const session = await getServerSession();
   const { email } = session!.user ;
 
@@ -36,7 +36,7 @@ export async function getFolderContents(id: number): Promise<RowData[]> {
       folderId: f.folderId,
       lastModified: utils.formatDate(f.updatedAt),
     } as unknown as FileData)),
-  ] as RowData[];
+  ] as ContentData[];
 }
 
 export async function getPathSegments(id: number): Promise<{ id: number, name: string }[]> {

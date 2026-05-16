@@ -3,15 +3,15 @@
 import EmptyState from "@/components/emptyState";
 import useDropzone from "@/hooks/useDropzone";
 import useFileUpload from "@/hooks/useFileUpload";
-import { FileListView } from "@/components/fileView";
-import row from "@/components/fileView/list/row";
-import { ListViewColumns } from "@/components/fileView/list/types";
-import { RowData } from "@/components/fileView/types";
+import { FileListView } from "@/components/content";
+import row from "@/components/content/list/row";
+import { ListViewColumns } from "@/components/content/list/types";
+import { ContentData } from "@/components/content/types";
 
 
 const columns: ListViewColumns[] = ["name", "lastModified", "fileSize", "elipsis"];
 
-export default function FileView({ data }: Readonly<{ data: RowData[] }>) {
+export default function FileView({ data }: Readonly<{ data: ContentData[] }>) {
   const { uploadFile } = useFileUpload();
   const [dropRef, isDragging] = useDropzone(uploadFile);
 

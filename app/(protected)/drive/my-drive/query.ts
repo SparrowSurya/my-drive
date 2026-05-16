@@ -2,10 +2,10 @@ import { getServerSession } from "next-auth";
 import { getOrCreateRootFolder, getFolders } from "@/lib/query/folder";
 import { getFiles } from "@/lib/query/file";
 import utils from "@/lib/utils";
-import type { RowData, FileData, FolderData } from "@/components/fileView/types";
+import type { ContentData, FileData, FolderData } from "@/components/content/types";
 
 
-export async function getFilesAndFolders(): Promise<RowData[]> {
+export async function getFilesAndFolders(): Promise<ContentData[]> {
   const session = await getServerSession();
   const { email } = session!.user ;
 
@@ -31,5 +31,5 @@ export async function getFilesAndFolders(): Promise<RowData[]> {
       folderId: f.folderId,
       lastModified: utils.formatDate(f.updatedAt),
     } as unknown as FileData)),
-  ] as RowData[];
+  ] as ContentData[];
 }

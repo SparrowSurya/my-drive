@@ -3,15 +3,20 @@
 import EmptyState from "@/components/emptyState";
 import useDropzone from "@/hooks/useDropzone";
 import useFileUpload from "@/hooks/useFileUpload";
-import { FileListView } from "@/components/fileView";
-import row from "@/components/fileView/list/row";
-import { ListViewColumns } from "@/components/fileView/list/types";
-import { RowData } from "@/components/fileView/types";
+import { FileListView, FileGridView } from "@/components/content";
+import row from "@/components/content/list/row";
+import { ListViewColumns } from "@/components/content/list/types";
+import { ContentData } from "@/components/content/types";
 
 
 const columns: ListViewColumns[] = ["name", "lastModified", "fileSize", "elipsis"];
 
-export default function FileView({ data }: Readonly<{ data: RowData[] }>) {
+export type ContentViewProps = {
+  data: ContentData[],
+  gridView: boolean,
+};
+
+export default function ContentView({ data, gridView }: Readonly<ContentViewProps>) {
   const { uploadFile } = useFileUpload();
   const [dropRef, isDragging] = useDropzone(uploadFile);
 
@@ -30,7 +35,9 @@ export default function FileView({ data }: Readonly<{ data: RowData[] }>) {
       }
       {
         data && data.length > 0 && (
-          <FileListView data={data} rows={row} cols={columns} />
+          gridView
+            ? <FileGridView data={data} />
+            : <FileListView data={data} rows={row} cols={columns} />
         )
       }
     </>

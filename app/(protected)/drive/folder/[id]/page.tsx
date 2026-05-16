@@ -1,8 +1,7 @@
 import { Metadata } from "next";
 import { getFolderContents, getPathSegments, getFolderName } from "./query";
 import { redirect } from "next/navigation";
-import Breadcrumbs from "@/components/breadcrumbs";
-import FileView from "./fileview";
+import FolderView from "../../my-drive/view";
 
 
 export async function generateMetadata({
@@ -40,11 +39,6 @@ export default async function FolderPage({
   ));
 
   return (
-    <>
-      <div className="flex flex-row">
-        <Breadcrumbs style={{ transform: "translateX(-12px)" }} data={segments} />
-      </div>
-      <FileView data={data} />
-    </>
+    <FolderView data={data} segments={segments} />
   );
 }

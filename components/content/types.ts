@@ -4,7 +4,7 @@ import { type FileType } from "@/lib/types/file";
 export interface FileData {
   id: number,
   name: string,
-  type: Omit<FileType, "folder">,
+  type: Exclude<FileType, "folder">,
   size: string,
   folderId: number,
   lastModified: string,
@@ -19,4 +19,4 @@ export interface FolderData {
   lastModified: string,
 };
 
-export type RowData = FileData | FolderData;
+export type ContentData = FileData | FolderData;
