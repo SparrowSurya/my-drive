@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function StarredPage() {
   return (
     <>
-      <div className="drivePageHeading">Storage</div>
+      <div className="drivePageHeading">Starred</div>
       <EmptyState
         image="/assets/svg/empty_state_storage.svg"
         title="No starred files"

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function DriveHomePage() {
   return (
     <>
-      <div className="drivePageHeading">Storage</div>
+      <div className="drivePageHeading">Welcome to Drive</div>
       <EmptyState
         image="/assets/svg/empty_state_home.svg"
         title="Drag your files and folders here or use the 'New' button to upload"

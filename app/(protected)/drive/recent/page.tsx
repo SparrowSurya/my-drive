@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function RecentPage() {
   return (
     <>
-      <div className="drivePageHeading">Storage</div>
+      <div className="drivePageHeading">Recent</div>
       <EmptyState
         image="/assets/svg/empty_state_recent.svg"
         title="No recent files"

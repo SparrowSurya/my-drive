@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function SharedWithMePage() {
   return (
     <>
-      <div className="drivePageHeading">Storage</div>
+      <div className="drivePageHeading">Shared with me</div>
       <EmptyState
         image="/assets/svg/empty_state_shared_with_me.svg"
         title="Files and folders others have shared with you"
