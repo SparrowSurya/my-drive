@@ -21,7 +21,7 @@ export default function FileUploadToast({ uploads, onClose, ...props }: Readonly
 
   return (
     <Modal {...props}>
-      <div className="bg-crust rounded-lg w-80 select-none overflow-clip shadow-md shadow-crust">
+      <div className="bg-crust rounded-lg w-80 select-none overflow-y-hidden shadow-md shadow-crust">
         <div className="flex flex-row gap-2 px-3 py-2">
           <span className="flex-1 font-semibold">
             {
@@ -41,7 +41,7 @@ export default function FileUploadToast({ uploads, onClose, ...props }: Readonly
         </div>
         {
           showDetail && (
-            <div className="bg-base">
+            <div className="bg-base h-[60vh] overflow-y-scroll">
               {
                 uploads.map((file, index) => (
                   <FileUploadItem key={index} file={file} />

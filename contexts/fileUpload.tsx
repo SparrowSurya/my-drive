@@ -82,7 +82,7 @@ export default function FileUploadProvider({ children }: Readonly<{ children: Re
               setShowUpload(false);
               setUploads([]);
             }}
-            className="fixed bottom-0 right-8"
+            className="fixed bottom-0 right-8 mb-3"
           />
         )
       }
