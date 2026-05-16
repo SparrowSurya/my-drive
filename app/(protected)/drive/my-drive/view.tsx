@@ -26,8 +26,8 @@ export default function FolderView({ data, segments }: Readonly<FolderViewProps>
   };
 
   return (
-    <>
-      <div className="flex flex-row justify-between">
+    <div className="flex flex-col flex-1 overflow-hidden">
+      <div className="flex flex-row justify-between shrink-0 mb-4">
         <Breadcrumbs
           className="text-2xl cursor-pointer"
           style={{ transform: "translateX(-12px)" }}
@@ -56,6 +56,6 @@ export default function FolderView({ data, segments }: Readonly<FolderViewProps>
         gridView={gridView}
         openFolder={openFolder}
       />
-    </>
+    </div>
   );
 }

@@ -13,7 +13,7 @@ export default function ContentDropZone({ children }: Readonly<ContentDropZonePr
   return (
     <div
       ref={dropRef}
-      className={`border-2 rounded ${isDragging ? "border-sapphire" : "border-transparent"}`}
+      className={`flex-1 flex flex-col overflow-hidden min-h-0 border-2 rounded ${isDragging ? "border-sapphire" : "border-transparent"}`}
     >
       {children}
     </div>

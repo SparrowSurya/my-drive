@@ -12,8 +12,8 @@ export type FileListViewProps = {
 
 export default function ContentListView({ rows, cols, data, openFolder }: Readonly<FileListViewProps>) {
   return (
-    <div className="fileListView">
-      <div className="fileListViewHead">
+    <div className="fileListView flex flex-col h-full overflow-hidden">
+      <div className="fileListViewHead shrink-0">
         {
           cols.map((col) => (
             <div key={col} className={`listColumn_${col}`}>
@@ -22,7 +22,7 @@ export default function ContentListView({ rows, cols, data, openFolder }: Readon
           ))
         }
       </div>
-      <div className="fileListViewBody">
+      <div className="fileListViewBody flex-1 overflow-y-auto min-h-0">
       {
         data.map((d) => (
           <div

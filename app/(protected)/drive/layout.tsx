@@ -13,13 +13,15 @@ export default function DriveLayout({
 }>) {
   return (
     <FileUploadProvider>
-      <div className="h-svh grid grid-rows-[auto_1fr]">
-        { topbar }
-        <div className="grid grid-cols-10 bg-crust">
-          <div className="col-span-2 bg-crust">
+      <div className="h-svh flex flex-col overflow-hidden bg-crust">
+        <header className="shrink-0">
+          { topbar }
+        </header>
+        <div className="flex-1 flex flex-row overflow-hidden">
+          <aside className="w-[20%] shrink-0 overflow-y-auto bg-crust">
             { navbar }
-          </div>
-          <main className="col-span-8 flex flex-col bg-mantle p-6 rounded-4xl ml-2">
+          </aside>
+          <main className="flex-1 flex flex-col bg-mantle p-6 rounded-4xl mr-2 overflow-hidden">
             { children }
           </main>
         </div>

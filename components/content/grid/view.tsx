@@ -19,7 +19,7 @@ export default function FileGridView({ data, openFolder }: Readonly<GridViewProp
   return (
     <div
       ref={dropRef}
-      className={`flex flex-col gap-5 ${isDragging ? "border-sapphire" : "border-transparent"}`}
+      className={`flex-1 flex flex-col gap-5 overflow-y-auto min-h-0 ${isDragging ? "border-sapphire" : "border-transparent"}`}
     >
       <div className="grid grid-cols-4 gap-3 p-3">
         {
