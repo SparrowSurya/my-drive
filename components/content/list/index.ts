@@ -1,3 +1,3 @@
-import FileListView from "./view";
+import ContentListView from "./view";
 
-export default FileListView;
+export default ContentListView;

@@ -70,7 +70,7 @@ body {
 	}
 
 	.modal {
-		@apply z-[1000000];
+		@apply z-1000000;
 	}
 
 	.option-menu {

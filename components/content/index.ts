@@ -1,4 +1,4 @@
-import FileListView from "./list/view";
-import FileGridView from "./grid/view";
+import ContentListView from "./list/view";
+import ContentGridView from "./grid/view";
 
-export { FileListView, FileGridView };
+export { ContentListView, ContentGridView };

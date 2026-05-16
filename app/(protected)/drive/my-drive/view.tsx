@@ -5,8 +5,9 @@ import ContentView from "../../../../components/content/view";
 import Icon from "@/components/icon";
 import { faBars, faInfoCircle, faThLarge } from "@fortawesome/free-solid-svg-icons";
 import { ContentData } from "@/components/content/types";
-import { useState } from "react";
 import { SegmentData } from "@/components/breadcrumbs/breadcrumbs";
+import useContentView from "@/hooks/useContentView";
+import { useRouter } from "next/navigation";
 
 
 export type FolderViewProps = {
@@ -16,7 +17,13 @@ export type FolderViewProps = {
 
 
 export default function FolderView({ data, segments }: Readonly<FolderViewProps>) {
-  const [gridView, setGridView] = useState(false);
+  const router = useRouter();
+  const { view, updateView } = useContentView();
+  const gridView = view == 'grid';
+
+  const openFolder = (id: number): void => {
+    router.push(`/drive/folder/${id}`);
+  };
 
   return (
     <>
@@ -30,13 +37,13 @@ export default function FolderView({ data, segments }: Readonly<FolderViewProps>
           <div className="inline-flex items-center rounded-full border shadow-sm overflow-hidden">
             <button
               className={`flex items-center justify-center transition px-3 gap-0 ${ gridView ? "" : "bg-surface1"}`}
-              onClick={() => setGridView(false)}
+              onClick={() => updateView('list')}
             >
               <Icon icon={faBars} />
             </button>
             <button
               className={`flex items-center justify-center transition px-3 gap-0 border-l ${ gridView ? "bg-surface1" : ""}`}
-              onClick={() => setGridView(true)}
+              onClick={() => updateView('grid')}
             >
               <Icon icon={faThLarge} />
             </button>
@@ -44,7 +51,11 @@ export default function FolderView({ data, segments }: Readonly<FolderViewProps>
           <Icon icon={faInfoCircle} hover={true} />
         </div>
       </div>
-      <ContentView data={data} gridView={gridView} />
+      <ContentView
+        data={data}
+        gridView={gridView}
+        openFolder={openFolder}
+      />
     </>
   );
 }

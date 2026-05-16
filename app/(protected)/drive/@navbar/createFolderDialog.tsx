@@ -28,7 +28,7 @@ export default function CreateFolderDialog({
   }, [state.success, closeModal]);
 
   return (
-    <div className="fixed top-0 right-0 left-0 bottom-0 bg-crust/60 z-[50]">
+    <div className="fixed top-0 right-0 left-0 bottom-0 bg-crust/60 z-50">
       <Modal
         className="absolute left-[50%] top-[50%] rounded-2xl py-5 px-8 bg-surface0 shadow-md shadow-crust"
         portal="id_modal"

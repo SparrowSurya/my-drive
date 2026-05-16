@@ -3,7 +3,7 @@
 import EmptyState from "@/components/emptyState";
 import useDropzone from "@/hooks/useDropzone";
 import useFileUpload from "@/hooks/useFileUpload";
-import { FileListView, FileGridView } from "@/components/content";
+import { ContentListView, ContentGridView } from "@/components/content";
 import row from "@/components/content/list/row";
 import { ListViewColumns } from "@/components/content/list/types";
 import { ContentData } from "@/components/content/types";
@@ -14,9 +14,10 @@ const columns: ListViewColumns[] = ["name", "lastModified", "fileSize", "elipsis
 export type ContentViewProps = {
   data: ContentData[],
   gridView: boolean,
+  openFolder: (id: number) => void,
 };
 
-export default function ContentView({ data, gridView }: Readonly<ContentViewProps>) {
+export default function ContentView({ data, gridView , openFolder}: Readonly<ContentViewProps>) {
   const { uploadFile } = useFileUpload();
   const [dropRef, isDragging] = useDropzone(uploadFile);
 
@@ -36,8 +37,8 @@ export default function ContentView({ data, gridView }: Readonly<ContentViewProp
       {
         data && data.length > 0 && (
           gridView
-            ? <FileGridView data={data} />
-            : <FileListView data={data} rows={row} cols={columns} />
+            ? <ContentGridView data={data} openFolder={openFolder} />
+            : <ContentListView data={data} rows={row} cols={columns} openFolder={openFolder} />
         )
       }
     </>

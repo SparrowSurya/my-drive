@@ -42,7 +42,7 @@ export default function Breadcrumbs({ data, className, ...props }: Readonly<Brea
             {
               showMenu && (
                 <OptionMenu
-                  className="absolute top-[42px] w-48"
+                  className="absolute top-10.5 w-48"
                   onClickOutside={() => setShowMenu(false)}
                   options={options}
                 />

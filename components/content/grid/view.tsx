@@ -4,9 +4,10 @@ import { type ContentData } from "../types";
 
 export type GridViewProps = {
   data: ContentData[],
+  openFolder: (id: number) => void,
 };
 
-export default function FileGridView({ data }: Readonly<GridViewProps>) {
+export default function FileGridView({ data, openFolder }: Readonly<GridViewProps>) {
   const files = data.filter((item) => item.type != "folder");
   const folders = data.filter((item) => item.type == "folder");
 
@@ -14,7 +15,7 @@ export default function FileGridView({ data }: Readonly<GridViewProps>) {
     <div className="flex flex-col gap-5">
       <div className="grid grid-cols-4 gap-3 p-3">
         {
-          folders.map((folder, index) => <FolderGridItem key={index} folder={folder} />)
+          folders.map((folder, index) => <FolderGridItem key={index} folder={folder} openFolder={openFolder} />)
         }
       </div>
       <div className="grid grid-cols-4 gap-3 p-3">

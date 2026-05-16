@@ -1,7 +1,4 @@
-"use client";
-
 import React from "react";
-import { useRouter } from "next/navigation";
 import { ContentData } from "../types";
 import type { ListViewColumns, ListViewRow } from "./types";
 import useDropzone from "@/hooks/useDropzone";
@@ -12,10 +9,10 @@ export type FileListViewProps = {
   rows: ListViewRow,
   cols: ListViewColumns[],
   data: ContentData[],
+  openFolder: (id: number) => void,
 };
 
-export default function FileListView({ rows, cols, data }: Readonly<FileListViewProps>) {
-  const router = useRouter();
+export default function ContentListView({ rows, cols, data, openFolder }: Readonly<FileListViewProps>) {
   const { uploadFile } = useFileUpload();
   const [dropRef, isDragging] = useDropzone(uploadFile);
 
@@ -39,11 +36,7 @@ export default function FileListView({ rows, cols, data }: Readonly<FileListView
             <div
               key={d.id}
               className="fileListRow"
-              onDoubleClick={() => {
-                if (d.type === "folder") {
-                  router.push(`/drive/folder/${d.id}`);
-                }
-              }}
+              onDoubleClick={d.type == "folder" ? () => openFolder(d.id): undefined}
             >
               {
                 cols.map((col) => rows[col].body(d, col))
