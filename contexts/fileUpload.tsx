@@ -27,11 +27,12 @@ export default function FileUploadProvider({ children }: Readonly<{ children: Re
   const uploadFile = (file: FileWithRelativePath) => {
     const id = crypto.randomUUID();
     const folderId = utils.getFolderIdByPathname(path);
+    const fileName = file.relativePath.split("/").pop() || file.name;
     const newUpload: FileUpload = {
       id,
-      name: file.name,
+      name: fileName,
       path: file.relativePath,
-      type: utils.getFileType(file.name),
+      type: utils.getFileType(fileName),
       progress: 0,
       status: "uploading",
     };

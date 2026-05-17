@@ -63,7 +63,13 @@ export async function uploadFiles(parentId: number, files: {
 
   try {
     const id = (parentId === 0) ? (await getOrCreateRootFolder({ email }, { id: true })).id : parentId;
-    return await addFiles({ email }, { id }, files, { name: true })
+    const typedFiles = files.map(
+      (file) => ({
+        ...file,
+        data: new Uint8Array(file.data),
+      })
+    );
+    return await addFiles({ email }, { id }, typedFiles, { name: true }) ;
   } catch {
     return "Something went wrong";
   }
@@ -81,9 +87,13 @@ export async function uploadFolder(parentId: number, files: {
   if (!email) return "Something went wrong";
 
   try {
-    const tree = utils.buildDirectory(files);
+    const typedFiles = files.map((file) => ({
+      ...file,
+      data: new Uint8Array(file.data),
+    }));
+    const tree = utils.buildDirectory(typedFiles);
     const id = (parentId === 0) ? (await getOrCreateRootFolder({ email }, { id: true })).id : parentId;
-    await createFileTree({ email }, { id }, tree);
+    await createFileTree({ email }, { id }, tree); // ERROR on tree
   } catch {
     return "Something went wrong";
   }

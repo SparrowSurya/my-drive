@@ -41,7 +41,7 @@ export default function FileUploadToast({ uploads, onClose, ...props }: Readonly
         </div>
         {
           showDetail && (
-            <div className="bg-base h-[60vh] overflow-y-scroll">
+            <div className="bg-base max-h-[60vh] overflow-y-scroll">
               {
                 uploads.map((file, index) => (
                   <FileUploadItem key={index} file={file} />

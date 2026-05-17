@@ -23,9 +23,12 @@ export async function POST(req: NextRequest) {
   const { file, relativePath, folderId } = result.data;
   const arrayBuf = await file.arrayBuffer();
 
+  const rawPath = formData.get("relativePath") as string;
+  const fileName = rawPath.split("/").pop() || file.name;
+
   try {
     const newFile = await addFileWithRelativePath({ email }, {
-      name: file.name,
+      name: fileName,
       data: new Uint8Array(arrayBuf),
       folderId,
       path: relativePath,
