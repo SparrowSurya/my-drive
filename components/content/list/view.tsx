@@ -7,10 +7,10 @@ export type FileListViewProps = {
   rows: ListViewRow,
   cols: ListViewColumns[],
   data: ContentData[],
-  openFolder: (id: number) => void,
+  showFolder: (id: number) => void,
 };
 
-export default function ContentListView({ rows, cols, data, openFolder }: Readonly<FileListViewProps>) {
+export default function ContentListView({ rows, cols, data, showFolder }: Readonly<FileListViewProps>) {
   return (
     <div className="fileListView flex flex-col h-full overflow-hidden">
       <div className="fileListViewHead shrink-0">
@@ -28,7 +28,7 @@ export default function ContentListView({ rows, cols, data, openFolder }: Readon
           <div
           key={d.id}
           className="fileListRow"
-          onDoubleClick={d.type == "folder" ? () => openFolder(d.id): undefined}
+          onDoubleClick={d.type == "folder" ? () => showFolder(d.id): undefined}
           >
             {
               cols.map((col) => rows[col].body(d, col))

@@ -6,10 +6,10 @@ import useDropzone from "@/hooks/useDropzone";
 
 export type GridViewProps = {
   data: ContentData[],
-  openFolder: (id: number) => void,
+  showFolder: (id: number) => void,
 };
 
-export default function FileGridView({ data, openFolder }: Readonly<GridViewProps>) {
+export default function FileGridView({ data, showFolder }: Readonly<GridViewProps>) {
   const { uploadFile } = useFileUpload();
   const [dropRef, isDragging] = useDropzone(uploadFile);
 
@@ -23,7 +23,7 @@ export default function FileGridView({ data, openFolder }: Readonly<GridViewProp
     >
       <div className="grid grid-cols-4 gap-3 p-3">
         {
-          folders.map((folder, index) => <FolderGridItem key={index} folder={folder} openFolder={openFolder} />)
+          folders.map((folder, index) => <FolderGridItem key={index} folder={folder} showFolder={showFolder} />)
         }
       </div>
       <div className="grid grid-cols-4 gap-3 p-3">

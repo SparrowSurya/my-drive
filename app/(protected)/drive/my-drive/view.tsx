@@ -7,7 +7,6 @@ import { faBars, faInfoCircle, faThLarge } from "@fortawesome/free-solid-svg-ico
 import { ContentData } from "@/components/content/types";
 import { SegmentData } from "@/components/breadcrumbs/breadcrumbs";
 import useContentView from "@/hooks/useContentView";
-import { useRouter } from "next/navigation";
 
 
 export type FolderViewProps = {
@@ -17,13 +16,8 @@ export type FolderViewProps = {
 
 
 export default function FolderView({ data, segments }: Readonly<FolderViewProps>) {
-  const router = useRouter();
   const { view, updateView } = useContentView();
   const gridView = view == 'grid';
-
-  const openFolder = (id: number): void => {
-    router.push(`/drive/folder/${id}`);
-  };
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden">
@@ -54,7 +48,6 @@ export default function FolderView({ data, segments }: Readonly<FolderViewProps>
       <ContentView
         data={data}
         gridView={gridView}
-        openFolder={openFolder}
       />
     </div>
   );
