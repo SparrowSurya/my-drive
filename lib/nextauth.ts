@@ -113,7 +113,7 @@ export const authOptions = {
 						throw new Error(firstError);
 					}
 
-					const safeData = { ...data, authProvider: null };
+					const safeData = { ...result.data, confirmPassword: undefined, authProvider: null };
 					const select = { id: true, name: true,	email: true,	profilePic: true,	password: false };
 					const user = await createUser(safeData, select);
 					return {
