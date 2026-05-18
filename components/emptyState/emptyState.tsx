@@ -16,7 +16,7 @@ export default function EmptyState({
   ...props
 }: Readonly<EmptyStateProps>) {
   return (
-    <div className={className ?? "emptyState"} {...props}>
+    <div className={className ?? "flex flex-col justify-center items-center w-full h-full"} {...props}>
       {
         (typeof image === "string") ? (
           <Image
@@ -24,19 +24,18 @@ export default function EmptyState({
             alt="empty state"
             width="240"
             height="240"
-            className={"emptyStateImage"}
           />
         ) : image
       }
       {
         (typeof title === "string") ? (
-          <div className={"emptyStateTitle"}>{ title }</div>
+          <div className="text-xl mt-10">{ title }</div>
         ) : title
       }
       {
         para && (
           (typeof para === "string") ? (
-            <div className={"emptyStatePara"}>{ para }</div>
+            <div className="text-subtext0 mt-2">{ para }</div>
           ) : para
         )
       }

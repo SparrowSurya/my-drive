@@ -13,7 +13,7 @@ const rowBuilder: ListViewRow = {
     head: "Name",
     body: (row: ContentData, key: string) => {
       return (
-        <div  key={key} className="listColumn_name">
+        <div  key={key} className="flex flex-row items-center truncate">
           <FileIcon type={row.type as FileType} />
           <span className="truncate overflow-hidden whitespace-nowrap">{ row.name }</span>
         </div>
@@ -24,7 +24,7 @@ const rowBuilder: ListViewRow = {
     head: "Last modified",
     body: (row: ContentData, key: string) => {
       return (
-        <div key={key} className="listColumn_lastModified">
+        <div key={key} className="flex flex-row items-center">
           <span className="ml-2">
             { row.lastModified }
           </span>
@@ -36,7 +36,7 @@ const rowBuilder: ListViewRow = {
     head: "File size",
     body: (row: ContentData, key: string) => {
       return (
-        <div key={key} className="listColumn_fileSize">
+        <div key={key} className="flex flex-row items-center">
           <span className="ml-2">
             { row.size ?? "—" }
           </span>
@@ -48,7 +48,7 @@ const rowBuilder: ListViewRow = {
     head: "Reason",
     body: (row: ContentData, key: string) => {
       return (
-        <div key={key} className="listColumn_reason">
+        <div key={key} className="flex flex-row items-center">
           { row.reason ?? "—" }
         </div>
       );
@@ -58,7 +58,7 @@ const rowBuilder: ListViewRow = {
     head: "Owner",
     body: (row: ContentData, key: string) => {
       return (
-        <div key={key} className="listColumn_owner flex flex-row gap-2">
+        <div key={key} className="flex flex-row items-center gap-2">
           <Avatar
             text={row.owner}
             className={`bg-lavender text-base`}
@@ -73,7 +73,7 @@ const rowBuilder: ListViewRow = {
     head: "",
     body: (row: ContentData, key: string) => {
       return (
-        <div key={key} className="listColumn_elipsis">
+        <div key={key} className="flex flex-row items-center mx-2 shrink-0">
           <FileOption row={row} />
         </div>
       );
