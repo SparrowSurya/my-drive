@@ -9,7 +9,7 @@ import useShowContent from "@/hooks/useShowContent";
 import useContentView from "@/hooks/useContentView";
 
 
-const columns: ListViewColumns[] = ["name", "lastModified", "fileSize", "elipsis"];
+const columns: ListViewColumns[] = ["name", "owner", "lastModified", "fileSize", "elipsis"];
 
 export type ContentViewProps = {
   data: ContentData[],

@@ -23,9 +23,13 @@ export type FileSuggestionsProps = {
 };
 
 export default function FileSuggestions({ files }: Readonly<FileSuggestionsProps>) {
+  const [viewMore, setViewMore] = useState(false);
   const [show, setShow] = useState<boolean>(true);
   const { showFolder } = useShowContent();
   const { gridView } = useContentView();
+
+  const lessCount = 12;
+  const visibleFiles = viewMore ? files : files.slice(0, Math.min(files.length, lessCount));
 
   return (
     <div className="flex flex-col flex-none">
@@ -39,23 +43,28 @@ export default function FileSuggestions({ files }: Readonly<FileSuggestionsProps
         </button>
         {show && <ContentViewToggleButton visible={files.length > 0} />}
       </div>
-      <div className={`mx-5 overflow-hidden flex flex-col transition-all duration-500 ease-in-out ${show ? 'max-h-1250 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
-          { gridView
-              ? <ContentGridView
-                  data={files}
-                  showFolder={showFolder}
-                  scrollable={false}
-                />
-              : <ContentListView
-                  cols={headings}
-                  data={files}
-                  showFolder={showFolder}
-                  scrollable={false}
-                />
-          }
+      <div className={`ml-5 overflow-hidden flex flex-col transition-all duration-500 ease-in-out ${show ? 'max-h-1250 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
+        { gridView
+            ? <ContentGridView
+                data={visibleFiles}
+                showFolder={showFolder}
+                scrollable={false}
+              />
+            : <ContentListView
+                cols={headings}
+                data={visibleFiles}
+                showFolder={showFolder}
+                scrollable={false}
+              />
+        }
+        {(files.length > lessCount) && (
           <button
-            className="flex flex-row gap-4 rounded-4xl px-5 py-1 my-4 font-semibold text-blue hover:bg-blue/25 shrink-0"
-          >View more</button>
+            className="flex flex-row gap-4 rounded-4xl px-5 mr-auto py-1 my-4 font-semibold text-blue hover:bg-blue/25 shrink-0"
+            onClick={() => setViewMore(!viewMore)}
+          >
+            { viewMore ? "View less" : "View more"}
+          </button>
+        )}
       </div>
     </div>
   );

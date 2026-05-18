@@ -35,12 +35,12 @@ export async function addFiles(
   );
 }
 
-export async function getFiles(
+export async function getFiles<T extends Prisma.FileSelect>(
   userWhere: Prisma.UserWhereUniqueInput,
+  select: T,
   folderWhere: Prisma.FolderWhereInput,
   fileWhere?: Prisma.FileWhereInput | undefined,
-  select?: Prisma.FileSelect | undefined,
-): Promise<Prisma.FileGetPayload<{ select?: Prisma.FileSelect }>[]> {
+): Promise<Prisma.FileGetPayload<{ select: T }>[]> {
   return await prisma.file.findMany({
     where: {
       folder: {

@@ -16,7 +16,7 @@ export async function getFileSuggestions(count?: number): Promise<FileData[]> {
     name: true,
     size: true,
     folderId: true,
-    folder: { select: { user: { select: { name: true } } } },
+    folder: { select: { user: { select: { name: true, email: true } } } },
     updatedAt: true,
   } as const;
   const files = await getRecentFiles({ email }, select, count);
@@ -27,7 +27,7 @@ export async function getFileSuggestions(count?: number): Promise<FileData[]> {
     size: utils.formatBytes(f.size),
     folderId: f.folderId,
     lastModified: utils.formatDate(f.updatedAt),
-    owner: f.folder.user.name,
+    owner: f.folder.user.email == email ? "me" : f.folder.user.name,
     reason: "You uploaded", // HARDCODE
   } as FileData));
 }
@@ -41,7 +41,7 @@ export async function getFolderSuggestions(count?: number): Promise<FolderData[]
     id: true,
     name: true,
     parent: { select: { parentId: true } },
-    user: { select: { name: true } },
+    user: { select: { name: true, email: true } },
     updatedAt: true,
   } as const;
   const folders = await getRecentFolders({ email }, select, count);
@@ -52,7 +52,7 @@ export async function getFolderSuggestions(count?: number): Promise<FolderData[]
     size: null,
     parentId: f.parent?.parentId,
     lastModified: utils.formatDate(f.updatedAt),
-    owner: f.user.name,
+    owner: f.user.email == email ? "me" : f.user.name,
     reason: "in My Drive", // HARDCODE
   } as FolderData));
 }

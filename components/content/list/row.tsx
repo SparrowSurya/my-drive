@@ -58,11 +58,11 @@ const rowBuilder: ListViewRow = {
     head: "Owner",
     body: (row: ContentData, key: string) => {
       return (
-        <div key={key} className="listColumn_owner flex flex-row gap-1">
+        <div key={key} className="listColumn_owner flex flex-row gap-2">
           <Avatar
             text={row.owner}
             className={`bg-lavender text-base`}
-            size="medium"
+            size="small"
           />
           <div className="max-w-30 truncate">{ row.owner }</div>
         </div>

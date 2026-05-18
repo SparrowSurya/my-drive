@@ -17,7 +17,8 @@ export async function getFolderContents(id: number): Promise<ContentData[]> {
     { id },
     { ...select, parent: { select: { parentId: true } } },
   );
-  const files = await getFiles({ email }, { id: id }, undefined, { ...select, size: true, folderId: true });
+  const fileSelect = { ...select, size: true, folderId: true };
+  const files = await getFiles({ email }, fileSelect, { id: id }, undefined);
 
   return [
     ...folders.map(f => ({

@@ -8,7 +8,7 @@ type AvatarCharProps = {
 } & React.HTMLAttributes<HTMLDivElement>;
 
 const sizes = {
-  small: "size-[24] text-md",
+  small: "size-[28] text-md",
   medium: "size-[36] text-2xl",
   large: "size-[86] text-7xl",
 };

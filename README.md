@@ -62,3 +62,5 @@ npm run start
 * File suggestions
 * Folder suggestions
 
+## TODO
+* Preview text file contents

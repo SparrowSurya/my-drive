@@ -28,7 +28,9 @@ export default function FolderView({ data, segments }: Readonly<FolderViewProps>
           { (data.length > 0) && <Icon icon={faInfoCircle} hover={true} /> }
         </div>
       </div>
-      <ContentView data={data} />
+      <div className="ml-3">
+        <ContentView data={data} />
+      </div>
     </div>
   );
 }
