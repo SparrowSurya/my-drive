@@ -8,13 +8,15 @@ export type FileListViewProps<T extends ContentData> = {
   cols: ListViewColumns[],
   data: T[],
   showFolder: (id: number) => void,
+  className?: string,
+  bodyClassName?: string,
 };
 
 export default function ContentListView<T extends ContentData>(
-  { rows, cols, data, showFolder }: Readonly<FileListViewProps<T>>,
+  { rows, cols, data, showFolder, className, bodyClassName }: Readonly<FileListViewProps<T>>,
 ) {
   return (
-    <div className="fileListView flex flex-col h-full overflow-hidden">
+    <div className={className ?? "fileListView flex flex-col h-full overflow-hidden"}>
       <div className="fileListViewHead shrink-0">
         {
           cols.map((col) => (
@@ -24,7 +26,7 @@ export default function ContentListView<T extends ContentData>(
           ))
         }
       </div>
-      <div className="fileListViewBody flex-1 overflow-y-auto min-h-0">
+      <div className={bodyClassName ?? "fileListViewBody flex-1 overflow-y-auto min-h-0"}>
       {
         data.map((d) => (
           <div

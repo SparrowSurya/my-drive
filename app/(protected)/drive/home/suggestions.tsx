@@ -9,7 +9,7 @@ export type ContentSuggestionsProps = {
 
 export default function ContentSuggestions({ files, folders }: Readonly<ContentSuggestionsProps>) {
   return (
-    <div className="flex flex-col gap-3 overflow-y-auto min-h-0">
+    <div className="flex flex-col gap-3">
       <FolderSuggestions folders={folders}  />
       <FileSuggestions files={files} />
     </div>

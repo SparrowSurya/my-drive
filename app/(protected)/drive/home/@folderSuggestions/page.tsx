@@ -18,8 +18,8 @@ export default function FolderSuggestions({ folders }: Readonly<FolderSuggestion
   const { showFolder } = useShowContent();
 
   return (
-    <>
-      <div className="flex flex-row">
+    <div className="flex flex-col flex-none">
+      <div className="flex flex-row shrink-0 sticky top-0 bg-mantle z-20 py-1">
         <button
           className="flex flex-row items-center rounded-4xl px-3 py-1 font-medium hover:text-blue hover:bg-blue/25"
           onClick={() => setShow(!show)}
@@ -28,13 +28,15 @@ export default function FolderSuggestions({ folders }: Readonly<FolderSuggestion
           <span className="mx-3">Suggested folders</span>
         </button>
       </div>
-      {show && (
-        <div className="mx-5 overflow-y-auto min-h-0">
-          <ContentDropZone>
-            <ContentGridView data={folders} showFolder={showFolder} />
-          </ContentDropZone>
-        </div>
-      )}
-    </>
+      <div className={`mx-5 overflow-hidden flex flex-col transition-all duration-500 ease-in-out ${show ? 'max-h-500 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
+        <ContentDropZone>
+          <ContentGridView
+            data={folders}
+            showFolder={showFolder}
+            className="flex flex-col gap-5"
+          />
+        </ContentDropZone>
+      </div>
+    </div>
   );
 }

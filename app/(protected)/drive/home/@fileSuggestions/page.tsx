@@ -28,8 +28,8 @@ export default function FileSuggestions({ files }: Readonly<FileSuggestionsProps
   const { gridView } = useContentView();
 
   return (
-    <>
-      <div className="flex flex-row justify-between">
+    <div className="flex flex-col flex-none">
+      <div className="flex flex-row justify-between shrink-0 sticky top-0 bg-mantle z-20 py-1">
         <button
           className="flex flex-row items-center rounded-4xl px-3 py-1 font-medium hover:text-blue hover:bg-blue/25"
           onClick={() => setShow(!show)}
@@ -39,17 +39,26 @@ export default function FileSuggestions({ files }: Readonly<FileSuggestionsProps
         </button>
         {show && <ContentViewToggleButton visible={files.length > 0} />}
       </div>
-      {show && (
-        <div className="mx-5 overflow-y-scroll">
+      <div className={`mx-5 overflow-hidden flex flex-col transition-all duration-500 ease-in-out ${show ? 'max-h-[5000px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
           { gridView
-              ? <ContentGridView data={files} showFolder={showFolder} />
-              : <ContentListView rows={row} cols={headings} data={files} showFolder={showFolder} />
+              ? <ContentGridView 
+                  data={files} 
+                  showFolder={showFolder} 
+                  className="flex flex-col gap-5"
+                />
+              : <ContentListView 
+                  rows={row} 
+                  cols={headings} 
+                  data={files} 
+                  showFolder={showFolder} 
+                  className="fileListView flex flex-col"
+                  bodyClassName="fileListViewBody flex flex-col"
+                />
           }
           <button
-            className="flex flex-row gap-4 rounded-4xl px-5 py-1 my-4 font-semibold text-blue hover:bg-blue/25"
+            className="flex flex-row gap-4 rounded-4xl px-5 py-1 my-4 font-semibold text-blue hover:bg-blue/25 shrink-0"
           >View more</button>
-        </div>
-      )}
-    </>
+      </div>
+    </div>
   );
 }
