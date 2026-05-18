@@ -165,11 +165,11 @@ export async function getFile(
   });
 }
 
-export async function getRecentFiles(
+export async function getRecentFiles<T extends Prisma.FileSelect>(
   userWhere: Prisma.UserWhereUniqueInput,
-  select: Prisma.FileSelect,
+  select: T,
   take?: number,
-): Promise<Prisma.FileGetPayload<{ select: Prisma.FileSelect }>[]> {
+): Promise<Prisma.FileGetPayload<{ select: T }>[]> {
   return await prisma.file.findMany({
     where: {
       folder: { user: userWhere },

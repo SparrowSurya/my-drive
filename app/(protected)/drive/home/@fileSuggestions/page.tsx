@@ -9,7 +9,7 @@ import useContentView from "@/hooks/useContentView";
 import { ListViewColumns } from "@/components/content/list/types";
 import ContentViewToggleButton from "@/components/contentViewToggleButton";
 import useShowContent from "@/hooks/useShowContent";
-import row from "@/components/content/list/row";
+
 
 const headings: ListViewColumns[] = [
   "name",
@@ -39,18 +39,17 @@ export default function FileSuggestions({ files }: Readonly<FileSuggestionsProps
         </button>
         {show && <ContentViewToggleButton visible={files.length > 0} />}
       </div>
-      <div className={`mx-5 overflow-hidden flex flex-col transition-all duration-500 ease-in-out ${show ? 'max-h-[5000px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
+      <div className={`mx-5 overflow-hidden flex flex-col transition-all duration-500 ease-in-out ${show ? 'max-h-1250 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
           { gridView
-              ? <ContentGridView 
-                  data={files} 
-                  showFolder={showFolder} 
+              ? <ContentGridView
+                  data={files}
+                  showFolder={showFolder}
                   scrollable={false}
                 />
-              : <ContentListView 
-                  rows={row} 
-                  cols={headings} 
-                  data={files} 
-                  showFolder={showFolder} 
+              : <ContentListView
+                  cols={headings}
+                  data={files}
+                  showFolder={showFolder}
                   scrollable={false}
                 />
           }

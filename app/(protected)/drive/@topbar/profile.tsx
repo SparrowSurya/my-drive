@@ -12,7 +12,6 @@ export default function ProfileInfo() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const user = session?.user;
   const username = user?.name ?? "";
-  const avatarChar = username[0]?.toUpperCase() ?? '?';
 
   async function logout() {
     await signOut({ callbackUrl: '/' });
@@ -36,7 +35,7 @@ export default function ProfileInfo() {
   return (
     <div className="relative">
       <Avatar
-        char={ avatarChar }
+        text={username}
         size="medium"
         className="bg-lavender text-base"
         onClick={() => setIsModalOpen(true)}
@@ -52,7 +51,7 @@ export default function ProfileInfo() {
               <div className="text-sm">Managed by { user!.email?.split("@")[1] }</div>
               <div className="text-lg mt-8">Hi { username.split(' ')[0] }!</div>
               <Avatar
-                char={ avatarChar }
+                text={username}
                 size="large"
                 className="bg-lavender text-base my-2"
                 onClick={() => setIsModalOpen(true)}

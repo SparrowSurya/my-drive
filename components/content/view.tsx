@@ -2,7 +2,6 @@
 
 import EmptyState from "@/components/emptyState";
 import { ContentListView, ContentGridView } from "@/components/content";
-import row from "@/components/content/list/row";
 import { ListViewColumns } from "@/components/content/list/types";
 import { ContentData } from "@/components/content/types";
 import ContentDropZone from "./dropzone";
@@ -35,7 +34,7 @@ export default function ContentView({ data }: Readonly<ContentViewProps>) {
         data && data.length > 0 && (
           gridView
             ? <ContentGridView data={data} showFolder={showFolder} />
-            : <ContentListView data={data} rows={row} cols={columns} showFolder={showFolder} />
+            : <ContentListView data={data} cols={columns} showFolder={showFolder} />
         )
       }
     </ContentDropZone>

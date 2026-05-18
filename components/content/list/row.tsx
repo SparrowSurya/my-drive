@@ -8,7 +8,7 @@ import { type ListViewRow } from "./types";
 import { type FileType } from "@/lib/types/file";
 
 
-const row: ListViewRow = {
+const rowBuilder: ListViewRow = {
   "name": {
     head: "Name",
     body: (row: ContentData, key: string) => {
@@ -57,14 +57,14 @@ const row: ListViewRow = {
   "owner": {
     head: "Owner",
     body: (row: ContentData, key: string) => {
-      const alphabet = row.owner?.charAt(0).toUpperCase() ?? '';
       return (
-        <div key={key} className="listColumn_owner">
+        <div key={key} className="listColumn_owner flex flex-row gap-1">
           <Avatar
-            char={alphabet}
-            className={`bg-peach text-base`}
+            text={row.owner}
+            className={`bg-lavender text-base`}
             size="medium"
           />
+          <div className="max-w-30 truncate">{ row.owner }</div>
         </div>
       );
     },
@@ -81,4 +81,4 @@ const row: ListViewRow = {
   },
 };
 
-export default row;
+export default rowBuilder;

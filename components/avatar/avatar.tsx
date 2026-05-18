@@ -1,7 +1,7 @@
 import React from "react";
 
 type AvatarCharProps = {
-  char: string,
+  text?: string,
   size: "small" | "medium" | "large",
   className?: string,
   style?: React.CSSProperties,
@@ -13,7 +13,9 @@ const sizes = {
   large: "size-[86] text-7xl",
 };
 
-export default function Avatar({ char, size, className, style, ...restProps }: Readonly<AvatarCharProps>) {
+export default function Avatar({ text, size, className, style, ...restProps }: Readonly<AvatarCharProps>) {
+  const char = text?.charAt(0).toUpperCase() ?? '?';
+
   return (
     <div
       className={`${className} ${sizes[size]} font-bold flex justify-center items-center rounded-full cursor-pointer`}

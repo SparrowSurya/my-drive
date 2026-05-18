@@ -1,27 +1,31 @@
 import React from "react";
 import { ContentData } from "../types";
-import type { ListViewColumns, ListViewRow } from "./types";
+import type { ListViewColumns } from "./types";
+import rowBuilder from "./row";
 
 
-export type FileListViewProps<T extends ContentData> = {
-  rows: ListViewRow,
+export type FileListViewProps = {
   cols: ListViewColumns[],
-  data: T[],
+  data: ContentData[],
   showFolder: (id: number) => void,
   className?: string,
   scrollable?: boolean,
 };
 
-export default function ContentListView<T extends ContentData>(
-  { rows, cols, data, showFolder, className, scrollable = true }: Readonly<FileListViewProps<T>>,
-) {
+export default function ContentListView({
+  cols,
+  data,
+  showFolder,
+  className,
+  scrollable = true,
+}: Readonly<FileListViewProps>) {
   return (
     <div className={className ?? "fileListView flex flex-col h-full overflow-hidden"}>
       <div className="fileListViewHead shrink-0">
         {
           cols.map((col) => (
             <div key={col} className={`listColumn_${col}`}>
-              { rows[col].head }
+              { rowBuilder[col].head }
             </div>
           ))
         }
@@ -35,7 +39,7 @@ export default function ContentListView<T extends ContentData>(
           onDoubleClick={d.type == "folder" ? () => showFolder(d.id): undefined}
           >
             {
-              cols.map((col) => rows[col].body(d, col))
+              cols.map((col) => rowBuilder[col].body(d, col))
             }
           </div>
         ))
