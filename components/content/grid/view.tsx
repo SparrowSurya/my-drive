@@ -6,14 +6,24 @@ export type GridViewProps = {
   data: ContentData[],
   showFolder: (id: number) => void,
   className?: string,
+  scrollable?: boolean,
 };
 
-export default function ContentGridView({ data, showFolder, className }: Readonly<GridViewProps>) {
+export default function ContentGridView({ 
+  data, 
+  showFolder, 
+  className, 
+  scrollable = true 
+}: Readonly<GridViewProps>) {
   const files = data.filter((item) => item.type != "folder");
   const folders = data.filter((item) => item.type == "folder");
 
+  const baseClassName = scrollable 
+    ? "flex-1 flex flex-col gap-5 overflow-y-auto min-h-0" 
+    : "flex flex-col gap-5";
+
   return (
-    <div className={className ?? "flex-1 flex flex-col gap-5 overflow-y-auto min-h-0"}>
+    <div className={className ?? baseClassName}>
       <div className="grid grid-cols-4 gap-3 p-3 shrink-0">
         {
           folders.map((folder, index) => <FolderGridItem key={index} folder={folder} showFolder={showFolder} />)

@@ -9,11 +9,11 @@ export type FileListViewProps<T extends ContentData> = {
   data: T[],
   showFolder: (id: number) => void,
   className?: string,
-  bodyClassName?: string,
+  scrollable?: boolean,
 };
 
 export default function ContentListView<T extends ContentData>(
-  { rows, cols, data, showFolder, className, bodyClassName }: Readonly<FileListViewProps<T>>,
+  { rows, cols, data, showFolder, className, scrollable = true }: Readonly<FileListViewProps<T>>,
 ) {
   return (
     <div className={className ?? "fileListView flex flex-col h-full overflow-hidden"}>
@@ -26,7 +26,7 @@ export default function ContentListView<T extends ContentData>(
           ))
         }
       </div>
-      <div className={bodyClassName ?? "fileListViewBody flex-1 overflow-y-auto min-h-0"}>
+      <div className={scrollable ? "fileListViewBody flex-1 overflow-y-auto min-h-0" : "fileListViewBody flex flex-col"}>
       {
         data.map((d) => (
           <div

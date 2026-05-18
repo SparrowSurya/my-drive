@@ -44,15 +44,14 @@ export default function FileSuggestions({ files }: Readonly<FileSuggestionsProps
               ? <ContentGridView 
                   data={files} 
                   showFolder={showFolder} 
-                  className="flex flex-col gap-5"
+                  scrollable={false}
                 />
               : <ContentListView 
                   rows={row} 
                   cols={headings} 
                   data={files} 
                   showFolder={showFolder} 
-                  className="fileListView flex flex-col"
-                  bodyClassName="fileListViewBody flex flex-col"
+                  scrollable={false}
                 />
           }
           <button
