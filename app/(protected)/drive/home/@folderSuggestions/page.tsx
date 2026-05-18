@@ -19,15 +19,17 @@ export default function FolderSuggestions({ folders }: Readonly<FolderSuggestion
 
   return (
     <>
-      <button
-        className="flex flex-row items-center rounded-4xl px-3 py-1 font-medium hover:text-blue hover:bg-blue/25"
-        onClick={() => setShow(!show)}
-      >
-        <Icon icon={show ? faCaretDown : faCaretRight}  />
-        <span className="mx-3">Suggested folders</span>
-      </button>
+      <div className="flex flex-row">
+        <button
+          className="flex flex-row items-center rounded-4xl px-3 py-1 font-medium hover:text-blue hover:bg-blue/25"
+          onClick={() => setShow(!show)}
+          >
+          <Icon icon={show ? faCaretDown : faCaretRight}  />
+          <span className="mx-3">Suggested folders</span>
+        </button>
+      </div>
       {show && (
-        <div className="mx-5 my-4">
+        <div className="mx-5 overflow-y-auto min-h-0">
           <ContentDropZone>
             <ContentGridView data={folders} showFolder={showFolder} />
           </ContentDropZone>

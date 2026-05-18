@@ -17,7 +17,7 @@ export default function FileGridItem({ folder, showFolder }: Readonly<FolderGrid
     >
       <div className="flex flex-row items-center gap-3">
         <FileIcon type={"folder"} />
-        <span className="flex-1">{ folder.name }</span>
+        <span className="flex-1 truncate">{ folder.name }</span>
         <FileOption row={folder} />
       </div>
     </div>

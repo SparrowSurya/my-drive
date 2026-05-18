@@ -62,6 +62,3 @@ npm run start
 * File suggestions
 * Folder suggestions
 
-## Todo
-* Read username from auth
-

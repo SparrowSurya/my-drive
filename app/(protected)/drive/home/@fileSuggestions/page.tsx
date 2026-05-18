@@ -40,7 +40,7 @@ export default function FileSuggestions({ files }: Readonly<FileSuggestionsProps
         {show && <ContentViewToggleButton visible={files.length > 0} />}
       </div>
       {show && (
-        <>
+        <div className="mx-5 overflow-y-scroll">
           { gridView
               ? <ContentGridView data={files} showFolder={showFolder} />
               : <ContentListView rows={row} cols={headings} data={files} showFolder={showFolder} />
@@ -48,7 +48,7 @@ export default function FileSuggestions({ files }: Readonly<FileSuggestionsProps
           <button
             className="flex flex-row gap-4 rounded-4xl px-5 py-1 my-4 font-semibold text-blue hover:bg-blue/25"
           >View more</button>
-        </>
+        </div>
       )}
     </>
   );

@@ -13,7 +13,7 @@ export default function FileGridItem({ file }: Readonly<FileGridItemProps>) {
     <div className="bg-surface2 hover:bg-surface1 px-2 py-3 rounded-2xl cursor-pointer">
       <div className="flex flex-row items-center gap-3">
         <FileIcon type={file.type} />
-        <span className="flex-1">{ file.name }</span>
+        <span className="flex-1 truncate">{ file.name }</span>
         <FileOption row={file} />
       </div>
       <div className="p-3 bg-overlay0 h-42 my-3"></div>
