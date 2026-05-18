@@ -1,14 +1,15 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { SubmitEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { Form, EmailInput, PasswordInput } from "@/components/form";
+import { Form, EmailInput, PasswordInput, Input } from "@/components/form";
 import { SigninSchema }  from "@/lib/schema";
 
 
 type FormError = {
+  name?: string[],
   email?: string[],
   password?: string[],
   confirmPassword?: string[],
@@ -21,7 +22,7 @@ export default function SigninForm() {
   const [errors, setErrors] = useState<FormError | null>(null);
   const [submit, setSubmit] = useState<boolean>(false);
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmit(true);
 
@@ -34,8 +35,7 @@ export default function SigninForm() {
       return;
     }
 
-    const { email, password } = result.data;
-    const response = await signIn("credentials", { email, password, redirect: false });
+    const response = await signIn("credentials", { ...result.data, redirect: false });
     const { error, status } = response!;
     if (status !== 200) {
       setErrors({ message: error! });
@@ -48,11 +48,18 @@ export default function SigninForm() {
 
   return (
     <>
-      { errors?.message && <div className="text-red text-center border-1 border-red py-2 mb-5">{`❗${errors.message}`}</div> }
+      { errors?.message && <div className="text-red text-center border border-red py-2 mb-5">{`❗${errors.message}`}</div> }
       <Form
         onSubmit={handleSubmit}
         className="w-full flex flex-col gap-3 font-poppins"
       >
+        <Input
+          id="id_name"
+          name="name"
+          labelText="Username"
+          placeholder="Your username"
+          errorText={errors?.name?.[0]}
+        />
         <EmailInput errorText={errors?.email?.[0]} />
         <PasswordInput errorText={errors?.password?.[0]} />
         <PasswordInput

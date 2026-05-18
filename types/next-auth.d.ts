@@ -2,6 +2,7 @@ import NextAuth from "next-auth"; // eslint-disable-line @typescript-eslint/no-u
 
 declare module "next-auth" {
   export interface User {
+    name: string;
     email: string;
     profilePic: string | null;
   }

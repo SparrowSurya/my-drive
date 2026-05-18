@@ -25,7 +25,7 @@ export default function FolderView({ data, segments }: Readonly<FolderViewProps>
         />
         <div className="flex flex-row gap-2 items-center">
           <ContentViewToggleButton visible={data.length > 0} />
-          <Icon icon={faInfoCircle} hover={true} />
+          { (data.length > 0) && <Icon icon={faInfoCircle} hover={true} /> }
         </div>
       </div>
       <ContentView data={data} />
