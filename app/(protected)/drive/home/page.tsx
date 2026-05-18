@@ -16,7 +16,7 @@ export default async function DriveHomePage() {
   const isEmpty = files.length == 0 && folders.length == 0;
 
   return (
-    <div className="flex flex-col gap-6 flex-1 overflow-y-auto min-h-0 pr-4">
+    <div className="flex flex-col gap-6 flex-1 overflow-y-auto min-h-0 pr-4 outline-none">
       <div className="drivePageHeading shrink-0">Welcome to Drive</div>
       {isEmpty ? (
         <EmptyState

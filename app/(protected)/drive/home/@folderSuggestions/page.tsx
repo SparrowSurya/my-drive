@@ -28,7 +28,7 @@ export default function FolderSuggestions({ folders }: Readonly<FolderSuggestion
           <span className="mx-3">Suggested folders</span>
         </button>
       </div>
-      <div className={`ml-5 overflow-hidden flex flex-col transition-all duration-500 ease-in-out ${show ? 'max-h-[2000px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
+      <div className={`ml-5 overflow-hidden flex flex-col transition-all duration-500 ease-in-out ${show ? 'max-h-500 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
         <ContentDropZone>
           <ContentGridView
             data={folders}
