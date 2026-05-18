@@ -11,14 +11,29 @@ export async function getFolderContents(id: number): Promise<ContentData[]> {
   const session = await getServerSession();
   const { email } = session!.user ;
 
-  const select = { id: true, name: true, updatedAt: true }
-  const folders = await getFolders(
-    { email },
-    { id },
-    { ...select, parent: { select: { parentId: true } } },
-  );
-  const fileSelect = { ...select, size: true, folderId: true };
-  const files = await getFiles({ email }, fileSelect, { id: id }, undefined);
+  const select = { id: true, name: true, updatedAt: true };
+  const fileSelect = {
+    ...select,
+    size: true,
+    folderId: true,
+    folder: {
+      select: {
+        user: {
+          select: { name: true, email: true },
+        }
+      },
+    }
+  };
+  const folderSelect = {
+    ...select,
+    parent: { select: { parentId: true } },
+    user: { select: { name: true, email: true } },
+  }
+
+  const [files, folders] = await Promise.all([
+    getFiles({ email }, fileSelect, { id }),
+    getFolders({ email }, { id }, folderSelect),
+  ]);
 
   return [
     ...folders.map(f => ({
@@ -27,6 +42,7 @@ export async function getFolderContents(id: number): Promise<ContentData[]> {
       type: "folder",
       size: null,
       parentId: f.parent?.parentId,
+      owner: f.user.email == email ? "me" : f.user.name,
       lastModified: utils.formatDate(f.updatedAt),
     } as unknown as FolderData)),
     ...files.map(f => ({
@@ -35,6 +51,7 @@ export async function getFolderContents(id: number): Promise<ContentData[]> {
       type: utils.getFileType(f.name),
       size: utils.formatBytes(f.size),
       folderId: f.folderId,
+      owner: f.folder.user.email == email ? "me" : f.folder.user.name,
       lastModified: utils.formatDate(f.updatedAt),
     } as unknown as FileData)),
   ] as ContentData[];
