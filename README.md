@@ -32,6 +32,7 @@ npm run start
 * 404 page (common for all)
 * Database (local)
 * Home page
+* File Upload Toast
 
 1. Authentication
 * Signin
@@ -57,9 +58,10 @@ npm run start
 * Show options (download, rename, organise, share, move to trash)
 * Rename option
 
+5. Home
+* File suggestions
+* Folder suggestions
 
 ## Todo
-* FileUploadToast
-  - add scroll to the toast when exceeds threshold height
-* FileListView
-  - add scroll when exceeds some height threshold
+* Read username from auth
+

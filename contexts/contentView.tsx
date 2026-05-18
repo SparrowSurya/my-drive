@@ -9,6 +9,7 @@ export type ContentViewType = "list" | "grid";
 export type ContentViewContextType = {
   view: ContentViewType;
   updateView: (newView: ContentViewType) => void;
+  gridView: boolean,
 };
 
 export const ContentViewContext = createContext<ContentViewContextType | undefined>(undefined);
@@ -28,7 +29,7 @@ export default function ContentViewProvider({ children }: Readonly<{ children: R
   };
 
   return (
-    <ContentViewContext.Provider value={{ view, updateView }}>
+    <ContentViewContext.Provider value={{ view, updateView, gridView: view == 'grid' }}>
       {children}
     </ContentViewContext.Provider>
   );

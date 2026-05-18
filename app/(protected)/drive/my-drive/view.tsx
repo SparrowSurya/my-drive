@@ -3,10 +3,10 @@
 import Breadcrumbs from "@/components/breadcrumbs";
 import ContentView from "../../../../components/content/view";
 import Icon from "@/components/icon";
-import { faBars, faInfoCircle, faThLarge } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { ContentData } from "@/components/content/types";
 import { SegmentData } from "@/components/breadcrumbs/breadcrumbs";
-import useContentView from "@/hooks/useContentView";
+import ContentViewToggleButton from "@/components/contentViewToggleButton";
 
 
 export type FolderViewProps = {
@@ -14,11 +14,7 @@ export type FolderViewProps = {
   segments: SegmentData[],
 };
 
-
 export default function FolderView({ data, segments }: Readonly<FolderViewProps>) {
-  const { view, updateView } = useContentView();
-  const gridView = view == 'grid';
-
   return (
     <div className="flex flex-col flex-1 overflow-hidden">
       <div className="flex flex-row justify-between shrink-0 mb-4">
@@ -28,27 +24,11 @@ export default function FolderView({ data, segments }: Readonly<FolderViewProps>
           data={segments}
         />
         <div className="flex flex-row gap-2 items-center">
-          <div className="inline-flex items-center rounded-full border shadow-sm overflow-hidden">
-            <button
-              className={`flex items-center justify-center transition px-3 gap-0 ${ gridView ? "" : "bg-surface1"}`}
-              onClick={() => updateView('list')}
-            >
-              <Icon icon={faBars} />
-            </button>
-            <button
-              className={`flex items-center justify-center transition px-3 gap-0 border-l ${ gridView ? "bg-surface1" : ""}`}
-              onClick={() => updateView('grid')}
-            >
-              <Icon icon={faThLarge} />
-            </button>
-          </div>
+          <ContentViewToggleButton visible={data.length > 0} />
           <Icon icon={faInfoCircle} hover={true} />
         </div>
       </div>
-      <ContentView
-        data={data}
-        gridView={gridView}
-      />
+      <ContentView data={data} />
     </div>
   );
 }

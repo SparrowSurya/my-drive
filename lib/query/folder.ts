@@ -270,3 +270,16 @@ export async function getFolderContents(
 
   return files;
 }
+
+export async function getRecentFolders(
+  userWhere: Prisma.UserWhereUniqueInput,
+  select: Prisma.FolderSelect,
+  take?: number,
+): Promise<Prisma.FolderGetPayload<{ select: Prisma.FolderSelect }>[]> {
+  return await prisma.folder.findMany({
+    where: { user: userWhere },
+    orderBy: { createdAt: "desc" },
+    select,
+    take,
+  });
+}

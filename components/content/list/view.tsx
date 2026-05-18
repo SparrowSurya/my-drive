@@ -3,14 +3,16 @@ import { ContentData } from "../types";
 import type { ListViewColumns, ListViewRow } from "./types";
 
 
-export type FileListViewProps = {
+export type FileListViewProps<T extends ContentData> = {
   rows: ListViewRow,
   cols: ListViewColumns[],
-  data: ContentData[],
+  data: T[],
   showFolder: (id: number) => void,
 };
 
-export default function ContentListView({ rows, cols, data, showFolder }: Readonly<FileListViewProps>) {
+export default function ContentListView<T extends ContentData>(
+  { rows, cols, data, showFolder }: Readonly<FileListViewProps<T>>,
+) {
   return (
     <div className="fileListView flex flex-col h-full overflow-hidden">
       <div className="fileListViewHead shrink-0">

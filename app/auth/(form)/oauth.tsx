@@ -20,14 +20,14 @@ export default function OAuth() {
     <>
       <div className="flex flex-row align-middle justify-between select-none my-8">
         <hr
-          className="flex-1 text-overlay0 border-1"
+          className="flex-1 text-overlay0 border"
           style={{
             transform: "translateY(10px)",
           }}
         />
         <span className="text-md mx-2">OR</span>
         <hr
-          className="flex-1 text-overlay0 border-1"
+          className="flex-1 text-overlay0 border"
           style={{
             transform: "translateY(10px)",
           }}
@@ -39,7 +39,7 @@ export default function OAuth() {
             <button
               key={provider.id}
               onClick={() => signIn(provider.id, { callbackUrl: "/drive" })}
-              className="text-md bg-base border-1 border-surface0 rounded-sm py-2 hover:border-mauve hover:text-mauve hover:bg-base/50"
+              className="text-md bg-base border border-surface0 rounded-sm py-2 hover:border-mauve hover:text-mauve hover:bg-base/50"
             >Sign up with { provider.name }</button>
           ))
         }

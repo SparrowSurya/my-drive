@@ -1,22 +1,23 @@
 import { type FileType } from "@/lib/types/file";
 
-
-export interface FileData {
+interface BaseData {
   id: number,
   name: string,
+  lastModified: string,
+  reason?: string,
+  owner?: string,
+}
+
+export interface FileData extends BaseData {
   type: Exclude<FileType, "folder">,
   size: string,
   folderId: number,
-  lastModified: string,
 };
 
-export interface FolderData {
-  id: number,
-  name: string,
+export interface FolderData extends BaseData {
   type: "folder",
   size: null,
   parentId: number,
-  lastModified: string,
 };
 
 export type ContentData = FileData | FolderData;

@@ -1,5 +1,6 @@
 "use client";
 
+import { Avatar } from "@/components/avatar";
 import FileOption from "../components/fileOptions";
 import FileIcon from "../fileIcon";
 import { type ContentData } from "../types";
@@ -39,6 +40,31 @@ const row: ListViewRow = {
           <span className="ml-2">
             { row.size ?? "—" }
           </span>
+        </div>
+      );
+    },
+  },
+  "reason": {
+    head: "Reason",
+    body: (row: ContentData, key: string) => {
+      return (
+        <div key={key} className="listColumn_reason">
+          { row.reason ?? "—" }
+        </div>
+      );
+    },
+  },
+  "owner": {
+    head: "Owner",
+    body: (row: ContentData, key: string) => {
+      const alphabet = row.owner?.charAt(0).toUpperCase() ?? '';
+      return (
+        <div key={key} className="listColumn_owner">
+          <Avatar
+            char={alphabet}
+            className={`bg-peach text-base`}
+            size="medium"
+          />
         </div>
       );
     },

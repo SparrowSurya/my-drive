@@ -7,7 +7,8 @@ import type { ContentData, FileData, FolderData } from "@/components/content/typ
 
 export async function getFilesAndFolders(): Promise<ContentData[]> {
   const session = await getServerSession();
-  const { email } = session!.user ;
+  const email = session?.user.email;
+  if (email == null) return [];
 
   const root = await getOrCreateRootFolder({ email }, { id: true });
   const select = { id: true, name: true, updatedAt: true }

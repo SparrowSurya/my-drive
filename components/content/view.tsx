@@ -7,17 +7,18 @@ import { ListViewColumns } from "@/components/content/list/types";
 import { ContentData } from "@/components/content/types";
 import ContentDropZone from "./dropzone";
 import useShowContent from "@/hooks/useShowContent";
+import useContentView from "@/hooks/useContentView";
 
 
 const columns: ListViewColumns[] = ["name", "lastModified", "fileSize", "elipsis"];
 
 export type ContentViewProps = {
   data: ContentData[],
-  gridView: boolean,
 };
 
-export default function ContentView({ data, gridView }: Readonly<ContentViewProps>) {
+export default function ContentView({ data }: Readonly<ContentViewProps>) {
   const { showFolder } = useShowContent();
+  const { gridView } = useContentView();
 
   return (
     <ContentDropZone>

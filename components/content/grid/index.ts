@@ -1,3 +1,3 @@
-import FileGridView from './view';
+import ContentGridView from './view';
 
-export default FileGridView;
+export default ContentGridView;

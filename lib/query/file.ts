@@ -145,7 +145,7 @@ export async function addFileWithRelativePath(
       folderId,
       name: file.name,
       size: file.data.length,
-      data: file.data,
+      data: new Uint8Array(file.data),
     },
     select,
   });
@@ -162,5 +162,22 @@ export async function getFile(
       ...fileWhere,
     },
     select,
+  });
+}
+
+export async function getRecentFiles(
+  userWhere: Prisma.UserWhereUniqueInput,
+  select: Prisma.FileSelect,
+  take?: number,
+): Promise<Prisma.FileGetPayload<{ select: Prisma.FileSelect }>[]> {
+  return await prisma.file.findMany({
+    where: {
+      folder: { user: userWhere },
+    },
+    orderBy: {
+      createdAt: "desc"
+    },
+    select,
+    take,
   });
 }
