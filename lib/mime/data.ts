@@ -3,7 +3,7 @@ import { MagicSignature } from './typedef';
 /**
  * Note: order mattters! more specific signatures should appear before generic ones.
  */
-export const MAGIC_SIGNATURES: MagicSignature[] = [
+export const MAGIC_SIGNATURES: MagicSignature[] = [ // TODO: validate the signatures
   // Images
   { offset: 0, hex: "FFD8FF", mimeType: "image/jpeg" },
   { offset: 0, hex: "89504E470D0A1A0A", mimeType: "image/png" },
@@ -25,7 +25,7 @@ export const MAGIC_SIGNATURES: MagicSignature[] = [
   { offset: 0, hex: "664C6143", mimeType: "audio/flac" },
   { offset: 0, hex: "52494646", mimeType: "audio/wav" }, // refined via offset 8 "57415645"
   { offset: 0, hex: "4D546864", mimeType: "audio/midi" },
-  { offset: 4, hex: "667479704D344100", mimeType: "audio/mp4" }, // m4a
+  { offset: 4, hex: "667479704D344120", mimeType: "audio/mp4" }, // m4a
 
   // Video
   { offset: 4, hex: "6674797069736F6D", mimeType: "video/mp4" },
@@ -40,7 +40,8 @@ export const MAGIC_SIGNATURES: MagicSignature[] = [
   { offset: 0, hex: "3026B2758E66CF11", mimeType: "video/x-ms-wmv" },
 
   // PDF
-  { offset: 0, hex: "25504446", mimeType: "application/pdf" },
+  { offset: 0, hex: "25504446", mimeType: "application/pdf" }, // %PDF
+  { offset: 0, hex: "50254644", mimeType: "application/pdf" }, // little-endian view of %PDF
 
   // Archives
   { offset: 0, hex: "504B0304", mimeType: "application/zip" },
@@ -61,10 +62,10 @@ export const MAGIC_SIGNATURES: MagicSignature[] = [
   { offset: 0, hex: "774F4646", mimeType: "font/woff" },
   { offset: 0, hex: "774F4632", mimeType: "font/woff2" },
   { offset: 0, hex: "4F54544F", mimeType: "font/otf" },
-  { offset: 0, hex: "000100", mimeType: "font/ttf" },
+  { offset: 0, hex: "00010000", mimeType: "font/ttf" },
 
   // SQLite
-  { offset: 0, hex: "53514C69746520666F726D617420330", mimeType: "application/x-sqlite3" },
+  { offset: 0, hex: "53514C69746520666F726D6174203300", mimeType: "application/x-sqlite3" },
 
   // Executables (flag as binary)
   { offset: 0, hex: "4D5A", mimeType: "application/x-msdownload" }, // .exe / .dll

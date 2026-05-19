@@ -62,8 +62,12 @@ npm run start
 * File suggestions
 * Folder suggestions
 
-## TODO
+## Partially Tested
 * Preview text file contents
+* verify the magic numbers for mime types
+
+
+## TODO
 * Move to trash
 * Organise file/folder
 * Recent

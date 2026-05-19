@@ -1,6 +1,6 @@
 import { CUSTOM_MAP } from "./constants";
 import { MAGIC_SIGNATURES } from "./data";
-import { matchesSignature, readHeader, resolveRiff } from "./helpers";
+import { matchesSignature, readHeader, resolveRiff, isTextBytes } from "./helpers";
 import { resolveBrowserRenderable, resolveCategory, resolvePlainText } from "./resolvers";
 import { MimeDetectionResult } from "./typedef";
 
@@ -14,7 +14,7 @@ import { MimeDetectionResult } from "./typedef";
  */
 export async function detectMimeType(file: File | Blob): Promise<MimeDetectionResult> {
   // The farthest offset in MAGIC_SIGNATURES is 257 (TAR header), plus a bit.
-  const HEADER_BYTES = 280;
+  const HEADER_BYTES = 512;
   const header = await readHeader(file, HEADER_BYTES);
 
   // Magic byte detection
@@ -29,7 +29,7 @@ export async function detectMimeType(file: File | Blob): Promise<MimeDetectionRe
     }
   }
 
-  // Custom fallback
+  // Custom fallback (Extensions)
   if (file instanceof File && file.name) {
     const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
     const fromExt = CUSTOM_MAP[ext];
@@ -39,6 +39,11 @@ export async function detectMimeType(file: File | Blob): Promise<MimeDetectionRe
   // Browser-reported type as a hint (unreliable, last resort)
   if (file.type && file.type !== "application/octet-stream") {
     return buildResult(file.type, "custom");
+  }
+
+  // Heuristic text detection (if magic bytes and extensions fail)
+  if (isTextBytes(header)) {
+    return buildResult("text/plain", "fallback");
   }
 
   return buildResult("application/octet-stream", "fallback");
@@ -69,11 +74,18 @@ export function detectMimeTypeFromBuffer(
     }
   }
 
-  // Custom fallback
+  // Custom fallback (Extensions)
   if (filename) {
     const ext = filename.split(".").pop()?.toLowerCase() ?? "";
     const fromExt = CUSTOM_MAP[ext];
     if (fromExt) return buildResult(fromExt, "custom");
+  }
+
+  // Heuristic text detection (if magic bytes and extensions fail)
+  // Check the first 512 bytes for a good sample
+  const sample = bytes.length > 512 ? bytes.slice(0, 512) : bytes;
+  if (isTextBytes(sample)) {
+    return buildResult("text/plain", "fallback");
   }
 
   return buildResult("application/octet-stream", "fallback");

@@ -16,7 +16,7 @@ export type FolderViewProps = {
 
 export default function FolderView({ data, segments }: Readonly<FolderViewProps>) {
   return (
-    <div className="flex flex-col flex-1 overflow-hidden">
+    <div className="flex flex-col flex-1 overflow-hidden h-full">
       <div className="flex flex-row justify-between shrink-0 mb-4">
         <Breadcrumbs
           className="text-2xl cursor-pointer"
@@ -28,7 +28,7 @@ export default function FolderView({ data, segments }: Readonly<FolderViewProps>
           { (data.length > 0) && <Icon icon={faInfoCircle} hover={true} /> }
         </div>
       </div>
-      <div className="ml-3">
+      <div className="ml-3 flex-1 flex flex-col min-h-0">
         <ContentView data={data} />
       </div>
     </div>

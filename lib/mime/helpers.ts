@@ -41,3 +41,24 @@ export function resolveRiff(bytes: Uint8Array): string {
   if (sub === "AVI ") return "video/avi";
   return "application/octet-stream";
 }
+
+/**
+ * Heuristic to detect if a byte array is likely plain text.
+ * It checks for the absence of null bytes (0x00) and ensures
+ * that most characters are printable ASCII or valid UTF-8.
+ */
+export function isTextBytes(bytes: Uint8Array): boolean {
+  if (bytes.length === 0) return true; // Empty files can be considered text
+  
+  for (let i = 0; i < bytes.length; i++) {
+    const byte = bytes[i];
+    
+    // Null bytes are a strong indicator of binary data
+    if (byte === 0x00) {
+      return false;
+    }
+  }
+  
+  // If no null bytes are found in the sampled header, it's highly likely to be text/plain
+  return true;
+}

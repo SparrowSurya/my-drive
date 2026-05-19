@@ -38,7 +38,7 @@ export function getFileType(name: string): FileType {
   for (const [key, values] of Object.entries(fileTypesGroup)) {
     if (values.includes(ext)) return key as FileType;
   }
-  return (ext in fileTypes) ? ext as FileType : "file";
+  return (fileTypes.includes(ext as FileType)) ? ext as FileType : "file";
 }
 
 /**

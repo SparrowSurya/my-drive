@@ -28,7 +28,7 @@ export default function ModalProvider({ children }: Readonly<{ children: React.R
       {
         content && (
           <Modal
-            className="fixed inset-0 z-1000000 flex items-center justify-center bg-crust/50"
+            className="fixed inset-0 z-1000000"
           >{ content }</Modal>
         )
       }
