@@ -1,0 +1,13 @@
+import { resolveBrowserRenderable, resolvePlainText } from "./resolvers";
+
+export const isImage = (mimeType: string) => mimeType.startsWith("image/");
+export const isAudio = (mimeType: string) => mimeType.startsWith("audio/");
+export const isVideo = (mimeType: string) => mimeType.startsWith("video/");
+export const isPdf = (mimeType: string) => mimeType === "application/pdf";
+export const isText = (mimeType: string) => resolvePlainText(mimeType);
+export const isSpreadsheet = (mimeType: string) => /spreadsheet|excel|\.sheet/.test(mimeType);
+export const isDocument = (mimeType: string) => /word|document|msword|odt|pages|epub/.test(mimeType);
+export const isPresentation = (mimeType: string) => /presentation|powerpoint|\.presentation/.test(mimeType);
+export const isArchive = (mimeType: string) => /zip|gzip|tar|bzip|rar|7z|xz/.test(mimeType);
+export const isFont = (mimeType: string) => mimeType.startsWith("font/");
+export const isBrowserRenderable = (mimeType: string) => resolveBrowserRenderable(mimeType);

@@ -64,3 +64,12 @@ npm run start
 
 ## TODO
 * Preview text file contents
+* Move to trash
+* Organise file/folder
+* Recent
+* Search
+* Activity
+* Share
+* Versions
+* Sort & Filters
+* Storage
