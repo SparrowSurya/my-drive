@@ -45,3 +45,7 @@ export const FileDownloadSchema = z.object({
 export const FolderDownloadSchema = z.object({
   id: field.folderId,
 });
+
+export const ReadFileDataSchema = z.object({
+  id: field.fileId,
+});

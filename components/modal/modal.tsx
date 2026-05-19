@@ -41,7 +41,9 @@ export default function Modal({
 	);
 
 	if (!!portal) {
-		return createPortal(modal, document.getElementById(portal)!);
+		const element = document.getElementById(portal);
+		if (element === null) return null;
+		return createPortal(modal, element);
 	}
 	return modal;
 }

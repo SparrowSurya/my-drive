@@ -12,6 +12,8 @@ export interface FileData extends BaseData {
   type: Exclude<FileType, "folder">,
   size: string,
   folderId: number,
+  mimeType?: string,
+  data?: Uint8Array,
 };
 
 export interface FolderData extends BaseData {

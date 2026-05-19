@@ -31,7 +31,7 @@ export default function CreateFolderDialog({
     <div className="fixed top-0 right-0 left-0 bottom-0 bg-crust/60 z-50">
       <Modal
         className="absolute left-[50%] top-[50%] rounded-2xl py-5 px-8 bg-surface0 shadow-md shadow-crust"
-        portal="id_modal"
+        portal="id_dialog"
         style={{ transform: "translate(-50%, -50%)" }}
       >
         <Form action={formAction} className="flex flex-col gap-3 w-60">

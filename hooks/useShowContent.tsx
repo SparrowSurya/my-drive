@@ -1,8 +1,13 @@
+"use client";
+
 import { useRouter } from "next/navigation";
+import useModal from "./useModal";
+import FilePreview from "@/components/content/preview";
 
 
 export default function useShowContent() {
   const router = useRouter();
+  const model = useModal();
 
   const showFolder = (id: number): void => {
     const path = `/drive/folder/${id}`;
@@ -10,7 +15,7 @@ export default function useShowContent() {
   };
 
   const showFile = (id: number): void => {
-    console.log("Showing FileID:", id);
+    model.show(<FilePreview id={id} close={model.close} />);
   }
 
   return { showFolder, showFile };

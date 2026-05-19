@@ -76,7 +76,7 @@ body {
   scrollbar-color: var(--color-surface2) var(--color-crust);
 }
 
-#id_modal {
+#id_dialog {
 	z-index: 100;
 }
 

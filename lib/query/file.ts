@@ -154,11 +154,11 @@ export async function addFileWithRelativePath(
   });
 }
 
-export async function getFile(
+export async function getFile<T extends Prisma.FileSelect>(
   userWhere: Prisma.UserWhereUniqueInput,
   fileWhere: Prisma.FileWhereUniqueInput,
-  select?: Prisma.FileSelect,
-): Promise<Prisma.FileGetPayload<{ select?: Prisma.FileSelect }>> {
+  select: T,
+): Promise<Prisma.FileGetPayload<{ select: T }>> {
   return await prisma.file.findFirstOrThrow({
     where: {
       folder: { user: userWhere },

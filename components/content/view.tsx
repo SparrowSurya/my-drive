@@ -20,23 +20,27 @@ export default function ContentView({ data }: Readonly<ContentViewProps>) {
   const { gridView } = useContentView();
 
   return (
-    <ContentDropZone>
+    <>
+      <ContentDropZone>
+        {
+          (data === null || data.length == 0) && (
+            <EmptyState
+              image="/assets/svg/empty_state_my_drive.svg"
+              title="A place for all of your files"
+              para="Drag your files and folders here or use the 'New' button to upload"
+            />
+          )
+        }
+        {
+          data && data.length > 0 && (
+            gridView
+              ? <ContentGridView data={data} showFolder={showFolder} showFile={showFile} />
+              : <ContentListView data={data} cols={columns} showFolder={showFolder} showFile={showFile} />
+          )
+        }
+      </ContentDropZone>
       {
-        (data === null || data.length == 0) && (
-          <EmptyState
-            image="/assets/svg/empty_state_my_drive.svg"
-            title="A place for all of your files"
-            para="Drag your files and folders here or use the 'New' button to upload"
-          />
-        )
       }
-      {
-        data && data.length > 0 && (
-          gridView
-            ? <ContentGridView data={data} showFolder={showFolder} showFile={showFile} />
-            : <ContentListView data={data} cols={columns} showFolder={showFolder} showFile={showFile} />
-        )
-      }
-    </ContentDropZone>
+    </>
   );
 }
