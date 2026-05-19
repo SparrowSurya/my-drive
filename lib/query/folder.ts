@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { Prisma } from "@/app/generated/prisma";
 import { type FileTree } from "@/lib/types/file";
+import { detectMimeTypeFromBuffer } from "../mime/detection";
 
 
 export async function getOrCreateRootFolder(
@@ -116,9 +117,11 @@ export async function createFileTree(
           });
           if (existingFile) continue;
 
+          const mimeResult = detectMimeTypeFromBuffer(file.data);
           await prisma.file.create({
             data: {
               ...file,
+              mimeType: mimeResult.mimeType,
               folder: { connect: { id: parentId } },
             },
           });

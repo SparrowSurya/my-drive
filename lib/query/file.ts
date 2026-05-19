@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { Prisma } from "@/app/generated/prisma";
 import { getOrCreateRootFolder } from "./folder";
+import { detectMimeTypeFromBuffer } from "../mime/detection";
 
 
 export async function addFiles(
@@ -27,6 +28,7 @@ export async function addFiles(
       prisma.file.create({
         data: {
           ...file,
+          mimeType: detectMimeTypeFromBuffer(file.data).mimeType,
           folder: { connect: { id: folder.id } },
         },
         select,
@@ -145,6 +147,7 @@ export async function addFileWithRelativePath(
       folderId,
       name: file.name,
       size: file.data.length,
+      mimeType: detectMimeTypeFromBuffer(file.data).mimeType,
       data: new Uint8Array(file.data),
     },
     select,
