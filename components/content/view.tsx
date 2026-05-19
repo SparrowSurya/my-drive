@@ -16,7 +16,7 @@ export type ContentViewProps = {
 };
 
 export default function ContentView({ data }: Readonly<ContentViewProps>) {
-  const { showFolder } = useShowContent();
+  const { showFolder, showFile } = useShowContent();
   const { gridView } = useContentView();
 
   return (
@@ -33,8 +33,8 @@ export default function ContentView({ data }: Readonly<ContentViewProps>) {
       {
         data && data.length > 0 && (
           gridView
-            ? <ContentGridView data={data} showFolder={showFolder} />
-            : <ContentListView data={data} cols={columns} showFolder={showFolder} />
+            ? <ContentGridView data={data} showFolder={showFolder} showFile={showFile} />
+            : <ContentListView data={data} cols={columns} showFolder={showFolder} showFile={showFile} />
         )
       }
     </ContentDropZone>

@@ -6,12 +6,16 @@ import { Avatar } from "@/components/avatar";
 
 export type FileGridItemProps = {
   file: FileData,
+  showFile: (ind: number) => void,
 };
 
 
-export default function FileGridItem({ file }: Readonly<FileGridItemProps>) {
+export default function FileGridItem({ file, showFile }: Readonly<FileGridItemProps>) {
   return (
-    <div className="bg-surface2 hover:bg-surface1 px-2 py-3 rounded-2xl cursor-pointer">
+    <div
+      className="bg-surface2 hover:bg-surface1 px-2 py-3 rounded-2xl cursor-pointer"
+      onDoubleClick={() => showFile(file.id)}
+    >
       <div className="flex flex-row items-center gap-3">
         <FileIcon type={file.type} />
         <span className="flex-1 truncate font-medium">{ file.name }</span>

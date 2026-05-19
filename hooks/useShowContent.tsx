@@ -9,5 +9,9 @@ export default function useShowContent() {
     router.push(path);
   };
 
-  return { showFolder };
+  const showFile = (id: number): void => {
+    console.log("Showing FileID:", id);
+  }
+
+  return { showFolder, showFile };
 }

@@ -5,6 +5,7 @@ import { type ContentData } from "../types";
 export type GridViewProps = {
   data: ContentData[],
   showFolder: (id: number) => void,
+  showFile: (id: number) => void,
   className?: string,
   scrollable?: boolean,
 };
@@ -12,6 +13,7 @@ export type GridViewProps = {
 export default function ContentGridView({
   data,
   showFolder,
+  showFile,
   className,
   scrollable = true
 }: Readonly<GridViewProps>) {
@@ -34,7 +36,7 @@ export default function ContentGridView({
       {(files.length > 0) && (
         <div className="grid grid-cols-4 gap-3 shrink-0">
           {
-            files.map((file, index) => <FileGridItem key={index} file={file} />)
+            files.map((file, index) => <FileGridItem key={index} file={file} showFile={showFile} />)
           }
         </div>
       )}

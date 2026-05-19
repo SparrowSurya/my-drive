@@ -8,6 +8,7 @@ export type FileListViewProps = {
   cols: ListViewColumns[],
   data: ContentData[],
   showFolder: (id: number) => void,
+  showFile: (id: number) => void,
   className?: string,
   scrollable?: boolean,
 };
@@ -16,6 +17,7 @@ export default function ContentListView({
   cols,
   data,
   showFolder,
+  showFile,
   className,
   scrollable = true,
 }: Readonly<FileListViewProps>) {
@@ -37,15 +39,15 @@ export default function ContentListView({
       </div>
       <div className={`w-full ${scrollable ? "w-full flex-1 overflow-y-auto min-h-0" : "w-full flex flex-col"}`}>
       {
-        data.map((d) => (
+        data.map((f) => (
           <div
-          key={d.id}
-          className="grid h-12 border-b-2 border-surface0 hover:bg-overlay0/30"
-          style={{ gridTemplateColumns }}
-          onDoubleClick={d.type == "folder" ? () => showFolder(d.id): undefined}
+            key={f.id}
+            className="grid h-12 border-b-2 border-surface0 hover:bg-overlay0/30"
+            style={{ gridTemplateColumns }}
+            onDoubleClick={f.type == "folder" ? () => showFolder(f.id): () => showFile(f.id)}
           >
             {
-              cols.map((col) => rowBuilder[col].body(d, col))
+              cols.map((col) => rowBuilder[col].body(f, col))
             }
           </div>
         ))
