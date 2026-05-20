@@ -36,7 +36,7 @@ export default function FilePreview({ id, close }: Readonly<FilePreviewProps>) {
 
   const category = data ? mime.resolveCategory(data.mimeType) : "unknown";
 
-  const renderContent = () => {
+  const render = () => {
     if (loading) return <span className="text-blue animate-pulse text-xl font-medium">Loading preview...</span>;
     if (error) return <span className="text-red text-xl font-medium">Failed to load: {error.message}</span>;
     if (!data) return null;
@@ -53,14 +53,7 @@ export default function FilePreview({ id, close }: Readonly<FilePreviewProps>) {
       case "pdf":
         return <PdfPreview data={data.data} />;
       default:
-        return (
-          <NonePreview 
-            id={data.id}
-            name={data.name}
-            type={data.type}
-            size={data.size}
-          />
-        );
+        return <NonePreview id={data.id} name={data.name} type={data.type} size={data.size} />;
     }
   };
 
@@ -86,7 +79,7 @@ export default function FilePreview({ id, close }: Readonly<FilePreviewProps>) {
         )}
       </div>
       <div className="flex-1 flex justify-center items-center overflow-hidden">
-        {renderContent()}
+        {render()}
       </div>
     </div>
   );
