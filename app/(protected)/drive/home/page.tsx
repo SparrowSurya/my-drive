@@ -1,7 +1,8 @@
 import { Metadata } from "next";
-import ContentSuggestions from "./suggestions";
 import EmptyState from "@/components/emptyState";
 import { getFileSuggestions, getFolderSuggestions } from "./query";
+import FolderSuggestions from "./folderSuggestions";
+import FileSuggestions from "./fileSuggestions";
 
 
 export const metadata: Metadata = {
@@ -24,7 +25,10 @@ export default async function DriveHomePage() {
           title="Drag your files and folders here or use the 'New' button to upload"
         />
       ) : (
-        <ContentSuggestions files={files} folders={folders} />
+        <div className="flex flex-col gap-3">
+          <FolderSuggestions folders={folders}  />
+          <FileSuggestions files={files} />
+        </div>
       )}
     </div>
   );
