@@ -9,7 +9,7 @@ export type FolderGridItemProps = {
 };
 
 
-export default function FileGridItem({ folder, showFolder }: Readonly<FolderGridItemProps>) {
+export default function FolderGridItem({ folder, showFolder }: Readonly<FolderGridItemProps>) {
   return (
     <div
       className="bg-surface2 hover:bg-surface1 px-2 py-3 rounded-2xl cursor-pointer"

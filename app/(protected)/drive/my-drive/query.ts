@@ -43,7 +43,8 @@ export async function getFilesAndFolders(): Promise<ContentData[]> {
       type: "folder",
       size: null,
       parentId: f.parent?.parentId,
-      owner: f.user.email == email ? "me" : f.user.name,
+      isMe: f.user.email == email,
+      owner: f.user.name,
       lastModified: utils.formatDate(f.updatedAt),
     } as unknown as FolderData)),
     ...files.map(f => ({
@@ -52,7 +53,8 @@ export async function getFilesAndFolders(): Promise<ContentData[]> {
       type: utils.getFileType(f.name),
       size: utils.formatBytes(f.size),
       folderId: f.folderId,
-      owner: f.folder.user.email == email ? "me" : f.folder.user.name,
+      isMe: f.folder.user.email == email,
+      owner: f.folder.user.name,
       lastModified: utils.formatDate(f.updatedAt),
     } as unknown as FileData)),
   ] as ContentData[];

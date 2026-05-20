@@ -5,6 +5,7 @@ interface BaseData {
   name: string,
   lastModified: string,
   reason?: string,
+  isMe?: boolean,
   owner?: string,
 }
 

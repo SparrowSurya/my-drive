@@ -64,7 +64,7 @@ const rowBuilder: ListViewRow = {
             className={`bg-lavender text-base`}
             size="small"
           />
-          <div className="max-w-30 truncate">{ row.owner }</div>
+          <div className="max-w-30 truncate">{ row.isMe ? 'me' : row.owner }</div>
         </div>
       );
     },

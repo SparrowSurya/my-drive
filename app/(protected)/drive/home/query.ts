@@ -27,7 +27,8 @@ export async function getFileSuggestions(count?: number): Promise<FileData[]> {
     size: utils.formatBytes(f.size),
     folderId: f.folderId,
     lastModified: utils.formatDate(f.updatedAt),
-    owner: f.folder.user.email == email ? "me" : f.folder.user.name,
+    isMe: f.folder.user.email == email,
+    owner: f.folder.user.name,
     reason: "You uploaded", // HARDCODE
   } as FileData));
 }
@@ -52,7 +53,8 @@ export async function getFolderSuggestions(count?: number): Promise<FolderData[]
     size: null,
     parentId: f.parent?.parentId,
     lastModified: utils.formatDate(f.updatedAt),
-    owner: f.user.email == email ? "me" : f.user.name,
+    isMe: f.user.email == email,
+    owner: f.user.name,
     reason: "in My Drive", // HARDCODE
   } as FolderData));
 }
