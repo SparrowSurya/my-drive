@@ -10,12 +10,17 @@ export type ImagePreviewProps = {
 
 export default function ImagePreview({ data, mimeType }: Readonly<ImagePreviewProps>) {
   return (
-    <div className="flex justify-center items-center w-full h-full p-4">
-      <Image
-        src={`data:${mimeType};base64,${data}`}
-        alt="Preview"
-        className="max-w-full max-h-full object-contain shadow-2xl rounded-sm"
-      />
+    <div className="flex justify-center items-center w-full h-full p-10 md:p-16">
+      <div className="relative w-full h-full max-w-[90vw] max-h-[85vh]">
+        <Image
+          src={`data:${mimeType};base64,${data}`}
+          alt="Preview"
+          fill
+          unoptimized
+          priority
+          className="object-contain shadow-2xl rounded-sm"
+        />
+      </div>
     </div>
   );
 }

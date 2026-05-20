@@ -9,10 +9,10 @@ export type VideoPreviewProps = {
 
 export default function VideoPreview({ data, mimeType }: Readonly<VideoPreviewProps>) {
   return (
-    <div className="flex justify-center items-center w-full h-full p-4">
+    <div className="flex justify-center items-center w-full h-full p-10 md:p-16">
       <video 
         controls 
-        className="max-w-full max-h-full shadow-2xl rounded-lg"
+        className="max-w-[80vw] max-h-full shadow-2xl rounded-lg"
         src={`data:${mimeType};base64,${data}`}
       />
     </div>
