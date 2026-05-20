@@ -12,6 +12,7 @@ import ImagePreview from "./image";
 import AudioPreview from "./audio";
 import VideoPreview from "./video";
 import PdfPreview from "./pdf";
+import useDownload from "@/hooks/useDownload";
 
 export type FilePreviewProps = {
   id: number,
@@ -33,6 +34,7 @@ type FileDataResponse = {
 export default function FilePreview({ id, close }: Readonly<FilePreviewProps>) {
   const url = `/api/file/${id}`;
   const { loading, error, data } = useFetch<FileDataResponse>(url);
+  const { downloadFile } = useDownload();
 
   const category = data ? mime.resolveCategory(data.mimeType) : "unknown";
 
@@ -72,9 +74,12 @@ export default function FilePreview({ id, close }: Readonly<FilePreviewProps>) {
         {data && (
           <div className="flex flex-row gap-6 items-center">
             <span className="text-subtext0 text-sm font-medium">{data.size}</span>
-            <a href={`/api/download/${data.id}`} download={data.name} className="flex items-center">
-              <Icon icon={faDownload} hover className="cursor-pointer text-lg" />
-            </a>
+            <Icon
+              icon={faDownload}
+              hover
+              className="cursor-pointer text-lg"
+              onClick={() => downloadFile(data.id, data.name)}
+            />
           </div>
         )}
       </div>

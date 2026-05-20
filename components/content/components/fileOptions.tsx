@@ -8,6 +8,7 @@ import type { ContentData } from "../types";
 import { OptionMenu, Option } from "@/components/option";
 import FolderRenameDialog from "./folderRenameDialog";
 import FileRenameDialog from "./fileRenameDialog";
+import useDownload from "@/hooks/useDownload";
 
 
 export default function FileOption({ row }: Readonly<{ row: ContentData }>) {
@@ -16,15 +17,13 @@ export default function FileOption({ row }: Readonly<{ row: ContentData }>) {
   const [showOptionMenu, setShowOptionMenu] = useState<boolean>(false);
   const [showFolderRenameDialog, setShowFolderRenameDialog] = useState<boolean>(false);
   const [showFileRenameDialog, setShowFileRenameDialog] = useState<boolean>(false);
+  const { downloadFile, downloadFolder } = useDownload();
 
   function handleDownload() {
-    const a = document.createElement("a");
-    const isFolder = row.type === "folder";
-    a.href = `/api/download/${isFolder ? "folder" : "file"}/${row.id}`;
-    a.download = row.name;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    if (row.type == "folder") {
+      return downloadFolder(row.id, row.name);
+    }
+    return downloadFile(row.id, row.name);
   };
 
   const options: (Option | null)[] = [
