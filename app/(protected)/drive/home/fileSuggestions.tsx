@@ -43,7 +43,7 @@ export default function FileSuggestions({ files }: Readonly<FileSuggestionsProps
         </button>
         {show && <ContentViewToggleButton visible={files.length > 0} />}
       </div>
-      <div className={`ml-5 overflow-hidden flex flex-col transition-all duration-500 ease-in-out ${show ? 'max-h-1250 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
+      <div className={`ml-5 overflow-hidden flex flex-col transition-all duration-500 ease-in-out ${show ? 'max-h-1250 opacity-100 mt-6' : 'max-h-0 opacity-0'}`}>
         { gridView
             ? <ContentGridView
                 data={visibleFiles}

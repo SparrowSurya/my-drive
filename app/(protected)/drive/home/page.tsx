@@ -25,7 +25,7 @@ export default async function DriveHomePage() {
           title="Drag your files and folders here or use the 'New' button to upload"
         />
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col">
           <FolderSuggestions folders={folders}  />
           <FileSuggestions files={files} />
         </div>

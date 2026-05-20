@@ -105,30 +105,27 @@ body {
 	}
 
 	.option-menu {
-		@apply flex flex-col w-72 bg-surface0 border-overlay1 shadow-sm shadow-overlay2 rounded-sm cursor-default;
+		@apply flex flex-col w-64 bg-base border border-surface1 shadow-2xl rounded-xl cursor-default py-2 z-[9999];
 
 		.option-item {
-			@apply flex flex-row items-center py-1 hover:bg-overlay2/20 cursor-pointer;
+			@apply flex flex-row items-center py-2 px-4 hover:bg-surface0 cursor-pointer transition-all duration-200;
 
 			svg {
-				@apply w-4 mx-4 mr-4;
+				@apply w-4 mr-4 text-subtext0;
 			}
 
 			.option-item-text {
-				@apply text-text;
+				@apply text-text font-medium text-sm;
 			}
 		}
 
-		.option-item > .option-item-text:first-child {
-			@apply pl-4;
+		.option-item:hover {
+			svg { @apply text-blue; }
+			.option-item-text { @apply text-blue; }
 		}
 
-		.option-item:first-child {
-			@apply mt-2;
-		}
-
-		.option-item:last-child {
-			@apply mb-2;
+		.option-seperator {
+			@apply border-t border-surface1 my-2;
 		}
 	}
 
