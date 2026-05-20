@@ -1,9 +1,8 @@
-
 /**
  * Source of the mime detection:
  * 1. magic: reads the file's binary header
  * 2. custom: fallback when binary sniffing inconclusive
- * 3. default: when nothing matches (take it as binary)
+ * 3. fallback: when nothing matches (take it as binary)
  */
 export type MimeDetectionSource = "magic" | "custom" | "fallback";
 
@@ -36,7 +35,7 @@ export interface MimeDetectionResult {
 /** Predefined signatures for binary files. */
 export interface MagicSignature {
   offset: number;
-  hex: string;
+  bytes: number[];
   mimeType: string;
+  description?: string;
 }
-

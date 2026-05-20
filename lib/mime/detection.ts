@@ -7,7 +7,7 @@ import { MimeDetectionResult } from "./typedef";
 
 /**
  * Detects the MIME type of a File or Blob using magic bytes first,
- * falling back to the custom checks (when a File object is provided).
+ * falling back to custom and heuristic checks.
  *
  * @param file - Browser `File` or `Blob` object
  * @returns MimeDetectionResult
@@ -16,10 +16,11 @@ export async function detectMimeType(file: File | Blob): Promise<MimeDetectionRe
   const HEADER_BYTES = 512;
   const header = await readHeader(file, HEADER_BYTES);
 
-  // Magic byte detection
+  // 1. Magic byte detection (Strict byte sequence matching)
   for (const sig of MAGIC_SIGNATURES) {
     if (matchesSignature(header, sig)) {
-      if (sig.hex === "52494646") {
+      // Disambiguate RIFF containers (WAV, WebP, AVI)
+      if (sig.mimeType === "application/octet-stream" && sig.description === "RIFF Container") {
         const resolved = resolveRiff(header);
         return buildResult(resolved, "magic");
       }
@@ -27,29 +28,37 @@ export async function detectMimeType(file: File | Blob): Promise<MimeDetectionRe
     }
   }
 
-  // Check for SVG (XML based)
-  const headerString = new TextDecoder().decode(header).toLowerCase();
-  if (headerString.includes("<svg") || (headerString.includes("<?xml") && headerString.includes("<svg"))) {
-    return buildResult("image/svg+xml", "magic");
+  // 2. SVG / XML Detection (Binary scanning for tags)
+  try {
+    const headerString = new TextDecoder("utf-8", { fatal: false }).decode(header).toLowerCase();
+    if (headerString.includes("<svg") || (headerString.includes("<?xml") && headerString.includes("<svg"))) {
+      return buildResult("image/svg+xml", "magic");
+    }
+    if (headerString.includes("<?xml")) {
+      return buildResult("application/xml", "magic");
+    }
+  } catch {
+    // Ignore decoding errors for non-textual data
   }
 
-  // Custom fallback (Extensions)
+  // 3. Custom fallback (Filename Extensions)
   if (file instanceof File && file.name) {
     const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
     const fromExt = CUSTOM_MAP[ext];
     if (fromExt) return buildResult(fromExt, "custom");
   }
 
-  // Browser-reported type as a hint
-  if (file.type && file.type !== "application/octet-stream") {
+  // 4. Browser-reported type (Last hint before heuristics)
+  if (file.type && file.type !== "application/octet-stream" && file.type !== "") {
     return buildResult(file.type, "custom");
   }
 
-  // Heuristic text detection
+  // 5. Heuristic text detection (Check for printable bytes / no nulls)
   if (isTextBytes(header)) {
     return buildResult("text/plain", "fallback");
   }
 
+  // 6. Final Fallback
   return buildResult("application/octet-stream", "fallback");
 }
 
@@ -61,32 +70,40 @@ export function detectMimeTypeFromBuffer(
   filename?: string
 ): MimeDetectionResult {
   const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
-  const sample = bytes.length > 512 ? bytes.slice(0, 512) : bytes;
+  const sampleSize = Math.min(bytes.length, 512);
+  const sample = bytes.slice(0, sampleSize);
 
-  // Magic bytes
+  // 1. Magic byte detection
   for (const sig of MAGIC_SIGNATURES) {
     if (matchesSignature(bytes, sig)) {
-      if (sig.hex === "52494646") {
+      if (sig.mimeType === "application/octet-stream" && sig.description === "RIFF Container") {
         return buildResult(resolveRiff(bytes), "magic");
       }
       return buildResult(sig.mimeType, "magic");
     }
   }
 
-  // Check for SVG (XML based)
-  const headerString = new TextDecoder().decode(sample).toLowerCase();
-  if (headerString.includes("<svg") || (headerString.includes("<?xml") && headerString.includes("<svg"))) {
-    return buildResult("image/svg+xml", "magic");
+  // 2. SVG / XML Detection
+  try {
+    const headerString = new TextDecoder("utf-8", { fatal: false }).decode(sample).toLowerCase();
+    if (headerString.includes("<svg") || (headerString.includes("<?xml") && headerString.includes("<svg"))) {
+      return buildResult("image/svg+xml", "magic");
+    }
+    if (headerString.includes("<?xml")) {
+      return buildResult("application/xml", "magic");
+    }
+  } catch {
+    // Ignore
   }
 
-  // Custom fallback (Extensions)
+  // 3. Custom fallback (Extensions)
   if (filename) {
     const ext = filename.split(".").pop()?.toLowerCase() ?? "";
     const fromExt = CUSTOM_MAP[ext];
     if (fromExt) return buildResult(fromExt, "custom");
   }
 
-  // Heuristic text detection
+  // 4. Heuristic text detection
   if (isTextBytes(sample)) {
     return buildResult("text/plain", "fallback");
   }
@@ -99,12 +116,13 @@ export function detectMimeTypeFromBuffer(
  */
 export function detectMimeTypeFromUrl(url: string): MimeDetectionResult {
   try {
-    const pathname = new URL(url).pathname;
+    const urlObj = new URL(url);
+    const pathname = urlObj.pathname;
     const ext = pathname.split(".").pop()?.toLowerCase() ?? "";
     const fromExt = CUSTOM_MAP[ext];
     if (fromExt) return buildResult(fromExt, "custom");
   } catch {
-    // Invalid URL
+    // Fall through
   }
   return buildResult("application/octet-stream", "fallback");
 }
