@@ -77,3 +77,6 @@ npm run start
 * Versions
 * Sort & Filters
 * Storage
+
+## NOT WORKING
+* Preview in grid view.

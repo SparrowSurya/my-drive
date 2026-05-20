@@ -50,7 +50,6 @@ export async function GET(
       id: f.id,
       name: f.name,
       size: utils.formatBytes(f.size),
-      type: utils.getFileType(f.name),
       mimeType: f.mimeType,
       folderId: f.folderId,
       data: Buffer.from(f.data).toString("base64"),

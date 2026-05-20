@@ -34,7 +34,6 @@ export default function FileUploadProvider({ children }: Readonly<{ children: Re
       id,
       name: fileName,
       path: file.relativePath,
-      type: utils.getFileType(fileName),
       progress: 0,
       status: "uploading",
       mimeType: detectMimeTypeFromBuffer(buffer).mimeType,

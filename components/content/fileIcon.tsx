@@ -10,7 +10,6 @@ export type FileIconProps = {
 
 export default function FileIcon({ mimeType, style, className }: Readonly<FileIconProps>) {
   const [icon, type] = fileIconFromMime(mimeType);
-  console.log(`MIME: ${mimeType} -> ${type}`);
 
   return (
     <Icon

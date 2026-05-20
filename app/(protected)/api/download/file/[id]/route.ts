@@ -23,13 +23,13 @@ export async function GET(
 
   const { email } = session.user;
   const fileId  = result.data.id;
+  const select = { name: true, data: true, mimeType: true };
   try {
-    const file = await getFile({ email }, { id: fileId }, { name: true, data: true });
-    const type = utils.getFileType(file.name);
+    const file = await getFile({ email }, { id: fileId }, select);
     const bytes = new Uint8Array(file.data);
     return new NextResponse(bytes, {
       headers: {
-        "Content-Type": utils.getContentType(type),
+        "Content-Type": file.mimeType,
         "Content-Disposition": `attachment; filename="${file.name}"`,
       },
     });

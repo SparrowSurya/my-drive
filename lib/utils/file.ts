@@ -1,5 +1,4 @@
-import { fileTypes, fileTypesGroup } from "@/lib/data/fileExtensions";
-import type { FileType, FileTree } from "@/lib/types/file";
+import type { FileTree } from "@/lib/types/file";
 import { Prisma } from "@/app/generated/prisma/client";
 import { FileData } from "@/components/content/types";
 import { detectMimeTypeFromBuffer } from "../mime/detection";
@@ -22,67 +21,6 @@ export function getFolderIdByPathname(path: string): number {
   }
   return 0;
 }
-
-/**
- * Provides file extension from filename
- * @param name name of the file (can include dotfiles)
- * @returns string representing file extension (empty string for dotfiles)
- */
-export const getFileExt = (name: string): string => {
-  return name.slice(((name.lastIndexOf(".") - 1) >>> 0) + 2).toLowerCase();
-}
-
-/**
- * Provides the file type recognised (by the application)
- * @param name filename
- * @returns file type based on the file extension
- */
-export function getFileType(name: string): FileType {
-  const ext = getFileExt(name);
-  for (const [key, values] of Object.entries(fileTypesGroup)) {
-    if (values.includes(ext)) return key as FileType;
-  }
-  return (fileTypes.includes(ext as FileType)) ? ext as FileType : "file";
-}
-
-/**
- * Determines the correct "Content-Type" header for file
- * @param name filename (with extension)
- * @returns "Content-Type" header Value
- */
-export const getContentType = (name: string): string => {
-  const ext = getFileExt(name)
-  const filetype = getFileType(name);
-
-  switch (filetype) {
-    case "excel":
-      return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    case "pptx":
-      return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-    case "docx":
-      return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-    case "pdf":
-      return "application/pdf";
-    case "zip":
-    case "folder":
-      return "application/zip";
-    case "txt":
-      return "text/plain; charset=utf-8";
-    case "csv":
-      return "text/csv; charset=utf-8";
-    case "audio":
-      return `audio/${ext}`;
-    case "video":
-      return `video/${ext}`;
-    case "image":
-      return `image/${ext}`;
-    case "code":
-      return "text/plain; charset=utf-8";
-    case "file":
-    default:
-      return "application/octet-stream";
-  }
-};
 
 
 /**
