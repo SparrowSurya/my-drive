@@ -21,7 +21,19 @@ export default function FileGridItem({ file, showFile }: Readonly<FileGridItemPr
         <span className="flex-1 truncate font-medium">{ file.name }</span>
         <FileOption row={ file } />
       </div>
-      <div className="p-3 bg-overlay0 h-42 my-3"></div>
+      <div
+        className="p-3 bg-mantle rounded-md h-42 my-3 overflow-clip"
+        style={{
+          backgroundImage: `
+            repeating-linear-gradient(
+              -45deg,
+              rgba(255,255,255,0.1),
+              rgba(255,255,255,0.1) 3px,
+              transparent 1px,
+              transparent 8px
+            )
+          `,
+        }}></div>
       {file.reason && (
         <div className="flex flex-row gap-3 items-center mx-2">
           <Avatar text={ file.owner } size="small" className="bg-lavender text-base my-2" />

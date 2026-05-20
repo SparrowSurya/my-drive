@@ -78,5 +78,5 @@ npm run start
 * Sort & Filters
 * Storage
 
-## NOT WORKING
+## LATER
 * Preview in grid view.
