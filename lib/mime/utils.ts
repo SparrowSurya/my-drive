@@ -15,5 +15,5 @@ export const isCode = (mimeType: string) => isText(mimeType) && CODE_MIME_PATTER
 export const isConfig = (mimeType: string) => isText(mimeType) && CONFIG_MIME_PATTERN.test(mimeType);
 
 
-const CODE_MIME_PATTERN = /javascript|typescript|x-python|x-ruby|x-c|x-java-source|x-go|x-rust|x-sh|sql|php|html|css|shell|bash|source|script/i;
-const CONFIG_MIME_PATTERN = /json|yaml|yml|toml|xml|config|properties|ini/i;
+const CODE_MIME_PATTERN = /javascript|typescript|x-python|x-ruby|x-c|x-java-source|x-go|x-rust|x-sh|sql|php|html|css|shell|bash|source|script|swift|kotlin|dart|scala|haskell|lua|perl|julia|clojure|elixir|erlang|fsharp|powershell|dockerfile|makefile/i;
+const CONFIG_MIME_PATTERN = /json|yaml|yml|toml|xml|config|properties|ini|editorconfig|gitignore/i;

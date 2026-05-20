@@ -22,7 +22,7 @@ export default function NonePreview({ id, name, mimeType, size }: Readonly<NoneP
       <div className="flex flex-row items-center gap-4 min-w-0">
         <FileIcon mimeType={mimeType} className="h-36 shrink-0" />
         <div className="flex flex-col justify-between h-12 min-w-0 py-0.5">
-          <span className="text-text font-medium text-xl w-64 truncate leading-none" title={name}>
+          <span className="text-text font-medium text-xl max-w-64 truncate leading-none" title={name}>
             {name}
           </span>
           <span className="text-subtext0 text-sm font-normal leading-none">

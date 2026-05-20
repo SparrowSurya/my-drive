@@ -74,7 +74,7 @@ export default function FilePreview({ id, close }: Readonly<FilePreviewProps>) {
           <Icon icon={faClose} hover className="text-xl px-2 cursor-pointer mr-2" onClick={close} />
           {data && (
             <div className="flex flex-row gap-3 ml-3 text-lg font-medium items-center">
-              <FileIcon type={data.type} className="size-6" />
+              <FileIcon mimeType={data.mimeType} className="size-6" />
               <span className="text-text truncate max-w-md" title={data.name}>{data.name}</span>
             </div>
           )}

@@ -11,8 +11,8 @@ export async function getFilesAndFolders(): Promise<ContentData[]> {
   if (email == null) return [];
 
   const root = await getOrCreateRootFolder({ email }, { id: true });
-  const select = { id: true, name: true, updatedAt: true };
 
+  const select = { id: true, name: true, updatedAt: true };
   const fileSelect = {
     ...select,
     size: true,

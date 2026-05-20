@@ -1,4 +1,4 @@
-import { faFile, faFileAudio, faFileCode, faFileExcel, faFileImage, faFilePdf, faFilePowerpoint, faFileText, faFileVideo, faFileWord, faFileZipper, faFolder, faFont, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faCogs, faFile, faFileAudio, faFileCode, faFileExcel, faFileImage, faFilePdf, faFilePowerpoint, faFileText, faFileVideo, faFileWord, faFileZipper, faFolder, faFont, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import Icon, { type IconProp } from "@/components/icon";
 import * as mimeUtils from "@/lib/mime/utils";
 
@@ -9,7 +9,9 @@ export type FileIconProps = {
 
 
 export default function FileIcon({ mimeType, style, className }: Readonly<FileIconProps>) {
-  const [icon, type] = fileIconFromMime(mimeType)
+  const [icon, type] = fileIconFromMime(mimeType);
+  console.log(`MIME: ${mimeType} -> ${type}`);
+
   return (
     <Icon
       icon={icon}
@@ -27,6 +29,7 @@ export function fileIconFromMime(mimeType?: string): [IconDefinition, string] {
   if (mimeUtils.isVideo(mimeType)) return [faFileVideo, "video"];
   if (mimeUtils.isPdf(mimeType)) return [faFilePdf, "pdf"];
   if (mimeUtils.isCode(mimeType)) return [faFileCode, "code"];
+  if (mimeUtils.isConfig(mimeType)) return [faCogs, "config"];
   if (mimeUtils.isText(mimeType)) return [faFileText, "text"];
   if (mimeUtils.isSpreadsheet(mimeType)) return [faFileExcel, "spreadsheet"];
   if (mimeUtils.isDocument(mimeType)) return [faFileWord, "document"];

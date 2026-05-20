@@ -88,6 +88,7 @@ body {
 		&.fileIcon-video { @apply text-maroon; }
 		&.fileIcon-pdf { @apply text-red; }
 		&.fileIcon-code { @apply text-mauve; }
+		&.fileIcon-config { @apply text-sapphire; }
 		&.fileIcon-text { @apply text-blue; }
 		&.fileIcon-spreadsheet { @apply text-green; }
 		&.fileIcon-document { @apply text-sky; }

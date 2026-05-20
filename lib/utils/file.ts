@@ -189,11 +189,9 @@ export function fileToFileData(
     id: file.id,
     name: file.name,
     size: formatBytes(file.size),
-    mimeType: hasData
-      ? file.mimeType === ""
-        ? detectMimeTypeFromBuffer(file.data).mimeType
-        : file.mimeType
-      : null,
+    mimeType: file.mimeType === "" && hasData
+      ? detectMimeTypeFromBuffer(file.data).mimeType
+      : file.mimeType ?? "application/octet-stream",
     isMe: ownerEmail == file.folder.user.email,
     owner: file.folder.user.name,
     lastModified: formatDate(file.updatedAt),
