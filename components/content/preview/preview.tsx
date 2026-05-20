@@ -1,18 +1,19 @@
 "use client";
 
 import { useFetch } from "@/hooks/useFetch";
-import Icon from "../../icon";
+import useDownload from "@/hooks/useDownload";
 import { faClose, faDownload } from "@fortawesome/free-solid-svg-icons";
-import FileIcon from "../fileIcon";
 import { FileType } from "@/lib/types/file";
 import mime from "@/lib/mime";
+import Icon from "../../icon";
+import FileIcon from "../fileIcon";
 import TextPreview from "./text";
 import NonePreview from "./none";
 import ImagePreview from "./image";
 import AudioPreview from "./audio";
 import VideoPreview from "./video";
 import PdfPreview from "./pdf";
-import useDownload from "@/hooks/useDownload";
+import SvgPreview from "./svg";
 
 export type FilePreviewProps = {
   id: number,
@@ -43,6 +44,10 @@ export default function FilePreview({ id, close }: Readonly<FilePreviewProps>) {
     if (error) return <span className="text-red text-xl font-medium">Failed to load: {error.message}</span>;
     if (!data) return null;
 
+    if (data.mimeType === "image/svg+xml") {
+      return <SvgPreview data={data.data} />;
+    }
+
     switch (category) {
       case "text":
         return <TextPreview data={data.data} />;
@@ -60,7 +65,7 @@ export default function FilePreview({ id, close }: Readonly<FilePreviewProps>) {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col bg-crust/95 fixed inset-0 z-[100]" autoFocus>
+    <div className="w-screen h-screen flex flex-col bg-crust/95 fixed inset-0 z-100" autoFocus>
       <div className="flex flex-row justify-between items-center h-16 px-6 py-3 w-full bg-base border-b border-surface1 shrink-0">
         <div className="flex flex-row items-center">
           <Icon icon={faClose} hover className="text-xl px-2 cursor-pointer mr-2" onClick={close} />

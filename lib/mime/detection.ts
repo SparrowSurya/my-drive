@@ -13,20 +13,24 @@ import { MimeDetectionResult } from "./typedef";
  * @returns MimeDetectionResult
  */
 export async function detectMimeType(file: File | Blob): Promise<MimeDetectionResult> {
-  // The farthest offset in MAGIC_SIGNATURES is 257 (TAR header), plus a bit.
   const HEADER_BYTES = 512;
   const header = await readHeader(file, HEADER_BYTES);
 
   // Magic byte detection
   for (const sig of MAGIC_SIGNATURES) {
     if (matchesSignature(header, sig)) {
-      // RIFF container: need offset-8 disambiguation
       if (sig.hex === "52494646") {
         const resolved = resolveRiff(header);
         return buildResult(resolved, "magic");
       }
       return buildResult(sig.mimeType, "magic");
     }
+  }
+
+  // Check for SVG (XML based)
+  const headerString = new TextDecoder().decode(header).toLowerCase();
+  if (headerString.includes("<svg") || (headerString.includes("<?xml") && headerString.includes("<svg"))) {
+    return buildResult("image/svg+xml", "magic");
   }
 
   // Custom fallback (Extensions)
@@ -36,12 +40,12 @@ export async function detectMimeType(file: File | Blob): Promise<MimeDetectionRe
     if (fromExt) return buildResult(fromExt, "custom");
   }
 
-  // Browser-reported type as a hint (unreliable, last resort)
+  // Browser-reported type as a hint
   if (file.type && file.type !== "application/octet-stream") {
     return buildResult(file.type, "custom");
   }
 
-  // Heuristic text detection (if magic bytes and extensions fail)
+  // Heuristic text detection
   if (isTextBytes(header)) {
     return buildResult("text/plain", "fallback");
   }
@@ -51,18 +55,13 @@ export async function detectMimeType(file: File | Blob): Promise<MimeDetectionRe
 
 /**
  * Server-side variant: accepts a Buffer / Uint8Array and an optional filename.
- * Use this in Next.js API routes or Server Actions where `File` is unavailable.
- *
- * @example
- * // pages/api/upload.ts  or  app/api/upload/route.ts
- * const buffer = Buffer.from(await file.arrayBuffer());
- * const result = detectMimeTypeFromBuffer(buffer, file.name);
  */
 export function detectMimeTypeFromBuffer(
   buffer: Uint8Array | Buffer,
   filename?: string
 ): MimeDetectionResult {
   const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
+  const sample = bytes.length > 512 ? bytes.slice(0, 512) : bytes;
 
   // Magic bytes
   for (const sig of MAGIC_SIGNATURES) {
@@ -74,6 +73,12 @@ export function detectMimeTypeFromBuffer(
     }
   }
 
+  // Check for SVG (XML based)
+  const headerString = new TextDecoder().decode(sample).toLowerCase();
+  if (headerString.includes("<svg") || (headerString.includes("<?xml") && headerString.includes("<svg"))) {
+    return buildResult("image/svg+xml", "magic");
+  }
+
   // Custom fallback (Extensions)
   if (filename) {
     const ext = filename.split(".").pop()?.toLowerCase() ?? "";
@@ -81,9 +86,7 @@ export function detectMimeTypeFromBuffer(
     if (fromExt) return buildResult(fromExt, "custom");
   }
 
-  // Heuristic text detection (if magic bytes and extensions fail)
-  // Check the first 512 bytes for a good sample
-  const sample = bytes.length > 512 ? bytes.slice(0, 512) : bytes;
+  // Heuristic text detection
   if (isTextBytes(sample)) {
     return buildResult("text/plain", "fallback");
   }
@@ -93,7 +96,6 @@ export function detectMimeTypeFromBuffer(
 
 /**
  * Detects MIME type purely from a URL's pathname extension.
- * Useful when you have a remote URL and no file buffer.
  */
 export function detectMimeTypeFromUrl(url: string): MimeDetectionResult {
   try {
@@ -102,7 +104,7 @@ export function detectMimeTypeFromUrl(url: string): MimeDetectionResult {
     const fromExt = CUSTOM_MAP[ext];
     if (fromExt) return buildResult(fromExt, "custom");
   } catch {
-    // Invalid URL — fall through
+    // Invalid URL
   }
   return buildResult("application/octet-stream", "fallback");
 }
