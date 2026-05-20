@@ -1,7 +1,6 @@
 import { FileData, FolderData } from "@/components/content/types";
 import { getRecentFiles } from "@/lib/query/file";
 import { getRecentFolders } from "@/lib/query/folder";
-import { FileType } from "@/lib/types/file";
 import utils from "@/lib/utils";
 import { getServerSession } from "next-auth";
 
@@ -16,21 +15,12 @@ export async function getFileSuggestions(count?: number): Promise<FileData[]> {
     name: true,
     size: true,
     folderId: true,
+    mimeType: true,
     folder: { select: { user: { select: { name: true, email: true } } } },
     updatedAt: true,
   } as const;
   const files = await getRecentFiles({ email }, select, count);
-  return files.map((f) => ({
-    id: f.id,
-    name: f.name,
-    type: utils.getFileType(f.name) as Exclude<FileType, "folder">,
-    size: utils.formatBytes(f.size),
-    folderId: f.folderId,
-    lastModified: utils.formatDate(f.updatedAt),
-    isMe: f.folder.user.email == email,
-    owner: f.folder.user.name,
-    reason: "You uploaded", // HARDCODE
-  } as FileData));
+  return files.map((f) => utils.fileToFileData(email, f));
 }
 
 export async function getFolderSuggestions(count?: number): Promise<FolderData[]> {
@@ -46,15 +36,5 @@ export async function getFolderSuggestions(count?: number): Promise<FolderData[]
     updatedAt: true,
   } as const;
   const folders = await getRecentFolders({ email }, select, count);
-  return folders.map((f) => ({
-    id: f.id,
-    name: f.name,
-    type: "folder",
-    size: null,
-    parentId: f.parent?.parentId,
-    lastModified: utils.formatDate(f.updatedAt),
-    isMe: f.user.email == email,
-    owner: f.user.name,
-    reason: "in My Drive", // HARDCODE
-  } as FolderData));
+  return folders.map((f) => utils.folderToFolderData(email, f));
 }

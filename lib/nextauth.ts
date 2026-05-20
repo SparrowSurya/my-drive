@@ -85,11 +85,6 @@ export const authOptions = {
 					const hashedPassword = existingUser.password ?? "";
 					const match = await matchPassword(password, hashedPassword);
 					if (match) {
-						let name = existingUser.name;
-						if (name != existingUser.name) { // Since name field was added later
-							const updatedUser = await updateUser({ name }, { email }, { name: true });
-							name = updatedUser.name;
-						}
 						return {
 							id: existingUser.id.toString(),
 							name: name,

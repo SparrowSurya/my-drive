@@ -1,5 +1,9 @@
 import { fileTypes, fileTypesGroup } from "@/lib/data/fileExtensions";
 import type { FileType, FileTree } from "@/lib/types/file";
+import { Prisma } from "@/app/generated/prisma/client";
+import { FileData } from "@/components/content/types";
+import { detectMimeTypeFromBuffer } from "../mime/detection";
+import { formatDate } from "./date";
 
 
 /**
@@ -130,4 +134,72 @@ export function formatBytes(bytes: number): string {
   const formatted = value % 1 === 0 ? value.toString() : value.toFixed(1);
 
   return `${formatted} ${sizes[i]}`;
+}
+
+
+type FileAndDataWithFolderAndUser = Prisma.FileGetPayload<{
+  select: {
+    id: true,
+    name: true,
+    size: true,
+    folderId: true,
+    mimeType: true,
+    folder: {
+      select: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
+    },
+    updatedAt: true,
+  }
+}>;
+
+type FileWithFolderAndUser = Prisma.FileGetPayload<{
+  select: {
+    id: true,
+    name: true,
+    size: true,
+    folderId: true,
+    mimeType: true,
+    folder: {
+      select: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
+    },
+    updatedAt: true,
+    data: true,
+  }
+}>;
+
+export function fileToFileData(
+  ownerEmail: string,
+  file: FileAndDataWithFolderAndUser | FileWithFolderAndUser,
+): FileData {
+  const hasData = "data" in file;
+  return {
+    id: file.id,
+    name: file.name,
+    size: formatBytes(file.size),
+    mimeType: hasData
+      ? file.mimeType === ""
+        ? detectMimeTypeFromBuffer(file.data).mimeType
+        : file.mimeType
+      : null,
+    isMe: ownerEmail == file.folder.user.email,
+    owner: file.folder.user.name,
+    lastModified: formatDate(file.updatedAt),
+    reason: "You uploaded", // HARDCODE
+    data: hasData ? file.data : undefined,
+    folderId: file.folderId,
+    type: "file",
+  } as FileData;
 }

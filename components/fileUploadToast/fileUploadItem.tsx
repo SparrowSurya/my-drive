@@ -14,7 +14,7 @@ export type FileUploadItemProps = {
 export default function FileUploadItem({ file }: Readonly<FileUploadItemProps>) {
   return (
     <div className="flex py-2 ml-3">
-      <FileIcon type={file.type} className={(file.status === "success") ? "opacity-100" : "opacity-75"} />
+      <FileIcon mimeType={file.mimeType} className={(file.status === "success") ? "opacity-100" : "opacity-75"} />
       <span
         className={`flex-1 truncate overflow-hidden whitespace-nowrap ${(file.status === "uploading") ? "text-subtext1/50" : "text-text"} ${(file.status === "error") && "line-through"}`}
       >

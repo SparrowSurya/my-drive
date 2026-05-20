@@ -15,7 +15,7 @@ export type FolderSuggestionsProps = {
 
 export default function FolderSuggestions({ folders }: Readonly<FolderSuggestionsProps>) {
   const [show, setShow] = useState<boolean>(true);
-  const { showFolder } = useShowContent();
+  const { showFolder, showFile } = useShowContent();
 
   return (
     <div className="flex flex-col flex-none">
@@ -33,6 +33,7 @@ export default function FolderSuggestions({ folders }: Readonly<FolderSuggestion
           <ContentGridView
             data={folders}
             showFolder={showFolder}
+            showFile={showFile}
             scrollable={false}
           />
         </ContentDropZone>

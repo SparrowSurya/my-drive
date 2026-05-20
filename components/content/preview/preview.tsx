@@ -63,7 +63,7 @@ export default function FilePreview({ id, close }: Readonly<FilePreviewProps>) {
       case "font":
         return <FontPreview id={data.id} name={data.name} data={data.data} mimeType={data.mimeType} />;
       default:
-        return <NonePreview id={data.id} name={data.name} type={data.type} size={data.size} />;
+        return <NonePreview id={data.id} name={data.name} mimeType={data.mimeType} size={data.size} />;
     }
   };
 

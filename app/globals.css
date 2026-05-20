@@ -80,7 +80,24 @@ body {
 	z-index: 100;
 }
 
+
 @layer components {
+	.fileIcon {
+		&.fileIcon-image { @apply text-teal; }
+		&.fileIcon-audio { @apply text-pink; }
+		&.fileIcon-video { @apply text-maroon; }
+		&.fileIcon-pdf { @apply text-red; }
+		&.fileIcon-code { @apply text-mauve; }
+		&.fileIcon-text { @apply text-blue; }
+		&.fileIcon-spreadsheet { @apply text-green; }
+		&.fileIcon-document { @apply text-sky; }
+		&.fileIcon-presentation { @apply text-peach; }
+		&.fileIcon-archive { @apply text-yellow; }
+		&.fileIcon-font { @apply text-flamingo; }
+		&.fileIcon-file { @apply text-subtext1; }
+		&.fileIcon-folder { @apply text-subtext1; }
+	}
+
 	.text-button {
 		@apply py-2 px-3 rounded-4xl;
 		@apply bg-transparent text-lavender hover:bg-lavender/25 disabled:text-lavender/25;

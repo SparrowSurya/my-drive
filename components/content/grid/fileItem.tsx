@@ -17,7 +17,7 @@ export default function FileGridItem({ file, showFile }: Readonly<FileGridItemPr
       onDoubleClick={() => showFile(file.id)}
     >
       <div className="flex flex-row items-center gap-1">
-        <FileIcon type={ file.type } />
+        <FileIcon mimeType={ file.mimeType } />
         <span className="flex-1 truncate font-medium">{ file.name }</span>
         <FileOption row={ file } />
       </div>

@@ -25,7 +25,7 @@ export type FileSuggestionsProps = {
 export default function FileSuggestions({ files }: Readonly<FileSuggestionsProps>) {
   const [viewMore, setViewMore] = useState(false);
   const [show, setShow] = useState<boolean>(true);
-  const { showFolder } = useShowContent();
+  const { showFolder, showFile } = useShowContent();
   const { gridView } = useContentView();
 
   const lessCount = 12;
@@ -48,12 +48,14 @@ export default function FileSuggestions({ files }: Readonly<FileSuggestionsProps
             ? <ContentGridView
                 data={visibleFiles}
                 showFolder={showFolder}
+                showFile={showFile}
                 scrollable={false}
               />
             : <ContentListView
                 cols={headings}
                 data={visibleFiles}
                 showFolder={showFolder}
+                showFile={showFile}
                 scrollable={false}
               />
         }

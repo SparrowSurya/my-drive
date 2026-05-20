@@ -30,11 +30,11 @@ export async function getOrCreateRootFolder(
   });
 }
 
-export async function getFolders(
+export async function getFolders<T extends Prisma.FolderSelect>(
   userWhere: Prisma.UserWhereUniqueInput,
   parentWhere: Prisma.FolderWhereUniqueInput,
-  select: Prisma.FolderSelect,
-): Promise<Prisma.FolderGetPayload<{ select: Prisma.FolderSelect }>[]> {
+  select: T,
+): Promise<Prisma.FolderGetPayload<{ select: T }>[]> {
   const children = await prisma.hierarchy.findMany({
     where: {
       parent: {
@@ -274,11 +274,11 @@ export async function getFolderContents(
   return files;
 }
 
-export async function getRecentFolders(
+export async function getRecentFolders<T extends Prisma.FolderSelect>(
   userWhere: Prisma.UserWhereUniqueInput,
-  select: Prisma.FolderSelect,
+  select: T,
   take?: number,
-): Promise<Prisma.FolderGetPayload<{ select: Prisma.FolderSelect }>[]> {
+): Promise<Prisma.FolderGetPayload<{ select: T }>[]> {
   return await prisma.folder.findMany({
     where: { user: userWhere },
     orderBy: { createdAt: "desc" },

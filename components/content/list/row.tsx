@@ -5,7 +5,6 @@ import FileOption from "../components/fileOptions";
 import FileIcon from "../fileIcon";
 import { type ContentData } from "../types";
 import { type ListViewRow } from "./types";
-import { type FileType } from "@/lib/types/file";
 
 
 const rowBuilder: ListViewRow = {
@@ -14,7 +13,7 @@ const rowBuilder: ListViewRow = {
     body: (row: ContentData, key: string) => {
       return (
         <div  key={key} className="flex flex-row items-center truncate">
-          <FileIcon type={row.type as FileType} />
+          <FileIcon mimeType={row.type === "file" ? row.mimeType : undefined} />
           <span className="truncate overflow-hidden whitespace-nowrap">{ row.name }</span>
         </div>
       );

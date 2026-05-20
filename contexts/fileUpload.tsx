@@ -7,6 +7,7 @@ import FileUploadToast from "@/components/fileUploadToast";
 import { type FileUpload } from "@/components/fileUploadToast/types";
 import { type FileWithRelativePath } from "@/hooks/useDropzone";
 import utils from "@/lib/utils";
+import { detectMimeTypeFromBuffer } from "@/lib/mime/detection";
 
 
 export type UploadContextType = {
@@ -24,10 +25,11 @@ export default function FileUploadProvider({ children }: Readonly<{ children: Re
   const path = usePathname();
   const { refresh: refreshTransition } = useDebounce(() => startTransition(() => router.refresh()), 1000);
 
-  const uploadFile = (file: FileWithRelativePath) => {
+  const uploadFile = async (file: FileWithRelativePath) => {
     const id = crypto.randomUUID();
     const folderId = utils.getFolderIdByPathname(path);
     const fileName = file.relativePath.split("/").pop() || file.name;
+    const buffer = new Uint8Array(await file.arrayBuffer());
     const newUpload: FileUpload = {
       id,
       name: fileName,
@@ -35,6 +37,7 @@ export default function FileUploadProvider({ children }: Readonly<{ children: Re
       type: utils.getFileType(fileName),
       progress: 0,
       status: "uploading",
+      mimeType: detectMimeTypeFromBuffer(buffer).mimeType,
     };
     setUploads((prev) => [...prev, newUpload]);
     setShowUpload(true);

@@ -2,17 +2,16 @@
 
 import React from "react";
 import FileIcon from "../fileIcon";
-import { FileType } from "@/lib/types/file";
 import useDownload from "@/hooks/useDownload";
 
 export type NonePreviewProps = {
   id: number;
   name: string;
-  type: Exclude<FileType, "folder">;
+  mimeType: string
   size: string;
 };
 
-export default function NonePreview({ id, name, type, size }: Readonly<NonePreviewProps>) {
+export default function NonePreview({ id, name, mimeType, size }: Readonly<NonePreviewProps>) {
   const { downloadFile } = useDownload();
 
   return (
@@ -21,9 +20,9 @@ export default function NonePreview({ id, name, type, size }: Readonly<NonePrevi
         <span className="text-text/80 text-center text-2xl font-medium">Preview not available</span>
       </div>
       <div className="flex flex-row items-center gap-4 min-w-0">
-        <FileIcon type={type} className="h-36 shrink-0" />
+        <FileIcon mimeType={mimeType} className="h-36 shrink-0" />
         <div className="flex flex-col justify-between h-12 min-w-0 py-0.5">
-          <span className="text-text font-medium text-xl truncate leading-none" title={name}>
+          <span className="text-text font-medium text-xl w-64 truncate leading-none" title={name}>
             {name}
           </span>
           <span className="text-subtext0 text-sm font-normal leading-none">

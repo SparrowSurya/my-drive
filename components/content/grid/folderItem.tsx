@@ -16,7 +16,7 @@ export default function FolderGridItem({ folder, showFolder }: Readonly<FolderGr
       onDoubleClick={() => showFolder(folder.id)}
     >
       <div className="flex flex-row items-center gap-3">
-        <FileIcon type={"folder"} />
+        <FileIcon mimeType={undefined} />
         <div className="flex flex-col flex-1">
           <span className="truncate font-medium">{ folder.name }</span>
           {folder.reason && <span className="truncate text-xs">{ folder.reason }</span>}

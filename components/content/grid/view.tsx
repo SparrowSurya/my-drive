@@ -17,7 +17,7 @@ export default function ContentGridView({
   className,
   scrollable = true
 }: Readonly<GridViewProps>) {
-  const files = data.filter((item) => item.type != "folder");
+  const files = data.filter((item) => item.type == "file");
   const folders = data.filter((item) => item.type == "folder");
 
   const baseClassName = scrollable
