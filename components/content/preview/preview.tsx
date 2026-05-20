@@ -14,6 +14,7 @@ import AudioPreview from "./audio";
 import VideoPreview from "./video";
 import PdfPreview from "./pdf";
 import SvgPreview from "./svg";
+import FontPreview from "./font";
 
 export type FilePreviewProps = {
   id: number,
@@ -59,6 +60,8 @@ export default function FilePreview({ id, close }: Readonly<FilePreviewProps>) {
         return <VideoPreview data={data.data} mimeType={data.mimeType} />;
       case "pdf":
         return <PdfPreview data={data.data} />;
+      case "font":
+        return <FontPreview id={data.id} name={data.name} data={data.data} mimeType={data.mimeType} />;
       default:
         return <NonePreview id={data.id} name={data.name} type={data.type} size={data.size} />;
     }
