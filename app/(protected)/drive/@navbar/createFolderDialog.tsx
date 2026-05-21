@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Form, Input } from "@/components/form";
 import { createFolderAction } from "./actions";
 import utils from "@/lib/utils";
+import useSnackbar from "@/hooks/useSnackbar";
 
 
 export default function CreateFolderDialog({
@@ -13,6 +14,7 @@ export default function CreateFolderDialog({
   closeModal: (refresh: boolean) => void,
 }>) {
   const path  = usePathname();
+  const snackbar = useSnackbar();
   const folderId = utils.getFolderIdByPathname(path);
 
   const [state, formAction, isSubmitting] = useActionState(createFolderAction, {
@@ -23,8 +25,11 @@ export default function CreateFolderDialog({
   useEffect(() => {
     if (!!state.success) {
       closeModal(true);
+      snackbar.show({
+        message: state.message ?? `Created new folder "${state.folderName}"`,
+      });
     }
-  }, [state.success, closeModal]);
+  }, [state.success, closeModal, state.message, state.folderName, snackbar]);
 
   return (
     <div className="fixed inset-0 bg-crust/60 z-50 flex items-center justify-center">

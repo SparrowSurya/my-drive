@@ -23,10 +23,18 @@ export default function RenameFolderDialog({ data, closeModal }: Readonly<Rename
     if (!!state.success) {
       closeModal(true);
       snackbar.show({
-        message: state.message ?? `Renamed filder "${data.name}" to "${state.folderName}"`,
+        message: state.message ?? `Renamed folder "${data.name}" to "${state.folderName}"`,
       });
     }
   }, [state.success, closeModal, state.message, state.folderName, snackbar, data.name]);
+
+  const customFormAction = (payload: FormData): void => {
+    const folderName = payload.get('folderName');
+    if (folderName !== data.name) {
+      return formAction(payload);
+    }
+    closeModal(false);
+  };
 
   return (
     <div
@@ -37,7 +45,7 @@ export default function RenameFolderDialog({ data, closeModal }: Readonly<Rename
         className="rounded-3xl p-8 bg-surface0 shadow-2xl shadow-crust w-100"
         onClick={(e) => e.stopPropagation()}
       >
-        <Form action={formAction} className="flex flex-col">
+        <Form action={customFormAction} className="flex flex-col">
           <h3 className="text-2xl font-semibold text-text mb-6">Rename Folder</h3>
           <input type="hidden" name="folderId" defaultValue={state.folderId} />
           <Input

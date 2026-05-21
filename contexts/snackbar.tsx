@@ -10,6 +10,7 @@ export type SnackbarOptions = {
   onClose?: () => void;
   duration?: number;
   icon?: React.ReactNode;
+  autoClose?: boolean,
 };
 
 export type SnackbarContextType = {
@@ -42,13 +43,16 @@ export default function SnackbarProvider({ children }: Readonly<{ children: Reac
 
     setOptions(options);
 
-    if (options.duration === null || options.duration === undefined) {
+    const autoClose = options.autoClose ?? true;
+    const duration = options.duration ?? 3000;
+
+    if (autoClose) {
       timerRef.current = setTimeout(() => {
         setOptions(null);
         if (options.onClose) {
           options.onClose();
         }
-      }, options.duration);
+      }, duration);
     }
   }, []);
 

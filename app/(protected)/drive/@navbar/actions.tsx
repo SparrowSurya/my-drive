@@ -1,7 +1,7 @@
 "use server";
 
 import { getServerSession } from "next-auth";
-import { getOrCreateRootFolder, createFolder, folderExists, createFileTree } from "@/lib/query/folder";
+import { getOrCreateRootFolder, createFolder, folderExists, createFileTree, getFolder } from "@/lib/query/folder";
 import { addFiles } from "@/lib/query/file";
 import utils from "@/lib/utils";
 import { CreateFolderSchema } from "@/lib/schema";
@@ -38,11 +38,13 @@ export async function createFolderAction(state: CreateFolderFormState, formData:
 
   try {
     const id = (parentId === 0) ? (await getOrCreateRootFolder({ email }, { id: true })).id : parentId;
+    const parentFolder = await getFolder({ email }, { id }, { name: true, isRoot: true });
+    const parentName = parentFolder?.isRoot ? "My Drive" : parentFolder?.name;
     const { name } = await createFolder({ email }, { id }, { name: folderName }, { name: true });
     return {
       ...result.data,
       success: true,
-      message: `created '${name}' folder`,
+      message: `Created new folder "${name}" in "${parentName}"`,
     };
   } catch {
     return {

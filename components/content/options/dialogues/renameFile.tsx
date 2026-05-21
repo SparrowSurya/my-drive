@@ -28,6 +28,14 @@ export default function RenameFileDialog({ data, closeModal }: Readonly<RenameFi
     }
   }, [state.success, closeModal, snackbar, data.name, state.message, state.fileName]);
 
+  const customFormAction = (payload: FormData): void => {
+    const fileName = payload.get('fileName');
+    if (fileName !== data.name) {
+      return formAction(payload);
+    }
+    closeModal(false);
+  };
+
   return (
     <div
       className="fixed inset-0 bg-crust/60 z-50 flex items-center justify-center"
@@ -37,7 +45,7 @@ export default function RenameFileDialog({ data, closeModal }: Readonly<RenameFi
         className="rounded-3xl p-8 bg-surface0 shadow-2xl shadow-crust w-100"
         onClick={(e) => e.stopPropagation()}
       >
-        <Form action={formAction} className="flex flex-col">
+        <Form action={customFormAction} className="flex flex-col">
           <h3 className="text-2xl font-semibold text-text mb-6">Rename File</h3>
           <input type="hidden" name="fileId" defaultValue={state.fileId} />
           <Input

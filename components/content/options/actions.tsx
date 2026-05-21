@@ -69,13 +69,14 @@ export async function FileRenameAction(state: RenameFileFormState, formData: For
   };
 
   const { fileName, fileId } = result.data;
+  const oldName = state.fileName;
 
   try {
     const { name } = await updateFile({ email }, { id: fileId }, { name: fileName }, { name: true });
     return {
       ...result.data,
       success: true,
-      message: `Renamed file "${fileName}" to "${name}"`,
+      message: `Renamed file "${oldName}" to "${name}"`,
     };
   } catch {
     return {
