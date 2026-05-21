@@ -29,13 +29,14 @@ export async function FolderRenameAction(state: RenameFolderFormState, formData:
   };
 
   const { folderName, folderId } = result.data;
+  const oldName = state.folderName;
 
   try {
     const { name } = await updateFolder({ email }, { id: folderId }, { name: folderName }, { name: true });
     return {
       ...result.data,
       success: true,
-      message: `Renamed folder "${folderName}" to "${name}"`,
+      message: `Renamed folder "${oldName}" to "${name}"`,
     };
   } catch {
     return {

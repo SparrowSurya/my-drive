@@ -21,10 +21,10 @@ export default function RenameFileDialog({ data, closeModal }: Readonly<RenameFi
 
   useEffect(() => {
     if (!!state.success) {
-      closeModal(true);
       snackbar.show({
         message: state.message ?? `Renamed file "${data.name}" to "${state.fileName}"`,
       });
+      closeModal(true);
     }
   }, [state.success, closeModal, snackbar, data.name, state.message, state.fileName]);
 

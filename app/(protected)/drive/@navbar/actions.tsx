@@ -95,7 +95,7 @@ export async function uploadFolder(parentId: number, files: {
     }));
     const tree = utils.buildDirectory(typedFiles);
     const id = (parentId === 0) ? (await getOrCreateRootFolder({ email }, { id: true })).id : parentId;
-    await createFileTree({ email }, { id }, tree); // ERROR on tree
+    await createFileTree({ email }, { id }, tree);
   } catch {
     return "Something went wrong";
   }

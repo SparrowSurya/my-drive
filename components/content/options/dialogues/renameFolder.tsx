@@ -21,10 +21,10 @@ export default function RenameFolderDialog({ data, closeModal }: Readonly<Rename
 
   useEffect(() => {
     if (!!state.success) {
-      closeModal(true);
       snackbar.show({
         message: state.message ?? `Renamed folder "${data.name}" to "${state.folderName}"`,
       });
+      closeModal(true);
     }
   }, [state.success, closeModal, state.message, state.folderName, snackbar, data.name]);
 
