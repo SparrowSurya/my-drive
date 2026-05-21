@@ -12,9 +12,9 @@ export type ListViewColumns = (
 );
 
 export const colDivisions: Record<ListViewColumns, string> = {
-  "name": "minmax(0,3fr)",
+  "name": "minmax(0,4fr)",
   "lastModified": "minmax(0,2fr)",
-  "fileSize": "minmax(0,2fr)",
+  "fileSize": "minmax(0,1fr)",
   "reason": "minmax(0,2fr)",
   "owner": "minmax(0,2fr)",
   "elipsis": "64px",

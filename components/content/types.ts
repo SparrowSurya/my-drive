@@ -6,8 +6,10 @@ interface BaseData {
   reason?: string,
   isMe?: boolean,
   owner?: string,
-  type: string,
+  type: ContentType,
 }
+
+export type ContentType = "file" | "folder";
 
 export interface FileData extends BaseData {
   size: string,

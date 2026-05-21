@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
-import FileOption from "../components/fileOptions";
+import ContentOptionMenu from "../options";
 import FileIcon from "../fileIcon";
 import { type ContentData } from "../types";
 import { type ListViewRow } from "./types";
@@ -10,22 +10,22 @@ import { type ListViewRow } from "./types";
 const rowBuilder: ListViewRow = {
   "name": {
     head: "Name",
-    body: (row: ContentData, key: string) => {
+    body: (data: ContentData, key: string) => {
       return (
         <div  key={key} className="flex flex-row items-center truncate">
-          <FileIcon mimeType={row.type === "file" ? row.mimeType : undefined} />
-          <span className="truncate overflow-hidden whitespace-nowrap">{ row.name }</span>
+          <FileIcon mimeType={data.type === "file" ? data.mimeType : undefined} />
+          <span className="truncate overflow-hidden whitespace-nowrap">{ data.name }</span>
         </div>
       );
     },
   },
   "lastModified": {
     head: "Last modified",
-    body: (row: ContentData, key: string) => {
+    body: (data: ContentData, key: string) => {
       return (
         <div key={key} className="flex flex-row items-center">
           <span className="ml-2">
-            { row.lastModified }
+            { data.lastModified }
           </span>
         </div>
       );
@@ -33,11 +33,11 @@ const rowBuilder: ListViewRow = {
   },
   "fileSize": {
     head: "File size",
-    body: (row: ContentData, key: string) => {
+    body: (data: ContentData, key: string) => {
       return (
         <div key={key} className="flex flex-row items-center">
           <span className="ml-2">
-            { row.size ?? "—" }
+            { data.size ?? "—" }
           </span>
         </div>
       );
@@ -45,35 +45,35 @@ const rowBuilder: ListViewRow = {
   },
   "reason": {
     head: "Reason",
-    body: (row: ContentData, key: string) => {
+    body: (data: ContentData, key: string) => {
       return (
         <div key={key} className="flex flex-row items-center">
-          { row.reason ?? "—" }
+          { data.reason ?? "—" }
         </div>
       );
     },
   },
   "owner": {
     head: "Owner",
-    body: (row: ContentData, key: string) => {
+    body: (data: ContentData, key: string) => {
       return (
         <div key={key} className="flex flex-row items-center gap-2">
           <Avatar
-            text={row.owner}
+            text={data.owner}
             className={`bg-lavender text-base`}
             size="small"
           />
-          <div className="max-w-30 truncate">{ row.isMe ? 'me' : row.owner }</div>
+          <div className="max-w-30 truncate">{ data.isMe ? 'me' : data.owner }</div>
         </div>
       );
     },
   },
   "elipsis": {
     head: "",
-    body: (row: ContentData, key: string) => {
+    body: (data: ContentData, key: string) => {
       return (
         <div key={key} className="flex flex-row items-center mx-2 shrink-0">
-          <FileOption row={row} />
+          <ContentOptionMenu data={data} />
         </div>
       );
     },

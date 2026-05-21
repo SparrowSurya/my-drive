@@ -8,21 +8,19 @@ import CreateFolderDialog from "./createFolderDialog";
 import { OptionMenu, Option } from "@/components/option";
 import useFileUpload from "@/hooks/useFileUpload";
 import { FileWithRelativePath } from "@/hooks/useDropzone";
+import useModal from "@/hooks/useModal";
 
 
 export default function MenuButton() {
   const router = useRouter();
+  const modal = useModal();
   const fileUploadRef = useRef<HTMLInputElement>(null);
   const folderUploadRef = useRef<HTMLInputElement>(null);
 
   const { uploadFile } = useFileUpload();
 
-  // const path = usePathname();
-  // const folderId = utils.getFolderIdByPathname(path);
-
   const [isTransition, startTransition] = useTransition(); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [showOptionMenu, setShowOptionMenu] = useState<boolean>(false);
-  const [showCreateFolderDialog, setShowCreateFolderDialog] = useState<boolean>(false);
 
   useEffect(() => {
     if (folderUploadRef.current) {
@@ -30,28 +28,18 @@ export default function MenuButton() {
     }
   }, []);
 
+  const closeOptionMenu = () => setShowOptionMenu(false);
+
+  const closeModal = (refresh: boolean = true) => {
+    modal.close();
+    if (refresh) {
+      startTransition(() => router.refresh())
+    }
+  };
+
   async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
     if (files) {
-      /*
-      const fileData = await Promise.all(
-          Array.from(files).map(async (file) => {
-          const arrayBuf = await file.arrayBuffer();
-          return {
-            name: file.name,
-            size: file.size,
-            data: new Uint8Array(arrayBuf),
-          };
-        })
-      );
-
-      try {
-        await uploadFiles(folderId, fileData);
-        startTransition(() => router.refresh());
-      } catch (error) {
-        console.log("Error:", error);
-      }
-      */
       Array.from(files).forEach((file) => {
         (file as FileWithRelativePath).relativePath = file.name;
         uploadFile(file as FileWithRelativePath);
@@ -65,25 +53,6 @@ export default function MenuButton() {
   async function handleFolderUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
     if (files) {
-      /*
-      const fileData = await Promise.all(
-        Array.from(files).map(async (file) => {
-          const arrayBuf = await file.arrayBuffer();
-          return {
-            name: file.name,
-            size: file.size,
-            data: new Uint8Array(arrayBuf),
-            path: file.webkitRelativePath,
-          };
-        })
-      );
-      try {
-        await uploadFolder(folderId, fileData);
-        startTransition(() => router.refresh());
-      } catch (error) {
-        console.log("Error:", error);
-      }
-      */
       Array.from(files).forEach((file) => {
         (file as FileWithRelativePath).relativePath = file.webkitRelativePath;
         uploadFile(file as FileWithRelativePath);
@@ -100,8 +69,8 @@ export default function MenuButton() {
       label: "New Folder",
       props: {
         onClick() {
-          setShowCreateFolderDialog(true);
-          setShowOptionMenu(false);
+          closeOptionMenu();
+          modal.show(<CreateFolderDialog closeModal={closeModal} />);
         }
       }
     },
@@ -112,7 +81,7 @@ export default function MenuButton() {
       props: {
         onClick() {
           fileUploadRef.current?.click();
-          setTimeout(() => setShowOptionMenu(false), 0);
+          setTimeout(closeOptionMenu, 0);
         }
       }
     },
@@ -122,7 +91,7 @@ export default function MenuButton() {
       props: {
         onClick() {
           folderUploadRef.current?.click();
-          setTimeout(() => setShowOptionMenu(false), 0);
+          setTimeout(closeOptionMenu, 0);
         }
       }
     },
@@ -136,16 +105,6 @@ export default function MenuButton() {
             onClickOutside={() => setShowOptionMenu(!showOptionMenu)}
             className="absolute"
             options={options}
-          />
-        )
-      }
-      {
-        showCreateFolderDialog && (
-          <CreateFolderDialog
-            closeModal={() => {
-              setShowCreateFolderDialog(false);
-              startTransition(() => router.refresh());
-            }}
           />
         )
       }

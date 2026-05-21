@@ -6,19 +6,25 @@ import { faDownload, faEllipsisVertical, faFolderOpen, faPencil, faTrash, faUser
 import Icon from "@/components/icon";
 import type { ContentData } from "../types";
 import { OptionMenu, Option } from "@/components/option";
-import FolderRenameDialog from "./folderRenameDialog";
-import FileRenameDialog from "./fileRenameDialog";
 import useDownload from "@/hooks/useDownload";
+import RenameFileDialog from "./dialogues/renameFile";
+import RenameFolderDialog from "./dialogues/renameFolder";
+import SoftDeleteDialog from "./dialogues/softDelete";
+import useModal from "@/hooks/useModal";
 
 
-export default function FileOption({ row }: Readonly<{ row: ContentData }>) {
+export type ContentOptionProps = {
+  data: ContentData,
+};
+
+
+export default function ContentOptionMenu({ data }: Readonly<ContentOptionProps>) {
   const router = useRouter();
-  const [isTransition, startTransition] = useTransition(); // eslint-disable-line @typescript-eslint/no-unused-vars
+  const modal = useModal();
+  const [isTransition, startTransition] = useTransition(); // exslint-disable-line @typescript-eslint/no-unused-vars
   const [showOptionMenu, setShowOptionMenu] = useState<boolean>(false);
-  const [showFolderRenameDialog, setShowFolderRenameDialog] = useState<boolean>(false);
-  const [showFileRenameDialog, setShowFileRenameDialog] = useState<boolean>(false);
   const { downloadFile, downloadFolder } = useDownload();
-  
+
   const buttonRef = useRef<HTMLDivElement>(null);
   const [menuPos, setMenuPos] = useState({ top: 0, left: 0 });
 
@@ -27,16 +33,25 @@ export default function FileOption({ row }: Readonly<{ row: ContentData }>) {
       const rect = buttonRef.current.getBoundingClientRect();
       setMenuPos({
         top: rect.bottom + 8,
-        left: rect.right - 256 // w-64 is 256px
+        left: rect.right - 256,
       });
     }
   }, [showOptionMenu]);
 
-  function handleDownload() {
-    if (row.type == "folder") {
-      return downloadFolder(row.id, row.name);
+  const closeOptionMenu = () => setShowOptionMenu(false);
+
+  const handleDownload = () => {
+    if (data.type == "folder") {
+      return downloadFolder(data.id, data.name);
     }
-    return downloadFile(row.id, row.name);
+    return downloadFile(data.id, data.name);
+  };
+
+  const closeModal = (refresh: boolean = true) => {
+    modal.close();
+    if (refresh) {
+      startTransition(() => router.refresh())
+    }
   };
 
   const options: (Option | null)[] = [
@@ -45,8 +60,8 @@ export default function FileOption({ row }: Readonly<{ row: ContentData }>) {
       label: "Download",
       props: {
         onClick() {
+          closeOptionMenu();
           handleDownload();
-          setShowOptionMenu(false);
         }
       }
     },
@@ -55,11 +70,11 @@ export default function FileOption({ row }: Readonly<{ row: ContentData }>) {
       label: "Rename",
       props: {
         onClick() {
-          setShowOptionMenu(false);
-          if (row.type === "folder") {
-            setShowFolderRenameDialog(true);
+          closeOptionMenu();
+          if (data.type === "folder") {
+            modal.show(<RenameFolderDialog data={data} closeModal={closeModal} />);
           } else {
-            setShowFileRenameDialog(true);
+            modal.show(<RenameFileDialog data={data} closeModal={closeModal} />);
           }
         }
       }
@@ -76,6 +91,12 @@ export default function FileOption({ row }: Readonly<{ row: ContentData }>) {
     {
       leading: <Icon icon={faTrash} />,
       label: "Move to Trash",
+      props: {
+        onClick() {
+          closeOptionMenu();
+          modal.show(<SoftDeleteDialog data={data} closeModal={closeModal} />);
+        }
+      },
     },
   ];
 
@@ -87,34 +108,12 @@ export default function FileOption({ row }: Readonly<{ row: ContentData }>) {
             portal="id_dialog"
             onClickOutside={() => setShowOptionMenu(false)}
             className="fixed shadow-2xl"
-            style={{ 
+            style={{
               top: menuPos.top,
               left: menuPos.left,
               zIndex: 1000001
             }}
             options={options}
-          />
-        )
-      }
-      {
-        showFolderRenameDialog && (
-          <FolderRenameDialog
-            data={row}
-            closeModal={() => {
-              setShowFolderRenameDialog(false);
-              startTransition(() => router.refresh());
-            }}
-          />
-        )
-      }
-      {
-        showFileRenameDialog && (
-          <FileRenameDialog
-            data={row}
-            closeModal={() => {
-              setShowFileRenameDialog(false);
-              startTransition(() => router.refresh());
-            }}
           />
         )
       }

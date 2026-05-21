@@ -29,6 +29,7 @@ export default function ModalProvider({ children }: Readonly<{ children: React.R
         content && (
           <Modal
             className="fixed inset-0 z-1000000"
+            portal="id_dialog"
           >{ content }</Modal>
         )
       }

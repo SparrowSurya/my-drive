@@ -1,6 +1,6 @@
 import FileIcon from "../fileIcon";
 import { type FolderData } from "../types";
-import FileOption from "../components/fileOptions";
+import ContentOptionMenu from "../options";
 
 
 export type FolderGridItemProps = {
@@ -21,7 +21,7 @@ export default function FolderGridItem({ folder, showFolder }: Readonly<FolderGr
           <span className="truncate font-medium">{ folder.name }</span>
           {folder.reason && <span className="truncate text-xs">{ folder.reason }</span>}
         </div>
-        <FileOption row={folder} />
+        <ContentOptionMenu data={folder} />
       </div>
     </div>
   );

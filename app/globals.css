@@ -77,9 +77,23 @@ body {
 }
 
 #id_dialog {
+	position: fixed;
 	z-index: 100;
 }
 
+@layer base {
+  body {
+    @apply select-none;
+  }
+
+  input,
+  textarea,
+	pre,
+	code
+  [contenteditable="true"] {
+    @apply select-text;
+  }
+}
 
 @layer components {
 	.fileIcon {

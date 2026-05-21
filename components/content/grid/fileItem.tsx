@@ -1,6 +1,6 @@
 import FileIcon from "../fileIcon";
 import { type FileData } from "../types";
-import FileOption from "../components/fileOptions";
+import ContentOptionMenu from "../options";
 import { Avatar } from "@/components/avatar";
 
 
@@ -19,7 +19,7 @@ export default function FileGridItem({ file, showFile }: Readonly<FileGridItemPr
       <div className="flex flex-row items-center gap-1">
         <FileIcon mimeType={ file.mimeType } />
         <span className="flex-1 truncate font-medium">{ file.name }</span>
-        <FileOption row={ file } />
+        <ContentOptionMenu data={ file } />
       </div>
       <div
         className="p-3 bg-mantle rounded-md h-42 my-3 overflow-clip"

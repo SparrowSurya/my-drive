@@ -1,23 +1,20 @@
 "use client";
 
 import { useEffect, useActionState } from "react";
-import { usePathname } from "next/navigation";
 import { Form, Input } from "@/components/form";
-import { createFolderAction } from "./actions";
-import utils from "@/lib/utils";
+import { FolderRenameAction } from "../query";
+import type { ContentData } from "../../types";
 
 
-export default function CreateFolderDialog({
-  closeModal,
-}: Readonly<{
+export type RenameFolderDialogProps = {
+  data: ContentData,
   closeModal: (refresh: boolean) => void,
-}>) {
-  const path  = usePathname();
-  const folderId = utils.getFolderIdByPathname(path);
+};
 
-  const [state, formAction, isSubmitting] = useActionState(createFolderAction, {
-    parentId: folderId,
-    folderName: "",
+export default function RenameFolderDialog({ data, closeModal }: Readonly<RenameFolderDialogProps>) {
+  const [state, formAction, isSubmitting] = useActionState(FolderRenameAction, {
+    folderName: data.name,
+    folderId: data.id,
   });
 
   useEffect(() => {
@@ -27,14 +24,17 @@ export default function CreateFolderDialog({
   }, [state.success, closeModal]);
 
   return (
-    <div className="fixed inset-0 bg-crust/60 z-50 flex items-center justify-center">
+    <div
+      className="fixed inset-0 bg-crust/60 z-50 flex items-center justify-center"
+      onClick={() => closeModal(false)}
+    >
       <div
-        className="rounded-3xl p-8 bg-surface0 shadow-2xl shadow-crust w-100"
+        className="rounded-3xl p-8 bg-surface0 shadow-2xl shadow-crust w-[400px]"
         onClick={(e) => e.stopPropagation()}
       >
         <Form action={formAction} className="flex flex-col">
-          <h3 className="text-2xl font-semibold text-text mb-6">New Folder</h3>
-          <input type="hidden" name="parentId" defaultValue={state.parentId} style={{ display: "none" }} />
+          <h3 className="text-2xl font-semibold text-text mb-6">Rename Folder</h3>
+          <input type="hidden" name="folderId" defaultValue={state.folderId} />
           <Input
             required
             id="id_folder"
@@ -59,7 +59,7 @@ export default function CreateFolderDialog({
               disabled={isSubmitting}
               className="px-6 py-2 rounded-full bg-lavender text-base font-semibold hover:bg-lavender/90 transition-all disabled:opacity-50"
             >
-              Create
+              Rename
             </button>
           </div>
         </Form>

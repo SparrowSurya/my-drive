@@ -69,14 +69,6 @@ npm run start
 
 ## TODO
 * Move to trash
-  * Page
-  * Option menu item
-    * Confirmation dialog
-  * Trash Option menu
-  * Trash table
-  * New Column in ListView
-    * Original location (as location): My Drive, Folder Name or Shared with me
-  * What Happens to files/folders inside when you delete a folder
 * Organise file/folder
 * Recent
 * Search
