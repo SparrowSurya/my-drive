@@ -2,6 +2,7 @@
 
 import { Noto_Sans, Noto_Sans_Mono, Poppins } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
+import SnackbarProvider from "@/contexts/snackbar";
 import "./globals.css";
 
 const notoSans = Noto_Sans({
@@ -35,8 +36,10 @@ export default function RootLayout({
           refetchOnWindowFocus={!!parseInt(process.env.NEXT_PUBLIC_SESSION_REFETCH_ON_WINDOW_FOCUS!)}
           refetchWhenOffline={false}
         >
-          {children}
-          <div id="id_dialog"></div>
+          <SnackbarProvider>
+            {children}
+            <div id="id_dialog"></div>
+          </SnackbarProvider>
         </SessionProvider>
       </body>
     </html>

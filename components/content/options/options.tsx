@@ -18,10 +18,10 @@ export type ContentOptionProps = {
 };
 
 
-export default function ContentOptionMenu({ data }: Readonly<ContentOptionProps>) {
+export default function ContentOption({ data }: Readonly<ContentOptionProps>) {
   const router = useRouter();
   const modal = useModal();
-  const [isTransition, startTransition] = useTransition(); // exslint-disable-line @typescript-eslint/no-unused-vars
+  const [isTransition, startTransition] = useTransition(); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [showOptionMenu, setShowOptionMenu] = useState<boolean>(false);
   const { downloadFile, downloadFolder } = useDownload();
 
@@ -50,7 +50,7 @@ export default function ContentOptionMenu({ data }: Readonly<ContentOptionProps>
   const closeModal = (refresh: boolean = true) => {
     modal.close();
     if (refresh) {
-      startTransition(() => router.refresh())
+      startTransition(() => router.refresh());
     }
   };
 

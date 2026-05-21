@@ -2,8 +2,8 @@
 
 import { getServerSession } from "next-auth";
 import { updateFolder } from "@/lib/query/folder";
-import { updateFile } from "@/lib/query/file";
-import { RenameFolderSchema, RenameFileSchema } from "@/lib/schema";
+import { softDelete, updateFile } from "@/lib/query/file";
+import { RenameFolderSchema, RenameFileSchema, FileSoftDeleteSchema } from "@/lib/schema";
 
 
 export type RenameFolderFormState = {
@@ -22,7 +22,7 @@ export async function FolderRenameAction(state: RenameFolderFormState, formData:
   };
 
   const session = await getServerSession();
-  const { email } = session!.user ;
+  const { email } = session?.user ?? {};
   if (!email) return {
     ...state,
     errors: { root: "Something went wrong" },
@@ -35,12 +35,12 @@ export async function FolderRenameAction(state: RenameFolderFormState, formData:
     return {
       ...result.data,
       success: true,
-      message: `Rename '${folderName}' to '${name}''`,
+      message: `Renamed folder "${folderName}" to "${name}"`,
     };
   } catch {
     return {
       ...state,
-      errors: { root: "Something went wrong2" },
+      errors: { root: "Something went wrong" },
     };
   }
 }
@@ -62,7 +62,7 @@ export async function FileRenameAction(state: RenameFileFormState, formData: For
   };
 
   const session = await getServerSession();
-  const { email } = session!.user ;
+  const { email } = session?.user ?? {};
   if (!email) return {
     ...state,
     errors: { root: "Something went wrong" },
@@ -75,12 +75,50 @@ export async function FileRenameAction(state: RenameFileFormState, formData: For
     return {
       ...result.data,
       success: true,
-      message: `Rename '${fileName}' to '${name}''`,
+      message: `Renamed file "${fileName}" to "${name}"`,
     };
   } catch {
     return {
       ...state,
-      errors: { root: "Something went wrong2" },
+      errors: { root: "Something went wrong" },
+    };
+  }
+}
+
+export type FileSoftDeleteState = {
+  success?: true,
+  message?: string,
+  fileId: number,
+  errors?: Partial<Record<keyof Omit<FileSoftDeleteState, "errors">, string[]>> & { root?: string },
+};
+
+export async function FileSoftDeleteAction(state: FileSoftDeleteState, formData: FormData): Promise<FileSoftDeleteState> {
+  const result = FileSoftDeleteSchema.safeParse(Object.fromEntries(formData.entries()))
+    if (!result.success) return {
+      ...state,
+      errors: result.error?.flatten().fieldErrors,
+  };
+
+  const session = await getServerSession();
+  const { email } = session?.user ?? {};
+  if (!email) return {
+    ...state,
+    errors: { root: "Something went wrong" },
+  };
+
+  const { fileId } = result.data;
+
+  try {
+    const { name } = await softDelete({ email }, { id: fileId }, { name: true });
+    return {
+      ...result.data,
+      success: true,
+      message: `File "${name}" sent to trash`,
+    };
+  } catch {
+    return {
+      ...state,
+      errors: { root: "Something went wrong" },
     };
   }
 }

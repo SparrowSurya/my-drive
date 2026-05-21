@@ -49,3 +49,7 @@ export const FolderDownloadSchema = z.object({
 export const ReadFileDataSchema = z.object({
   id: field.fileId,
 });
+
+export const FileSoftDeleteSchema = z.object({
+  fileId: field.fileId,
+});

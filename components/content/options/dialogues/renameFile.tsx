@@ -4,6 +4,7 @@ import { useEffect, useActionState } from "react";
 import { Form, Input } from "@/components/form";
 import { FileRenameAction } from "../actions";
 import type { ContentData } from "../../types";
+import useSnackbar from "@/hooks/useSnackbar";
 
 
 export type RenameFileDialogProps = {
@@ -12,6 +13,7 @@ export type RenameFileDialogProps = {
 };
 
 export default function RenameFileDialog({ data, closeModal }: Readonly<RenameFileDialogProps>) {
+  const snackbar = useSnackbar();
   const [state, formAction, isSubmitting] = useActionState(FileRenameAction, {
     fileName: data.name,
     fileId: data.id,
@@ -20,8 +22,11 @@ export default function RenameFileDialog({ data, closeModal }: Readonly<RenameFi
   useEffect(() => {
     if (!!state.success) {
       closeModal(true);
+      snackbar.show({
+        message: state.message ?? `Renamed file "${data.name}" to "${state.fileName}"`,
+      });
     }
-  }, [state.success, closeModal]);
+  }, [state.success, closeModal, snackbar, data.name, state.message, state.fileName]);
 
   return (
     <div

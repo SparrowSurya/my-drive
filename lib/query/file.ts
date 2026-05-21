@@ -50,23 +50,25 @@ export async function getFiles<T extends Prisma.FileSelect>(
         ...folderWhere,
       },
       ...(fileWhere ?? {}),
+      deletedAt: null,
     },
     select,
   });
 }
 
-export async function updateFile(
+export async function updateFile<T extends Prisma.FileSelect>(
   userWhere: Prisma.UserWhereUniqueInput,
   fileWhere: Prisma.FileWhereUniqueInput,
   values: Prisma.FileUpdateInput,
-  select?: Prisma.FileSelect,
-): Promise<Prisma.FileGetPayload<{ select?: Prisma.FileSelect }>> {
+  select: T,
+): Promise<Prisma.FileGetPayload<{ select: T }>> {
   return await prisma.file.update({
     where: {
       folder: {
         user: userWhere,
       },
       ...fileWhere,
+      deletedAt: null,
     },
     data: values,
     select,
@@ -163,6 +165,7 @@ export async function getFile<T extends Prisma.FileSelect>(
     where: {
       folder: { user: userWhere },
       ...fileWhere,
+      deletedAt: null,
     },
     select,
   });
@@ -176,11 +179,43 @@ export async function getRecentFiles<T extends Prisma.FileSelect>(
   return await prisma.file.findMany({
     where: {
       folder: { user: userWhere },
+      deletedAt: null,
     },
     orderBy: {
       createdAt: "desc"
     },
     select,
     take,
+  });
+}
+
+export async function softDelete<T extends Prisma.FileSelect>(
+  userWhere: Prisma.UserWhereUniqueInput,
+  fileWhere: Prisma.FileWhereUniqueInput,
+  select: T,
+): Promise<Prisma.FileGetPayload<{ select: T }>> {
+  const data = { deletedAt: new Date() };
+  return await updateFile(userWhere, fileWhere, data, select);
+}
+
+export async function getDeletedFiles<T extends Prisma.FileSelect>(
+  userWhere: Prisma.UserWhereUniqueInput,
+  fileWhere: Prisma.FileWhereInput,
+  select: T,
+  folderWhere?: Prisma.FolderWhereUniqueInput,
+): Promise<Prisma.FileGetPayload<{ select: T }>[]> {
+  return await prisma.file.findMany({
+    where: {
+      ...fileWhere,
+      folder: {
+        ...folderWhere,
+        user: userWhere,
+      },
+      deletedAt: { not: null },
+    },
+    select,
+    orderBy: {
+      deletedAt: "desc",
+    },
   });
 }

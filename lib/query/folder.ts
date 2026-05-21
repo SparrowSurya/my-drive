@@ -112,7 +112,7 @@ export async function createFileTree(
       if (Array.isArray(value)) {
         for (const file of value) {
           const existingFile = await prisma.file.findUnique({
-            where: { name_folderId: { folderId: parentId, name: file.name } },
+            where: { name_folderId: { folderId: parentId, name: file.name }, deletedAt: null },
             select: { id: true },
           });
           if (existingFile) continue;
@@ -247,7 +247,7 @@ export async function getFolderContents(
     const { folderId: parentId, folderName: segment } = stack.pop()!;
 
     const foundFiles = await prisma.file.findMany({
-      where: { folderId: parentId },
+      where: { folderId: parentId, deletedAt: null },
       select: { ...select, name: true },
     });
 

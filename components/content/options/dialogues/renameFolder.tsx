@@ -4,6 +4,7 @@ import { useEffect, useActionState } from "react";
 import { Form, Input } from "@/components/form";
 import { FolderRenameAction } from "../actions";
 import type { ContentData } from "../../types";
+import useSnackbar from "@/hooks/useSnackbar";
 
 
 export type RenameFolderDialogProps = {
@@ -12,6 +13,7 @@ export type RenameFolderDialogProps = {
 };
 
 export default function RenameFolderDialog({ data, closeModal }: Readonly<RenameFolderDialogProps>) {
+  const snackbar = useSnackbar();
   const [state, formAction, isSubmitting] = useActionState(FolderRenameAction, {
     folderName: data.name,
     folderId: data.id,
@@ -20,8 +22,11 @@ export default function RenameFolderDialog({ data, closeModal }: Readonly<Rename
   useEffect(() => {
     if (!!state.success) {
       closeModal(true);
+      snackbar.show({
+        message: state.message ?? `Renamed filder "${data.name}" to "${state.folderName}"`,
+      });
     }
-  }, [state.success, closeModal]);
+  }, [state.success, closeModal, state.message, state.folderName, snackbar, data.name]);
 
   return (
     <div
@@ -29,7 +34,7 @@ export default function RenameFolderDialog({ data, closeModal }: Readonly<Rename
       onClick={() => closeModal(false)}
     >
       <div
-        className="rounded-3xl p-8 bg-surface0 shadow-2xl shadow-crust w-[400px]"
+        className="rounded-3xl p-8 bg-surface0 shadow-2xl shadow-crust w-100"
         onClick={(e) => e.stopPropagation()}
       >
         <Form action={formAction} className="flex flex-col">
