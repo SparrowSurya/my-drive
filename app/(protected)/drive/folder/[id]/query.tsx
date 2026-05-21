@@ -17,8 +17,10 @@ export async function getFolderContents(id: number): Promise<ContentData[]> {
     size: true,
     folderId: true,
     mimeType: true,
+    deletedAt: false,
     folder: {
       select: {
+        name: false,
         user: {
           select: { name: true, email: true },
         }

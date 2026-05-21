@@ -68,7 +68,6 @@ npm run start
 
 
 ## TODO
-* Move to trash
 * Organise file/folder
 * Search
 * Activity
@@ -79,3 +78,4 @@ npm run start
 
 ## LATER
 * Preview in grid view.
+* Options for trash page items

@@ -28,7 +28,7 @@ export default async function TrashPage() {
     "dateTrashed",
     "fileSize",
     "location",
-    "elipsis",
+    // "elipsis", // TODO: later
   ];
 
   return (

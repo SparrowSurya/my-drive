@@ -24,16 +24,14 @@ export default function GroupedContentListView({ data, cols, showFile, showFolde
       </div>
       <div className="flex flex-col gap-3 overflow-y-auto">
         {groups.map((group) => (
-          <>
+          <div key={`ListGroup-${group}`}>
             <div className="sticky top-0 bg-mantle z-10 pb-1">
               <div className="text-md font-medium tracking-wide text-subtext0">
                 {group}
               </div>
             </div>
-            <div key={`ListGroup-${group}`} className="">
-              <ContentListView showHeading={false} data={data[group]} cols={cols} showFile={showFile} showFolder={showFolder} />
-            </div>
-          </>
+            <ContentListView showHeading={false} data={data[group]} cols={cols} showFile={showFile} showFolder={showFolder} />
+          </div>
         ))}
       </div>
     </>
