@@ -15,6 +15,7 @@ const headings: ListViewColumns[] = [
   "name",
   "reason",
   "owner",
+  "location",
   "elipsis",
 ];
 

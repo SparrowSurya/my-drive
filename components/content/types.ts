@@ -7,6 +7,7 @@ interface BaseData {
   isMe?: boolean,
   owner?: string,
   type: ContentType,
+  parent?: string
 }
 
 export type ContentType = "file" | "folder";
@@ -26,3 +27,8 @@ export interface FolderData extends BaseData {
 };
 
 export type ContentData = FileData | FolderData;
+
+export interface ContentGroupData {
+  title: string;
+  data: ContentData[];
+}

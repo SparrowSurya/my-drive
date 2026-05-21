@@ -26,7 +26,7 @@ export default function ContentListView({
   return (
     <div className={className ?? "flex flex-col h-full w-full select-none overflow-hidden"}>
       <div
-        className={`grid h-12 border-2 border-b-surface0 border-t-transparent border-l-transparent border-r-transparent font-bold shrink-0`}
+        className={`grid gap-x-2 h-12 border-2 border-b-surface0 border-t-transparent border-l-transparent border-r-transparent font-bold shrink-0`}
         style={{ gridTemplateColumns }}
       >
         {
@@ -42,7 +42,7 @@ export default function ContentListView({
         data.map((f) => (
           <div
             key={f.id}
-            className="grid h-12 border-b-2 border-surface0 hover:bg-overlay0/30"
+            className="grid gap-x-2 h-12 border-b-2 border-surface0 hover:bg-overlay0/30"
             style={{ gridTemplateColumns }}
             onDoubleClick={f.type == "folder" ? () => showFolder(f.id): () => showFile(f.id)}
           >

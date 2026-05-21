@@ -84,6 +84,7 @@ type FileAndDataWithFolderAndUser = Prisma.FileGetPayload<{
     mimeType: true,
     folder: {
       select: {
+        name: true,
         user: {
           select: {
             name: true,
@@ -105,6 +106,7 @@ type FileWithFolderAndUser = Prisma.FileGetPayload<{
     mimeType: true,
     folder: {
       select: {
+        name: true,
         user: {
           select: {
             name: true,
@@ -136,6 +138,7 @@ export function fileToFileData(
     reason: "You uploaded", // HARDCODE
     data: hasData ? file.data : undefined,
     folderId: file.folderId,
+    parent: file.folder.name,
     type: "file",
   } as FileData;
 }

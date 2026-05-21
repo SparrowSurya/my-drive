@@ -5,6 +5,8 @@ import ContentOptionMenu from "../options";
 import FileIcon from "../fileIcon";
 import { type ContentData } from "../types";
 import { type ListViewRow } from "./types";
+import Icon from "@/components/icon";
+import { faFolder, faHardDrive } from "@fortawesome/free-solid-svg-icons";
 
 
 const rowBuilder: ListViewRow = {
@@ -15,6 +17,31 @@ const rowBuilder: ListViewRow = {
         <div  key={key} className="flex flex-row items-center truncate">
           <FileIcon mimeType={data.type === "file" ? data.mimeType : undefined} />
           <span className="truncate overflow-hidden whitespace-nowrap">{ data.name }</span>
+        </div>
+      );
+    },
+  },
+  "reason": {
+    head: "Reason",
+    body: (data: ContentData, key: string) => {
+      return (
+        <div key={key} className="flex flex-row items-center">
+          { data.reason ?? "—" }
+        </div>
+      );
+    },
+  },
+  "owner": {
+    head: "Owner",
+    body: (data: ContentData, key: string) => {
+      return (
+        <div key={key} className="flex flex-row items-center gap-2">
+          <Avatar
+            text={data.owner}
+            className={`bg-lavender text-base`}
+            size="small"
+          />
+          <div className="max-w-30 truncate">{ data.isMe ? 'me' : data.owner }</div>
         </div>
       );
     },
@@ -43,27 +70,13 @@ const rowBuilder: ListViewRow = {
       );
     },
   },
-  "reason": {
-    head: "Reason",
+  "location": {
+    head: "Location",
     body: (data: ContentData, key: string) => {
       return (
         <div key={key} className="flex flex-row items-center">
-          { data.reason ?? "—" }
-        </div>
-      );
-    },
-  },
-  "owner": {
-    head: "Owner",
-    body: (data: ContentData, key: string) => {
-      return (
-        <div key={key} className="flex flex-row items-center gap-2">
-          <Avatar
-            text={data.owner}
-            className={`bg-lavender text-base`}
-            size="small"
-          />
-          <div className="max-w-30 truncate">{ data.isMe ? 'me' : data.owner }</div>
+          <Icon icon={!!data.parent ? faFolder : faHardDrive} />
+          <span className="ml-2">{!!data.parent ? data.parent : "My Drive"}</span>
         </div>
       );
     },

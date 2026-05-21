@@ -16,7 +16,12 @@ export async function getFileSuggestions(count?: number): Promise<FileData[]> {
     size: true,
     folderId: true,
     mimeType: true,
-    folder: { select: { user: { select: { name: true, email: true } } } },
+    folder: {
+      select: {
+        name: true,
+        user: { select: { name: true, email: true } },
+      },
+    },
     updatedAt: true,
   } as const;
   const files = await getRecentFiles({ email }, select, count);
