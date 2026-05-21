@@ -19,7 +19,7 @@ export default function GroupedContentListView({ data, cols, showFile, showFolde
 
   return (
     <>
-      <div>
+      <div className="pb-2">
         <ContentListView showHeading={true} data={[]} cols={cols} showFile={showFile} showFolder={showFolder} />
       </div>
       <div className="flex flex-col gap-6 overflow-y-auto">

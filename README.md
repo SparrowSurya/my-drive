@@ -70,7 +70,6 @@ npm run start
 ## TODO
 * Move to trash
 * Organise file/folder
-* Recent
 * Search
 * Activity
 * Share
