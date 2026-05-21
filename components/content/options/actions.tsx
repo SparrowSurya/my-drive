@@ -95,10 +95,10 @@ export type FileSoftDeleteState = {
 };
 
 export async function FileSoftDeleteAction(state: FileSoftDeleteState, formData: FormData): Promise<FileSoftDeleteState> {
-  const result = FileSoftDeleteSchema.safeParse(Object.fromEntries(formData.entries()))
-    if (!result.success) return {
-      ...state,
-      errors: result.error?.flatten().fieldErrors,
+  const result = FileSoftDeleteSchema.safeParse(Object.fromEntries(formData.entries()));
+  if (!result.success) return {
+    ...state,
+    errors: result.error?.flatten().fieldErrors,
   };
 
   const session = await getServerSession();
@@ -109,6 +109,10 @@ export async function FileSoftDeleteAction(state: FileSoftDeleteState, formData:
   };
 
   const { fileId } = result.data;
+  if (fileId !== state.fileId) return {
+    ...state,
+    errors: { root: "Something went wrong" },
+  };
 
   try {
     const { name } = await softDelete({ email }, { id: fileId }, { name: true });

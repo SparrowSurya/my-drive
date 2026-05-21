@@ -7,14 +7,16 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { ContentData } from "@/components/content/types";
 import { SegmentData } from "@/components/breadcrumbs/breadcrumbs";
 import ContentViewToggleButton from "@/components/contentViewToggleButton";
+import { EmptyStateProps } from "@/components/emptyState";
 
 
 export type FolderViewProps = {
   data: ContentData[],
   segments: SegmentData[],
+  emptyStateProps: EmptyStateProps,
 };
 
-export default function FolderView({ data, segments }: Readonly<FolderViewProps>) {
+export default function FolderView({ data, segments, emptyStateProps }: Readonly<FolderViewProps>) {
   return (
     <div className="flex flex-col flex-1 overflow-hidden h-full">
       <div className="flex flex-row justify-between shrink-0 mb-4">
@@ -29,7 +31,7 @@ export default function FolderView({ data, segments }: Readonly<FolderViewProps>
         </div>
       </div>
       <div className="ml-3 flex-1 flex flex-col min-h-0">
-        <ContentView data={data} />
+        <ContentView data={data} emptyStateProps={emptyStateProps} />
       </div>
     </div>
   );

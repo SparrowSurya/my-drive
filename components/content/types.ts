@@ -1,8 +1,10 @@
+import { TimelineGroup } from "@/lib/utils/date";
 
 interface BaseData {
   id: number,
   name: string,
   lastModified: string,
+  deletedAt?: Date,
   reason?: string,
   isMe?: boolean,
   owner?: string,
@@ -28,7 +30,4 @@ export interface FolderData extends BaseData {
 
 export type ContentData = FileData | FolderData;
 
-export interface ContentGroupData {
-  title: string;
-  data: ContentData[];
-}
+export type ContentGroupData = Record<TimelineGroup, ContentData[]>;

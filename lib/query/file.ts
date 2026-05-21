@@ -200,13 +200,11 @@ export async function softDelete<T extends Prisma.FileSelect>(
 
 export async function getDeletedFiles<T extends Prisma.FileSelect>(
   userWhere: Prisma.UserWhereUniqueInput,
-  fileWhere: Prisma.FileWhereInput,
   select: T,
   folderWhere?: Prisma.FolderWhereUniqueInput,
 ): Promise<Prisma.FileGetPayload<{ select: T }>[]> {
   return await prisma.file.findMany({
     where: {
-      ...fileWhere,
       folder: {
         ...folderWhere,
         user: userWhere,

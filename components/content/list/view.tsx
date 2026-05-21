@@ -11,6 +11,7 @@ export type FileListViewProps = {
   showFile: (id: number) => void,
   className?: string,
   scrollable?: boolean,
+  showHeading?: boolean,
 };
 
 export default function ContentListView({
@@ -20,23 +21,26 @@ export default function ContentListView({
   showFile,
   className,
   scrollable = true,
+  showHeading = true,
 }: Readonly<FileListViewProps>) {
   const gridTemplateColumns = cols.map((c) => colDivisions[c]).join(' ');
 
   return (
     <div className={className ?? "flex flex-col h-full w-full select-none overflow-hidden"}>
-      <div
-        className={`grid gap-x-2 h-12 border-2 border-b-surface0 border-t-transparent border-l-transparent border-r-transparent font-bold shrink-0`}
-        style={{ gridTemplateColumns }}
-      >
-        {
-          cols.map((col) => (
-            <div key={col} className="flex items-center">
-              { rowBuilder[col].head }
-            </div>
-          ))
-        }
-      </div>
+      {showHeading && (
+        <div
+          className={`grid gap-x-2 h-12 border-2 border-b-surface0 border-t-transparent border-l-transparent border-r-transparent font-bold shrink-0`}
+          style={{ gridTemplateColumns }}
+        >
+          {
+            cols.map((col) => (
+              <div key={col} className="flex items-center">
+                { rowBuilder[col].head }
+              </div>
+            ))
+          }
+        </div>
+      )}
       <div className={`w-full ${scrollable ? "w-full flex-1 overflow-y-auto min-h-0" : "w-full flex flex-col"}`}>
       {
         data.map((f) => (

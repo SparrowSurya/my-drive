@@ -22,7 +22,7 @@ export async function getFilesAndFolders(): Promise<ContentData[]> {
       select: {
         user: {
           select: { name: true, email: true },
-        }
+        },
       },
     }
   };

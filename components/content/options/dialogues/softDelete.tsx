@@ -20,12 +20,12 @@ export default function SoftDeleteDialog({ data, closeModal }: Readonly<ConfirmS
 
   useEffect(() => {
     if (!!state.success) {
-      closeModal(true);
       snackbar.show({
         message: state.message ?? `File "${data.name}" sent to trash`,
       });
+      closeModal(true);
     }
-  }, [state.success, closeModal, snackbar, data.name, state.message])
+  }, [state.success, closeModal, snackbar, data.name, state.message]);
 
   return (
     <div
@@ -41,6 +41,7 @@ export default function SoftDeleteDialog({ data, closeModal }: Readonly<ConfirmS
           <p className="text-subtext0 mb-8">
             <span className="font-medium text-text">{`"${data.name}"`}</span> {data.type} will be deleted permanently after 30 days
           </p>
+          <input type="hidden" name="fileId" value={data.id} />
           <div className="flex flex-row justify-end items-center gap-4">
             <button
               type="button"
