@@ -7,6 +7,7 @@ export type ListViewColumns = (
   | "reason"
   | "owner"
   | "lastModified"
+  | "dateTrashed"
   | "fileSize"
   | "location"
   | "elipsis"
@@ -17,6 +18,7 @@ export const colDivisions: Record<ListViewColumns, string> = {
   "reason": "minmax(0,2fr)",
   "owner": "minmax(0,2fr)",
   "lastModified": "minmax(0,2fr)",
+  "dateTrashed": "minmax(0,2fr)",
   "fileSize": "minmax(0,1fr)",
   "location": "minmax(0,2fr)",
   "elipsis": "64px",

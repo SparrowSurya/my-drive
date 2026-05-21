@@ -97,6 +97,29 @@ type FileAndDataWithFolderAndUser = Prisma.FileGetPayload<{
   }
 }>;
 
+type DeletedFileAndDataWithFolderAndUser = Prisma.FileGetPayload<{
+  select: {
+    id: true,
+    name: true,
+    size: true,
+    folderId: true,
+    mimeType: true,
+    folder: {
+      select: {
+        name: true,
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
+    },
+    updatedAt: true,
+    deletedAt: true,
+  }
+}>;
+
 type FileWithFolderAndUser = Prisma.FileGetPayload<{
   select: {
     id: true,
@@ -122,7 +145,7 @@ type FileWithFolderAndUser = Prisma.FileGetPayload<{
 
 export function fileToFileData(
   ownerEmail: string,
-  file: FileAndDataWithFolderAndUser | FileWithFolderAndUser,
+  file: FileAndDataWithFolderAndUser | FileWithFolderAndUser | DeletedFileAndDataWithFolderAndUser,
 ): FileData {
   const hasData = "data" in file;
   return {
@@ -136,6 +159,9 @@ export function fileToFileData(
     owner: file.folder.user.name,
     updatedAt: file.updatedAt,
     lastModified: formatDate(file.updatedAt),
+    dateTrashed: "deletedAt" in file && !!file.deletedAt
+      ? formatDate(file.deletedAt)
+      : undefined,
     reason: "You uploaded", // HARDCODE
     data: hasData ? file.data : undefined,
     folderId: file.folderId,

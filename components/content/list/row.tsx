@@ -58,6 +58,18 @@ const rowBuilder: ListViewRow = {
       );
     },
   },
+  "dateTrashed": {
+    head: "Date trashed",
+    body: (data: ContentData, key: string) => {
+      return (
+        <div key={key} className="flex flex-row items-center">
+          <span className="ml-2">
+            { data.dateTrashed ?? "" }
+          </span>
+        </div>
+      );
+    },
+  },
   "fileSize": {
     head: "File size",
     body: (data: ContentData, key: string) => {

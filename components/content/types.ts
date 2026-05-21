@@ -6,6 +6,7 @@ interface BaseData {
   lastModified: string,
   updatedAt?: Date,
   deletedAt?: Date,
+  dateTrashed?: string,
   reason?: string,
   isMe?: boolean,
   owner?: string,

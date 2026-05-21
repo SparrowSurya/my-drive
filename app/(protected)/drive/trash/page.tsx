@@ -5,6 +5,7 @@ import ContentViewToggleButton from "@/components/contentViewToggleButton";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import Icon from "@/components/icon";
 import GroupedContentView from "@/components/content/groupedView";
+import { ListViewColumns } from "@/components/content/list/types";
 
 
 export const metadata: Metadata = {
@@ -21,6 +22,15 @@ export default async function TrashPage() {
     para: 'Items moved to the trash will be deleted forever after 30 days',
   };
 
+  const headings: ListViewColumns[] = [
+    "name",
+    "owner",
+    "dateTrashed",
+    "fileSize",
+    "location",
+    "elipsis",
+  ];
+
   return (
     <div className="flex flex-col flex-1 overflow-hidden h-full">
       <div className="flex flex-row justify-between shrink-0 mb-4">
@@ -31,7 +41,7 @@ export default async function TrashPage() {
         </div>
       </div>
       <div className="ml-3 flex-1 flex flex-col min-h-0">
-        <GroupedContentView data={data} cols={[]} emptyStateProps={emptyStateProps} />
+        <GroupedContentView data={data} cols={headings} emptyStateProps={emptyStateProps} />
       </div>
     </div>
   );
