@@ -2,7 +2,7 @@
 
 import { useEffect, useActionState } from "react";
 import { Form, Input } from "@/components/form";
-import { FileRenameAction } from "../query";
+import { FileRenameAction } from "../actions";
 import type { ContentData } from "../../types";
 
 
