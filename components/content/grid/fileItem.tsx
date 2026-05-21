@@ -1,14 +1,13 @@
 import FileIcon from "../fileIcon";
-import { type FileData } from "../types";
+import { type ContentData } from "../types";
 import ContentOptionMenu from "../options";
 import { Avatar } from "@/components/avatar";
 
 
 export type FileGridItemProps = {
-  file: FileData,
+  file: ContentData,
   showFile: (ind: number) => void,
 };
-
 
 export default function FileGridItem({ file, showFile }: Readonly<FileGridItemProps>) {
   return (
@@ -17,7 +16,7 @@ export default function FileGridItem({ file, showFile }: Readonly<FileGridItemPr
       onDoubleClick={() => showFile(file.id)}
     >
       <div className="flex flex-row items-center gap-1">
-        <FileIcon mimeType={ file.mimeType } />
+        <FileIcon mimeType={ file.type === "file" ? file.mimeType : undefined } />
         <span className="flex-1 truncate font-medium">{ file.name }</span>
         <ContentOptionMenu data={ file } />
       </div>

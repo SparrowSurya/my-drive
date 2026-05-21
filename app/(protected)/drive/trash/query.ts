@@ -1,18 +1,19 @@
-import { ContentGroupData } from "@/components/content/types";
+import { GroupedContentData } from "@/components/content/types";
 import { getDeletedFiles } from "@/lib/query/file";
 import utils from "@/lib/utils";
 import { groupByTimeline } from "@/lib/utils/date";
 import { getServerSession } from "next-auth";
 
 
-export async function getTrashFiles(): Promise<ContentGroupData> {
+export async function getTrashFiles(): Promise<GroupedContentData> {
   const session = await getServerSession();
   const email = session?.user.email;
-  if (email == null) return {} as ContentGroupData;
+  if (email == null) return {} as GroupedContentData;
 
   const select = {
     id: true,
     name: true,
+    updatedAt: false,
     deletedAt: true,
     size: true,
     folderId: true,

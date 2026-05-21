@@ -4,6 +4,7 @@ interface BaseData {
   id: number,
   name: string,
   lastModified: string,
+  updatedAt?: Date,
   deletedAt?: Date,
   reason?: string,
   isMe?: boolean,
@@ -30,4 +31,4 @@ export interface FolderData extends BaseData {
 
 export type ContentData = FileData | FolderData;
 
-export type ContentGroupData = Record<TimelineGroup, ContentData[]>;
+export type GroupedContentData = Record<TimelineGroup, ContentData[]>;

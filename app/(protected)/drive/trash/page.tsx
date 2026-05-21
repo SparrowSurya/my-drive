@@ -4,7 +4,7 @@ import { getTrashFiles } from "./query";
 import ContentViewToggleButton from "@/components/contentViewToggleButton";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import Icon from "@/components/icon";
-import ContentGroupedView from "@/components/content/groupedView";
+import GroupedContentView from "@/components/content/groupedView";
 
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export default async function TrashPage() {
         </div>
       </div>
       <div className="ml-3 flex-1 flex flex-col min-h-0">
-        <ContentGroupedView data={data} emptyStateProps={emptyStateProps} />
+        <GroupedContentView data={data} emptyStateProps={emptyStateProps} />
       </div>
     </div>
   );

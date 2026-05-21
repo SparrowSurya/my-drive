@@ -20,11 +20,10 @@ export async function getFilesAndFolders(): Promise<ContentData[]> {
     mimeType: true,
     folder: {
       select: {
-        user: {
-          select: { name: true, email: true },
-        },
+        name: true,
+        user: { select: { name: true, email: true } },
       },
-    }
+    },
   };
   const folderSelect = {
     ...select,

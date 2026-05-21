@@ -2,32 +2,31 @@
 
 import useContentView from "@/hooks/useContentView";
 import EmptyState, { EmptyStateProps } from "../emptyState";
-import { ContentGroupData } from "./types";
-import { TimelineGroupValues } from "@/lib/utils/date";
+import { GroupedContentData } from "./types";
+import GroupedContentGridView from "./grid/groupedView";
+import GroupedContentListView from "./list/groupedView";
+import useShowContent from "@/hooks/useShowContent";
+import { ListViewColumns } from "./list/types";
 
-export type ContentGroupedViewProps = {
-  data: ContentGroupData,
+
+export type GroupedContentViewProps = {
+  data: GroupedContentData,
   emptyStateProps: EmptyStateProps,
+  cols: ListViewColumns[],
 };
 
-// TODO
-export default function ContentGroupedView({ data, emptyStateProps }: Readonly<ContentGroupedViewProps>) {
+export default function GroupedContentView({ data, cols, emptyStateProps }: Readonly<GroupedContentViewProps>) {
+  const { showFolder, showFile } = useShowContent();
   const { gridView } = useContentView();
   const isEmpty = Object.keys(data).length === 0;
 
   return (
     <>
       {isEmpty && <EmptyState {...emptyStateProps} />}
-      {!isEmpty && !gridView && (
-        TimelineGroupValues.map((group) => {
-          return (
-            <div key={`GridGroup-${group}`} className="">
-              {data[group].map((content) => (
-                <div key={`GridItem-${content.id}`}>{ content.name }</div>
-              ))}
-            </div>
-          );
-        })
+      {!isEmpty && (
+        gridView
+          ? <GroupedContentGridView data={data} showFolder={showFolder} showFile={showFile} />
+          : <GroupedContentListView data={data} cols={cols} showFolder={showFolder} showFile={showFile} />
       )}
     </>
   );

@@ -134,6 +134,7 @@ export function fileToFileData(
       : file.mimeType ?? "application/octet-stream",
     isMe: ownerEmail == file.folder.user.email,
     owner: file.folder.user.name,
+    updatedAt: file.updatedAt,
     lastModified: formatDate(file.updatedAt),
     reason: "You uploaded", // HARDCODE
     data: hasData ? file.data : undefined,
