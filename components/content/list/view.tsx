@@ -7,8 +7,8 @@ import rowBuilder from "./row";
 export type FileListViewProps = {
   cols: ListViewColumns[],
   data: ContentData[],
-  showFolder: (id: number) => void,
-  showFile: (id: number) => void,
+  showFolder: (id?: number) => void,
+  showFile: (id?: number) => void,
   className?: string,
   scrollable?: boolean,
   showHeading?: boolean,

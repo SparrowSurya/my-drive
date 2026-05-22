@@ -2,14 +2,19 @@ import FileIcon from "../fileIcon";
 import { type ContentData } from "../types";
 import ContentOptionMenu from "../options";
 import { Avatar } from "@/components/avatar";
+import utils from "@/lib/utils";
 
 
 export type FileGridItemProps = {
   file: ContentData,
-  showFile: (ind: number) => void,
+  showFile: (id?: number) => void,
 };
 
 export default function FileGridItem({ file, showFile }: Readonly<FileGridItemProps>) {
+  const lastModified = file.updatedAt instanceof Date
+    ? utils.formatDate(file.updatedAt)
+    : null;
+
   return (
     <div
       className="bg-surface2 hover:bg-surface1 px-2 py-3 rounded-2xl cursor-pointer"
@@ -39,7 +44,7 @@ export default function FileGridItem({ file, showFile }: Readonly<FileGridItemPr
           <span className="text-sm truncate">{ file.reason }</span>
           <span className="flex items-center gap-1 text-sm shrink-0">
             <strong className="text-text leading-none mr-1">·</strong>
-            { file.lastModified.split(",")[0] }
+            { lastModified?.split(",")[0] }
           </span>
         </div>
       )}

@@ -15,7 +15,7 @@ export type ConfirmSoftDeleteDialogProps = {
 export default function SoftDeleteDialog({ data, closeModal }: Readonly<ConfirmSoftDeleteDialogProps>) {
   const snackbar = useSnackbar();
   const [state, formAction, isSubmitting] = useActionState(FileSoftDeleteAction, {
-    fileId: data.id,
+    fileId: data.id as number,
   });
 
   useEffect(() => {

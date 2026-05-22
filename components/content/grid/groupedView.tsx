@@ -5,8 +5,8 @@ import ContentGridView from "./view";
 
 export type GroupedContentGridViewProps = {
   data: GroupedContentData,
-  showFolder: (id: number) => void,
-  showFile: (id: number) => void,
+  showFolder: (id?: number) => void,
+  showFile: (id?: number) => void,
 };
 
 export default function GroupedContentGridView({ data, showFile, showFolder }: Readonly<GroupedContentGridViewProps>) {

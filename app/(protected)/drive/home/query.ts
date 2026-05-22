@@ -18,6 +18,7 @@ export async function getFileSuggestions(count?: number): Promise<FileData[]> {
     mimeType: true,
     folder: {
       select: {
+        folderId: true,
         name: true,
         user: { select: { name: true, email: true } },
       },
@@ -25,7 +26,7 @@ export async function getFileSuggestions(count?: number): Promise<FileData[]> {
     updatedAt: true,
   } as const;
   const files = await getRecentFiles({ email }, select, count);
-  return files.map((f) => utils.fileToFileData(email, f));
+  return files.map((f) => utils.map2FileData(email, f));
 }
 
 export async function getFolderSuggestions(count?: number): Promise<FolderData[]> {
@@ -41,5 +42,5 @@ export async function getFolderSuggestions(count?: number): Promise<FolderData[]
     updatedAt: true,
   } as const;
   const folders = await getRecentFolders({ email }, select, count);
-  return folders.map((f) => utils.folderToFolderData(email, f));
+  return folders.map((f) => utils.map2FolderData(email, f));
 }

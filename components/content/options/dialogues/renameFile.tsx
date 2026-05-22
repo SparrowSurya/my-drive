@@ -15,8 +15,8 @@ export type RenameFileDialogProps = {
 export default function RenameFileDialog({ data, closeModal }: Readonly<RenameFileDialogProps>) {
   const snackbar = useSnackbar();
   const [state, formAction, isSubmitting] = useActionState(FileRenameAction, {
-    fileName: data.name,
-    fileId: data.id,
+    fileName: data.name as string,
+    fileId: data.id as number,
   });
 
   useEffect(() => {

@@ -5,7 +5,7 @@ import ContentOptionMenu from "../options";
 
 export type FolderGridItemProps = {
   folder: FolderData,
-  showFolder: (id: number) => void,
+  showFolder: (id?: number) => void,
 };
 
 

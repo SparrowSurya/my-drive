@@ -7,6 +7,7 @@ import { type ContentData } from "../types";
 import { type ListViewRow } from "./types";
 import Icon from "@/components/icon";
 import { faFolder, faHardDrive } from "@fortawesome/free-solid-svg-icons";
+import utils from "@/lib/utils";
 
 
 const rowBuilder: ListViewRow = {
@@ -49,11 +50,13 @@ const rowBuilder: ListViewRow = {
   "lastModified": {
     head: "Last modified",
     body: (data: ContentData, key: string) => {
+      const lastModified = data.updatedAt instanceof Date
+        ? utils.formatDate(data.updatedAt)
+        : "—";
+
       return (
         <div key={key} className="flex flex-row items-center">
-          <span className="ml-2">
-            { data.lastModified }
-          </span>
+          <span className="ml-2">{ lastModified }</span>
         </div>
       );
     },
@@ -61,11 +64,13 @@ const rowBuilder: ListViewRow = {
   "dateTrashed": {
     head: "Date trashed",
     body: (data: ContentData, key: string) => {
+      const dateTrashed = data.deletedAt instanceof Date
+        ? utils.formatDate(data.deletedAt)
+        : "—";
+
       return (
         <div key={key} className="flex flex-row items-center">
-          <span className="ml-2">
-            { data.dateTrashed ?? "" }
-          </span>
+          <span className="ml-2">{ dateTrashed }</span>
         </div>
       );
     },
@@ -73,11 +78,13 @@ const rowBuilder: ListViewRow = {
   "fileSize": {
     head: "File size",
     body: (data: ContentData, key: string) => {
+      const size = typeof data.size === "number"
+        ? utils.formatBytes(data.size)
+        : "0 B";
+
       return (
         <div key={key} className="flex flex-row items-center">
-          <span className="ml-2">
-            { data.size ?? "—" }
-          </span>
+          <span className="ml-2">{ size }</span>
         </div>
       );
     },

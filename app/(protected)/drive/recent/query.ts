@@ -19,12 +19,13 @@ export async function getRecentFilesData(count?: number): Promise<GroupedContent
     updatedAt: true,
     folder: {
       select: {
+        folderId: true,
         name: true,
         user: { select: { name: true, email: true } },
       },
     },
   } as const;
   const files = await getRecentFiles({ email }, select, count);
-  const filesData = files.map((f) => utils.fileToFileData(email, f));
+  const filesData = files.map((f) => utils.map2FileData(email, f));
   return groupByTimeline(filesData, (i) => i.updatedAt!);
 }

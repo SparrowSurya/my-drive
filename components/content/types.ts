@@ -1,32 +1,31 @@
 import { TimelineGroup } from "@/lib/utils/date";
 
 interface BaseData {
-  id: number,
-  name: string,
-  lastModified: string,
+  id?: number,
+  name?: string,
   updatedAt?: Date,
   deletedAt?: Date,
-  dateTrashed?: string,
   reason?: string,
-  isMe?: boolean,
+  isMe: boolean,
   owner?: string,
   type: ContentType,
   parent?: string
+  size?: number,
 }
 
 export type ContentType = "file" | "folder";
 
 export interface FileData extends BaseData {
-  size: string,
-  folderId: number,
-  mimeType: string,
+  folderId?: number,
+  folderName?: string,
+  mimeType?: string,
   data?: Uint8Array,
   type: "file",
 };
 
 export interface FolderData extends BaseData {
-  size: null,
-  parentId: number,
+  parentId?: number,
+  children?: Array<FolderData>,
   type: "folder",
 };
 

@@ -4,8 +4,8 @@ import { type ContentData } from "../types";
 
 export type GridViewProps = {
   data: ContentData[],
-  showFolder: (id: number) => void,
-  showFile: (id: number) => void,
+  showFolder: (id?: number) => void,
+  showFile: (id?: number) => void,
   className?: string,
   scrollable?: boolean,
 };
@@ -21,8 +21,9 @@ export default function ContentGridView({
   const folders = data.filter((item) => item.type == "folder");
 
   const baseClassName = scrollable
-    ? "flex-1 flex flex-col gap-5 overflow-y-auto min-h-0"
-    : "flex flex-col gap-5";
+    ? "flex-1 flex flex-col gap-10 overflow-y-auto min-h-0"
+    : "flex flex-col gap-10";
+
 
   return (
     <div className={className ?? baseClassName}>

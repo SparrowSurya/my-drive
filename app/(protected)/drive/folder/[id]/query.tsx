@@ -20,6 +20,7 @@ export async function getFolderContents(id: number): Promise<ContentData[]> {
     deletedAt: false,
     folder: {
       select: {
+        folderId: false,
         name: false,
         user: {
           select: { name: true, email: true },
@@ -38,10 +39,13 @@ export async function getFolderContents(id: number): Promise<ContentData[]> {
     getFolders({ email }, { id }, folderSelect),
   ]);
 
-  return [
-    ...folders.map(f => utils.folderToFolderData(email, f)),
-    ...files.map(f => utils.fileToFileData(email, f)),
+  const contents = [
+    ...folders.map(f => utils.map2FolderData(email, f)),
+    ...files.map(f => utils.map2FileData(email, f)),
   ] as ContentData[];
+
+  contents.forEach((f) => f.reason = undefined);
+  return contents;
 }
 
 export async function getPathSegments(id: number): Promise<{ id: number, name: string }[]> {

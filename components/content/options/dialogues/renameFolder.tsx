@@ -15,8 +15,8 @@ export type RenameFolderDialogProps = {
 export default function RenameFolderDialog({ data, closeModal }: Readonly<RenameFolderDialogProps>) {
   const snackbar = useSnackbar();
   const [state, formAction, isSubmitting] = useActionState(FolderRenameAction, {
-    folderName: data.name,
-    folderId: data.id,
+    folderName: data.name as string,
+    folderId: data.id as number,
   });
 
   useEffect(() => {

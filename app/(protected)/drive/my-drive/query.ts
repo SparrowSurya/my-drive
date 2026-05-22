@@ -20,6 +20,7 @@ export async function getFilesAndFolders(): Promise<ContentData[]> {
     mimeType: true,
     folder: {
       select: {
+        folderId: true,
         name: true,
         user: { select: { name: true, email: true } },
       },
@@ -36,8 +37,11 @@ export async function getFilesAndFolders(): Promise<ContentData[]> {
     getFolders({ email }, { id: root.id }, folderSelect),
   ]);
 
-  return [
-    ...folders.map(f => utils.folderToFolderData(email, f)),
-    ...files.map(f => utils.fileToFileData(email, f)),
+  const contents = [
+    ...folders.map(f => utils.map2FolderData(email, f)),
+    ...files.map(f => utils.map2FileData(email, f)),
   ] as ContentData[];
+
+  contents.forEach((f) => f.reason = undefined);
+  return contents;
 }

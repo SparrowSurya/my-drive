@@ -41,6 +41,10 @@ export default function ContentOption({ data }: Readonly<ContentOptionProps>) {
   const closeOptionMenu = () => setShowOptionMenu(false);
 
   const handleDownload = () => {
+    if (typeof data.id !== "number" || typeof data.name !== "string") {
+      console.log(`Failed to download ${data.type}: invalid ID=${data.id} or name=${data.name}`);
+      return;
+    }
     if (data.type == "folder") {
       return downloadFolder(data.id, data.name);
     }

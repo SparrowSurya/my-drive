@@ -7,8 +7,8 @@ import ContentListView from "./view";
 export type GroupedContentListViewProps = {
   data: GroupedContentData,
   cols: ListViewColumns[],
-  showFolder: (id: number) => void,
-  showFile: (id: number) => void,
+  showFolder: (id?: number) => void,
+  showFile: (id?: number) => void,
 };
 
 export default function GroupedContentListView({ data, cols, showFile, showFolder }: Readonly<GroupedContentListViewProps>) {
