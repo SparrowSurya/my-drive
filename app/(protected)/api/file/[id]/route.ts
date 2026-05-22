@@ -55,7 +55,7 @@ export async function GET(
       data: Buffer.from(f.data).toString("base64"),
       owner: f.folder.user.email == email ? "me" : f.folder.user.name,
       lastModified: utils.formatDate(f.updatedAt),
-    }, { status: 200});
+    }, { status: 200 });
   } catch {
     return NextResponse.json({ error: "File not found" }, { status: 404 });
   }

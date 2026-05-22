@@ -18,14 +18,14 @@ type LooseFolder<S extends Prisma.FolderDefaultArgs> = DeepPartial<Prisma.Folder
     name: string;
   } | null;
   parent?: {
-    parentId: number;
+    id: number;
   } | null;
   children?: Array<LooseFolder<S>> | null;
 };
 
 type LooseFile<S extends Prisma.FileDefaultArgs> = DeepPartial<Prisma.FileGetPayload<S>> & {
   folder?: {
-    folderId: number;
+    id: number;
     name: string;
     user?: {
       email: string,

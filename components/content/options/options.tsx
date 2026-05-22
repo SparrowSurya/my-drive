@@ -11,6 +11,7 @@ import RenameFileDialog from "./dialogues/renameFile";
 import RenameFolderDialog from "./dialogues/renameFolder";
 import SoftDeleteDialog from "./dialogues/softDelete";
 import useModal from "@/hooks/useModal";
+import OrganiseContentDialog from "./dialogues/organiseContent";
 
 
 export type ContentOptionProps = {
@@ -87,6 +88,12 @@ export default function ContentOption({ data }: Readonly<ContentOptionProps>) {
     {
       leading: <Icon icon={faFolderOpen} />,
       label: "Organise",
+      props: {
+        onClick() {
+          closeOptionMenu();
+          modal.show(<OrganiseContentDialog data={data} closeModal={closeModal} />);
+        }
+      }
     },
     {
       leading: <Icon icon={faUserPlus} />,

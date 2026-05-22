@@ -286,3 +286,23 @@ export async function getRecentFolders<T extends Prisma.FolderSelect>(
     take,
   });
 }
+
+export async function getChildren<T extends Prisma.FolderSelect>(
+  userWhere: Prisma.UserWhereUniqueInput,
+  select: T,
+  folderId?: number | null,
+): Promise<Prisma.FolderGetPayload<{ select: T }>[]> {
+  const id = !!folderId ? folderId : (await getOrCreateRootFolder(userWhere, { id: true })).id;
+  return (await prisma.hierarchy.findMany({
+    where: {
+      parentId: id,
+      folder: { user: userWhere },
+    },
+    orderBy: {
+      folder: { updatedAt: "desc" },
+    },
+    select: {
+      folder: { select },
+    },
+  })).map((f) => f.folder);
+}

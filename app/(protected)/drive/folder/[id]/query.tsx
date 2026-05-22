@@ -20,7 +20,7 @@ export async function getFolderContents(id: number): Promise<ContentData[]> {
     deletedAt: false,
     folder: {
       select: {
-        folderId: false,
+        id: false,
         name: false,
         user: {
           select: { name: true, email: true },
@@ -30,7 +30,7 @@ export async function getFolderContents(id: number): Promise<ContentData[]> {
   };
   const folderSelect = {
     ...select,
-    parent: { select: { parentId: true } },
+    parent: { select: { id: true } },
     user: { select: { name: true, email: true } },
   }
 

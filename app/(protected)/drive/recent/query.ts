@@ -19,7 +19,7 @@ export async function getRecentFilesData(count?: number): Promise<GroupedContent
     updatedAt: true,
     folder: {
       select: {
-        folderId: true,
+        id: true,
         name: true,
         user: { select: { name: true, email: true } },
       },

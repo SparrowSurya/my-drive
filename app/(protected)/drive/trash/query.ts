@@ -20,7 +20,7 @@ export async function getTrashFiles(): Promise<GroupedContentData> {
     mimeType: true,
     folder: {
       select: {
-        folderId: true,
+        id: true,
         name: true,
         user: {
           select: { name: true, email: true },
@@ -30,5 +30,6 @@ export async function getTrashFiles(): Promise<GroupedContentData> {
   };
   const files = await getDeletedFiles({ email }, select);
   const filesData = files.map(f => utils.map2FileData(email, f));
+  filesData.forEach((f) => f.reason = undefined);
   return groupByTimeline(filesData, (i) => i.deletedAt!);
 }

@@ -20,7 +20,7 @@ export async function getFilesAndFolders(): Promise<ContentData[]> {
     mimeType: true,
     folder: {
       select: {
-        folderId: true,
+        id: true,
         name: true,
         user: { select: { name: true, email: true } },
       },
@@ -28,7 +28,7 @@ export async function getFilesAndFolders(): Promise<ContentData[]> {
   };
   const folderSelect = {
     ...select,
-    parent: { select: { parentId: true } },
+    parent: { select: { id: true } },
     user: { select: { name: true, email: true } },
   }
 

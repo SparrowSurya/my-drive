@@ -53,3 +53,7 @@ export const ReadFileDataSchema = z.object({
 export const FileSoftDeleteSchema = z.object({
   fileId: field.fileId,
 });
+
+export const FolderChildrenDataSchema = z.object({
+  id: field.folderId.nullable(),
+});
