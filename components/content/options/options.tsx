@@ -18,7 +18,6 @@ export type ContentOptionProps = {
   data: ContentData,
 };
 
-
 export default function ContentOption({ data }: Readonly<ContentOptionProps>) {
   const router = useRouter();
   const modal = useModal();

@@ -10,7 +10,7 @@ type UseFetchReturn<T> = {
   data: T | null;
   error: Error | null;
   loading: boolean;
-  refetch: (newUrl?: string) => Promise<void>;
+  refetch: (newUrl?: string) => Promise<T | undefined>;
 };
 
 export function useFetch<T>(url: string, options?: UseFetchOptions): UseFetchReturn<T> {
@@ -25,6 +25,7 @@ export function useFetch<T>(url: string, options?: UseFetchOptions): UseFetchRet
   const fetchData = useCallback(async (newUrl?: string) => {
     setLoading(true);
     setError(null);
+    setData(null);
 
     try {
       const response = await fetch(newUrl ?? url, optionsRef.current);
@@ -34,8 +35,10 @@ export function useFetch<T>(url: string, options?: UseFetchOptions): UseFetchRet
 
       const json = await response.json();
       setData(json);
+      return json as T;
     } catch (err) {
       setError(err instanceof Error ? err : new Error("Unknown error"));
+      return undefined;
     } finally {
       setLoading(false);
     }
