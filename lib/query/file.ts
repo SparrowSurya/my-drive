@@ -217,3 +217,12 @@ export async function getDeletedFiles<T extends Prisma.FileSelect>(
     },
   });
 }
+
+export async function moveFile(
+  userWhere: Prisma.UserWhereUniqueInput,
+  fileId: number,
+  folderId: number,
+): Promise<void> {
+  const data = { folder: { connect: { id: folderId } } };
+  await updateFile(userWhere, { id: fileId }, data, {});
+}

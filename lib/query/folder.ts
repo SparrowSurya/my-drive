@@ -306,3 +306,19 @@ export async function getChildren<T extends Prisma.FolderSelect>(
     },
   })).map((f) => f.folder);
 }
+
+export async function moveFolder(
+  userWhere: Prisma.UserWhereUniqueInput,
+  folderId: number,
+  targetFolderId: number,
+): Promise<void> {
+  await prisma.hierarchy.update({
+    where: {
+      folderId,
+      folder: { user: userWhere },
+    },
+    data: {
+      parentId: targetFolderId,
+    },
+  });
+}
