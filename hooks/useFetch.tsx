@@ -10,7 +10,7 @@ type UseFetchReturn<T> = {
   data: T | null;
   error: Error | null;
   loading: boolean;
-  refetch: () => Promise<void>;
+  refetch: (newUrl?: string) => Promise<void>;
 };
 
 export function useFetch<T>(url: string, options?: UseFetchOptions): UseFetchReturn<T> {
@@ -22,12 +22,12 @@ export function useFetch<T>(url: string, options?: UseFetchOptions): UseFetchRet
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState(immediate);
 
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(async (newUrl?: string) => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch(url, optionsRef.current);
+      const response = await fetch(newUrl ?? url, optionsRef.current);
       if (!response.ok) {
         throw new Error(`Request failed with status ${response.status}`);
       }
