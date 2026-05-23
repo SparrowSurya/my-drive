@@ -26,7 +26,9 @@ export async function GET(
   const select = {
     id: true,
     name: true,
-    updatedAt: true,
+    parent: {
+      select: { id: true },
+    },
     user: {
       select: { name: true, email: true },
     },
