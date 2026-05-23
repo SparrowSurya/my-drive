@@ -80,7 +80,7 @@ const rowBuilder: ListViewRow = {
     body: (data: ContentData, key: string) => {
       const size = typeof data.size === "number"
         ? utils.formatBytes(data.size)
-        : "0 B";
+        : "—";
 
       return (
         <div key={key} className="flex flex-row items-center">

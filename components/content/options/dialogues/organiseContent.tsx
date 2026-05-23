@@ -5,7 +5,8 @@ import { useFetch } from "@/hooks/useFetch";
 import type { ContentData, FolderData } from "../../types";
 import { faFolder } from "@fortawesome/free-solid-svg-icons";
 import Icon from "@/components/icon";
-
+import useMoveContent from "@/hooks/useMoveContent";
+import useSnackbar from "@/hooks/useSnackbar";
 
 export type OrganiseContentDialogProps = {
   data: ContentData,
@@ -22,6 +23,9 @@ const buildURL = (folderId: number) => `/api/folder/${folderId}/children`;
 
 export default function OrganiseContentDialog({ data, closeModal }: Readonly<OrganiseContentDialogProps>) {
   const root = useFetch<{ id: number }>('/api/folder/root', { immediate: true });
+  const snackbar = useSnackbar();
+  const { moveFile, moveFolder, isFileMoving, isFolderMoving, error: moveError } = useMoveContent();
+
   const [cache, setCache] = useState<Record<number, FolderData[]>>({});
   const [path, setPath] = useState<PathSegment[]>([ROOT_FOLDER]);
   const [active, setActive] = useState<number>(0);
@@ -75,23 +79,42 @@ export default function OrganiseContentDialog({ data, closeModal }: Readonly<Org
     setSelectedFolderId(null);
   };
 
-  const handleMove = () => {
-    if (!canMove) return;
-
-    const finalDestinationId = selectedFolderId ?? resolvedActiveId ?? active;
-    console.log(`Moving ${data.type} "${data.name}" (id: ${data.id}) to folder id: ${finalDestinationId}`);
-
-    closeModal(true);
-  };
-
+  const isMoving = isFileMoving || isFolderMoving;
   const destinationId = selectedFolderId ?? resolvedActiveId;
   const currentParentId = data.type === 'file' ? (data.folderId) : (data.parentId);
 
   const isSameFolder = destinationId !== null && destinationId !== undefined && destinationId === currentParentId;
   const isMovingIntoDescendant = data.type === 'folder' && path.some(segment => segment.id === data.id);
 
-  const canMove = !loading && !isSameFolder && !isMovingIntoDescendant && destinationId !== null;
+  const canMove = !loading && !isMoving && !isSameFolder && !isMovingIntoDescendant && destinationId !== null;
 
+  const handleMove = async () => {
+    if (!canMove) return;
+
+    const finalDestinationId = selectedFolderId ?? resolvedActiveId ?? active;
+
+    let destinationName = "";
+    if (selectedFolderId !== null) {
+      const selectedFolder = folders?.find(f => f.id === selectedFolderId);
+      destinationName = selectedFolder?.name ?? "Unknown folder";
+    } else {
+      destinationName = path[path.length - 1].name;
+    }
+
+    let success = false;
+    if (data.type === "file" && data.id) {
+      success = await moveFile(data.id, finalDestinationId);
+    } else if (data.type === "folder" && data.id) {
+      success = await moveFolder(data.id, finalDestinationId);
+    }
+
+    if (success) {
+      snackbar.show({ message: `Moved ${data.type} "${data.name}" to folder "${destinationName}"` });
+      closeModal(true);
+    } else {
+      snackbar.show({ message: moveError ?? "Failed to move item" });
+    }
+  };
 
   const folders = cache[active] ?? fetchedFolders;
 
@@ -172,7 +195,7 @@ export default function OrganiseContentDialog({ data, closeModal }: Readonly<Org
             onClick={handleMove}
             className="px-8 py-2.5 rounded-full bg-lavender text-base font-bold hover:bg-lavender/90 transition-all active:scale-95 shadow-lg shadow-lavender/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-surface2 disabled:shadow-none"
           >
-            Move
+            {isMoving ? "Moving..." : "Move"}
           </button>
         </div>
       </div>

@@ -224,5 +224,5 @@ export async function moveFile(
   folderId: number,
 ): Promise<void> {
   const data = { folder: { connect: { id: folderId } } };
-  await updateFile(userWhere, { id: fileId }, data, {});
+  await updateFile(userWhere, { id: fileId }, data, { id: true });
 }
