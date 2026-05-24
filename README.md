@@ -66,16 +66,17 @@ npm run start
 * Preview text file contents
 * verify the magic numbers for mime types
 
+## WIP
+* Sort & Filters
 
 ## TODO
-* Organise file/folder
 * Search
 * Activity
 * Share
 * Versions
-* Sort & Filters
 * Storage
 
 ## LATER
 * Preview in grid view.
-* Options for trash page items
+* Move folder to trash
+* Trash items option menu
