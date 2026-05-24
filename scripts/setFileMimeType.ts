@@ -61,7 +61,6 @@ async function processBatch(cursor?: number) {
    * Define filtering logic
    */
   const whereClause = {
-    deletedAt: null,
     ...(!FORCE_ALL && {
       OR: [
         { mimeType: "" },

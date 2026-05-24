@@ -1,4 +1,4 @@
-import { BROWSER_RENDERABLE_MIMES, MIME_CATEGORY_MAP, PLAIN_TEXT_MIMES } from "./constants";
+import { BROWSER_RENDERABLE_MIMES, CUSTOM_MAP, MIME_CATEGORY_MAP, PLAIN_TEXT_MIMES } from "./constants";
 import { MimeCategory } from "./typedef";
 
 
@@ -18,4 +18,10 @@ export function resolvePlainText(mimeType: string): boolean {
 
 export function resolveBrowserRenderable(mimeType: string): boolean {
   return BROWSER_RENDERABLE_MIMES.has(mimeType);
+}
+
+export function resolveMimeByExtension(filename?: string): string | undefined {
+  if (!filename) return undefined;
+  const ext = filename.split(".").pop()?.toLowerCase() ?? "";
+  return CUSTOM_MAP[ext];
 }

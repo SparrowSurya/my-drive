@@ -1,7 +1,7 @@
 import { CUSTOM_MAP } from "./constants";
 import { MAGIC_SIGNATURES } from "./data";
 import { matchesSignature, readHeader, resolveRiff, isTextBytes } from "./helpers";
-import { resolveBrowserRenderable, resolveCategory, resolvePlainText } from "./resolvers";
+import { resolveBrowserRenderable, resolveCategory, resolveMimeByExtension, resolvePlainText } from "./resolvers";
 import { MimeDetectionResult } from "./typedef";
 
 
@@ -41,11 +41,11 @@ export async function detectMimeType(file: File | Blob): Promise<MimeDetectionRe
     // Ignore decoding errors for non-textual data
   }
 
-  // 3. Custom fallback (Filename Extensions)
-  if (file instanceof File && file.name) {
-    const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
-    const fromExt = CUSTOM_MAP[ext];
-    if (fromExt) return buildResult(fromExt, "custom");
+  // 3. Extension detection for NON-TEXT files
+  const filename = file instanceof File ? file.name : undefined;
+  const fromExt = resolveMimeByExtension(filename);
+  if (fromExt && !resolvePlainText(fromExt)) {
+    return buildResult(fromExt, "custom");
   }
 
   // 4. Browser-reported type (Last hint before heuristics)
@@ -55,6 +55,10 @@ export async function detectMimeType(file: File | Blob): Promise<MimeDetectionRe
 
   // 5. Heuristic text detection (Check for printable bytes / no nulls)
   if (isTextBytes(header)) {
+    // If we detected text, try to refine the MIME type based on the extension
+    if (fromExt && resolvePlainText(fromExt)) {
+      return buildResult(fromExt, "custom");
+    }
     return buildResult("text/plain", "fallback");
   }
 
@@ -96,15 +100,18 @@ export function detectMimeTypeFromBuffer(
     // Ignore
   }
 
-  // 3. Custom fallback (Extensions)
-  if (filename) {
-    const ext = filename.split(".").pop()?.toLowerCase() ?? "";
-    const fromExt = CUSTOM_MAP[ext];
-    if (fromExt) return buildResult(fromExt, "custom");
+  // 3. Extension detection for NON-TEXT files
+  const fromExt = resolveMimeByExtension(filename);
+  if (fromExt && !resolvePlainText(fromExt)) {
+    return buildResult(fromExt, "custom");
   }
 
   // 4. Heuristic text detection
   if (isTextBytes(sample)) {
+    // If we detected text, try to refine the MIME type based on the extension
+    if (fromExt && resolvePlainText(fromExt)) {
+      return buildResult(fromExt, "custom");
+    }
     return buildResult("text/plain", "fallback");
   }
 

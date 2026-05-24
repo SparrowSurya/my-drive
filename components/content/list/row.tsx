@@ -95,7 +95,7 @@ const rowBuilder: ListViewRow = {
       return (
         <div key={key} className="flex flex-row items-center">
           <Icon icon={!!data.parent ? faFolder : faHardDrive} />
-          <span className="ml-2">{!!data.parent ? data.parent : "My Drive"}</span>
+          <span className="ml-2 truncate">{!!data.parent ? data.parent : "My Drive"}</span>
         </div>
       );
     },
