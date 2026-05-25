@@ -3,14 +3,16 @@ import { type ContentData } from "../types";
 import ContentOptionMenu from "../options";
 import { Avatar } from "@/components/avatar";
 import utils from "@/lib/utils";
+import { ViewContext } from "../list/types";
 
 
 export type FileGridItemProps = {
   file: ContentData,
   showFile: (id?: number) => void,
+  viewCtx?: ViewContext,
 };
 
-export default function FileGridItem({ file, showFile }: Readonly<FileGridItemProps>) {
+export default function FileGridItem({ file, showFile, viewCtx }: Readonly<FileGridItemProps>) {
   const lastModified = file.updatedAt instanceof Date
     ? utils.formatDate(file.updatedAt)
     : null;
@@ -23,7 +25,7 @@ export default function FileGridItem({ file, showFile }: Readonly<FileGridItemPr
       <div className="flex flex-row items-center gap-1">
         <FileIcon mimeType={ file.type === "file" ? file.mimeType : undefined } />
         <span className="flex-1 truncate font-medium">{ file.name }</span>
-        <ContentOptionMenu data={ file } />
+        <ContentOptionMenu data={ file } isTrash={viewCtx === "trash"} />
       </div>
       <div
         className="p-3 bg-mantle rounded-md h-42 my-3 overflow-clip"

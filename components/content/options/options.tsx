@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { faDownload, faEllipsisVertical, faFolderOpen, faPencil, faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faEllipsisVertical, faFolderOpen, faPencil, faRefresh, faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import Icon from "@/components/icon";
 import type { ContentData } from "../types";
 import { OptionMenu, Option } from "@/components/option";
@@ -16,9 +16,10 @@ import OrganiseContentDialog from "./dialogues/organiseContent";
 
 export type ContentOptionProps = {
   data: ContentData,
+  isTrash?: boolean,
 };
 
-export default function ContentOption({ data }: Readonly<ContentOptionProps>) {
+export default function ContentOptionMenu({ data, isTrash = false }: Readonly<ContentOptionProps>) {
   const router = useRouter();
   const modal = useModal();
   const [isTransition, startTransition] = useTransition(); // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -58,7 +59,7 @@ export default function ContentOption({ data }: Readonly<ContentOptionProps>) {
     }
   };
 
-  const options: (Option | null)[] = [
+  const defaultOptions: (Option | null)[] = [
     {
       leading: <Icon icon={faDownload} />,
       label: "Download",
@@ -109,6 +110,19 @@ export default function ContentOption({ data }: Readonly<ContentOptionProps>) {
       },
     },
   ];
+
+  const trashOptions: (Option | null)[] = [
+    {
+      leading: <Icon icon={faRefresh} />,
+      label: "Restore",
+    },
+    {
+      leading: <Icon icon={faTrash} />,
+      label: "Delete forever",
+    },
+  ];
+
+  const options = isTrash ? trashOptions : defaultOptions;
 
   return (
     <div className="relative w-7 flex items-center justify-center" ref={buttonRef}>

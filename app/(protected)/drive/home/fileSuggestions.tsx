@@ -6,12 +6,12 @@ import Icon from "@/components/icon";
 import { ContentGridView, ContentListView } from "@/components/content";
 import { FileData } from "@/components/content/types";
 import useContentView from "@/hooks/useContentView";
-import { ListViewColumns } from "@/components/content/list/types";
+import { ListViewColumn } from "@/components/content/list/types";
 import ContentViewToggleButton from "@/components/contentViewToggleButton";
 import useShowContent from "@/hooks/useShowContent";
 
 
-const headings: ListViewColumns[] = [
+const headings: ListViewColumn[] = [
   "name",
   "reason",
   "owner",

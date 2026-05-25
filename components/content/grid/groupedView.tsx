@@ -1,15 +1,17 @@
 import { GroupedContentData } from "../types";
 import { TimelineGroupValues } from "@/lib/utils/date";
 import ContentGridView from "./view";
+import { ViewContext } from "../list/types";
 
 
 export type GroupedContentGridViewProps = {
   data: GroupedContentData,
   showFolder: (id?: number) => void,
   showFile: (id?: number) => void,
+  viewCtx?: ViewContext,
 };
 
-export default function GroupedContentGridView({ data, showFile, showFolder }: Readonly<GroupedContentGridViewProps>) {
+export default function GroupedContentGridView({ data, showFile, showFolder, viewCtx }: Readonly<GroupedContentGridViewProps>) {
   const isEmpty = Object.keys(data).length === 0;
   if (isEmpty) return null;
 
@@ -25,7 +27,12 @@ export default function GroupedContentGridView({ data, showFile, showFolder }: R
               {group}
             </div>
           </div>
-          <ContentGridView data={data[group]} showFile={showFile} showFolder={showFolder} />
+          <ContentGridView
+            data={data[group]}
+            showFile={showFile}
+            showFolder={showFolder}
+            viewCtx={viewCtx}
+          />
         </div>
       ))}
     </div>

@@ -1,17 +1,18 @@
 import { GroupedContentData } from "../types";
 import { TimelineGroupValues } from "@/lib/utils/date";
-import { ListViewColumns } from "./types";
+import { ListViewColumn, ViewContext } from "./types";
 import ContentListView from "./view";
 
 
 export type GroupedContentListViewProps = {
   data: GroupedContentData,
-  cols: ListViewColumns[],
+  cols: ListViewColumn[],
   showFolder: (id?: number) => void,
   showFile: (id?: number) => void,
+  viewCtx?: ViewContext,
 };
 
-export default function GroupedContentListView({ data, cols, showFile, showFolder }: Readonly<GroupedContentListViewProps>) {
+export default function GroupedContentListView({ data, cols, showFile, showFolder, viewCtx }: Readonly<GroupedContentListViewProps>) {
   const isEmpty = Object.keys(data).length === 0;
   if (isEmpty) return null;
 
@@ -20,7 +21,14 @@ export default function GroupedContentListView({ data, cols, showFile, showFolde
   return (
     <>
       <div className="pb-2">
-        <ContentListView showHeading={true} data={[]} cols={cols} showFile={showFile} showFolder={showFolder} />
+        <ContentListView
+          showHeading={true}
+          data={[]}
+          cols={cols}
+          showFile={showFile}
+          showFolder={showFolder}
+          viewCtx={viewCtx}
+        />
       </div>
       <div className="flex flex-col gap-3 overflow-y-auto">
         {groups.map((group) => (
@@ -30,7 +38,14 @@ export default function GroupedContentListView({ data, cols, showFile, showFolde
                 {group}
               </div>
             </div>
-            <ContentListView showHeading={false} data={data[group]} cols={cols} showFile={showFile} showFolder={showFolder} />
+            <ContentListView
+              showHeading={false}
+              data={data[group]}
+              cols={cols}
+              showFile={showFile}
+              showFolder={showFolder}
+              viewCtx={viewCtx}
+            />
           </div>
         ))}
       </div>

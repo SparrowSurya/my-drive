@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ContentListView, ContentGridView } from "@/components/content";
-import { ListViewColumns } from "@/components/content/list/types";
+import { ListViewColumn } from "@/components/content/list/types";
 import { ContentData } from "@/components/content/types";
 import ContentDropZone from "./dropzone";
 import useShowContent from "@/hooks/useShowContent";
@@ -10,7 +10,7 @@ import useContentView from "@/hooks/useContentView";
 import EmptyState, { EmptyStateProps } from "../emptyState";
 
 
-const columns: ListViewColumns[] = ["name", "owner", "lastModified", "fileSize", "elipsis"];
+const headings: ListViewColumn[] = ["name", "owner", "updatedAt", "fileSize", "elipsis"];
 
 export type ContentViewProps = {
   emptyStateProps: EmptyStateProps,
@@ -29,7 +29,7 @@ export default function ContentView({ data, emptyStateProps }: Readonly<ContentV
           data && data.length > 0 && (
             gridView
               ? <ContentGridView data={data} showFolder={showFolder} showFile={showFile} />
-              : <ContentListView data={data} cols={columns} showFolder={showFolder} showFile={showFile} />
+              : <ContentListView data={data} cols={headings} showFolder={showFolder} showFile={showFile} />
           )
         }
       </ContentDropZone>

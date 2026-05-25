@@ -5,7 +5,7 @@ import ContentViewToggleButton from "@/components/contentViewToggleButton";
 import Icon from "@/components/icon";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import GroupedContentView from "@/components/content/groupedView";
-import { ListViewColumns } from "@/components/content/list/types";
+import { ListViewColumn } from "@/components/content/list/types";
 
 
 export const metadata: Metadata = {
@@ -22,9 +22,9 @@ export default async function RecentPage() {
     para: "See all the files that you've recently edited or opened",
   };
 
-  const headings: ListViewColumns[] = [
+  const headings: ListViewColumn[] = [
     "name",
-    "lastModified",
+    "updatedAt",
     "owner",
     "fileSize",
     "location",

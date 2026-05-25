@@ -1,18 +1,21 @@
 import React from "react";
 import { ContentData } from "../types";
-import { colDivisions, type ListViewColumns } from "./types";
-import rowBuilder from "./row";
+import { listColumnTemplate, ViewContext, type ListViewColumn } from "./types";
+import columnRenderer from "./columns";
 
 
 export type FileListViewProps = {
-  cols: ListViewColumns[],
+  cols: ListViewColumn[],
   data: ContentData[],
   showFolder: (id?: number) => void,
   showFile: (id?: number) => void,
   className?: string,
   scrollable?: boolean,
   showHeading?: boolean,
+  headings?: Partial<Record<ListViewColumn, string>>,
+  viewCtx?: ViewContext,
 };
+
 
 export default function ContentListView({
   cols,
@@ -22,8 +25,10 @@ export default function ContentListView({
   className,
   scrollable = true,
   showHeading = true,
+  headings = {},
+  viewCtx,
 }: Readonly<FileListViewProps>) {
-  const gridTemplateColumns = cols.map((c) => colDivisions[c]).join(' ');
+  const gridTemplateColumns = cols.map((c) => listColumnTemplate[c]).join(' ');
 
   return (
     <div className={className ?? "flex flex-col h-full w-full select-none overflow-hidden"}>
@@ -34,9 +39,7 @@ export default function ContentListView({
         >
           {
             cols.map((col) => (
-              <div key={col} className="flex items-center">
-                { rowBuilder[col].head }
-              </div>
+              columnRenderer[col].heading(col, { headings })
             ))
           }
         </div>
@@ -51,7 +54,7 @@ export default function ContentListView({
             onDoubleClick={f.type == "folder" ? () => showFolder(f.id): () => showFile(f.id)}
           >
             {
-              cols.map((col) => rowBuilder[col].body(f, col))
+              cols.map((col) => columnRenderer[col].content(col, { data: f, viewCtx }))
             }
           </div>
         ))

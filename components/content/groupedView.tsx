@@ -6,16 +6,17 @@ import { GroupedContentData } from "./types";
 import GroupedContentGridView from "./grid/groupedView";
 import GroupedContentListView from "./list/groupedView";
 import useShowContent from "@/hooks/useShowContent";
-import { ListViewColumns } from "./list/types";
+import { ListViewColumn, ViewContext } from "./list/types";
 
 
 export type GroupedContentViewProps = {
   data: GroupedContentData,
   emptyStateProps: EmptyStateProps,
-  cols: ListViewColumns[],
+  cols: ListViewColumn[],
+  viewCtx?: ViewContext,
 };
 
-export default function GroupedContentView({ data, cols, emptyStateProps }: Readonly<GroupedContentViewProps>) {
+export default function GroupedContentView({ data, cols, emptyStateProps, viewCtx }: Readonly<GroupedContentViewProps>) {
   const { showFolder, showFile } = useShowContent();
   const { gridView } = useContentView();
   const isEmpty = Object.keys(data).length === 0;
@@ -25,8 +26,19 @@ export default function GroupedContentView({ data, cols, emptyStateProps }: Read
       {isEmpty && <EmptyState {...emptyStateProps} />}
       {!isEmpty && (
         gridView
-          ? <GroupedContentGridView data={data} showFolder={showFolder} showFile={showFile} />
-          : <GroupedContentListView data={data} cols={cols} showFolder={showFolder} showFile={showFile} />
+          ? <GroupedContentGridView
+              data={data}
+              showFolder={showFolder}
+              showFile={showFile}
+              viewCtx={viewCtx}
+            />
+          : <GroupedContentListView
+              data={data}
+              cols={cols}
+              showFolder={showFolder}
+              showFile={showFile}
+              viewCtx={viewCtx}
+            />
       )}
     </>
   );
