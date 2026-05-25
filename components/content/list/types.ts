@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { ContentData } from "../types";
+import { SortOption } from "@/hooks/useSort";
 
 
 export type ListViewColumn = (
@@ -32,6 +33,8 @@ type ListColumnBuilderProps = {
 
 export type ListColumnHeadingBuilderProps = {
   headings: Partial<Record<ListViewColumn, string>>;
+  applySort?: (opt: SortOption | null) => void;
+  sortOption?: SortOption | null,
 } & ListColumnBuilderProps;
 
 export type ListColumnContentBuilderProps = {

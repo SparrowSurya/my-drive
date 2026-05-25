@@ -1,7 +1,10 @@
+"use client";
+
 import React from "react";
 import { ContentData } from "../types";
 import { listColumnTemplate, ViewContext, type ListViewColumn } from "./types";
 import columnRenderer from "./columns";
+import useSort from "@/hooks/useSort";
 
 
 export type FileListViewProps = {
@@ -29,6 +32,11 @@ export default function ContentListView({
   viewCtx,
 }: Readonly<FileListViewProps>) {
   const gridTemplateColumns = cols.map((c) => listColumnTemplate[c]).join(' ');
+  const { updatedData, sortOption, applySort } = useSort({ data });
+  const viewData = [
+    ...updatedData.filter((f) => f.type === "folder"),
+    ...updatedData.filter((f) => f.type === "file"),
+  ];
 
   return (
     <div className={className ?? "flex flex-col h-full w-full select-none overflow-hidden"}>
@@ -38,15 +46,15 @@ export default function ContentListView({
           style={{ gridTemplateColumns }}
         >
           {
-            cols.map((col) => (
-              columnRenderer[col].heading(col, { headings })
-            ))
+            cols.map((col) =>
+              columnRenderer[col].heading(col, { headings, applySort, sortOption })
+            )
           }
         </div>
       )}
       <div className={`w-full ${scrollable ? "w-full flex-1 overflow-y-auto min-h-0" : "w-full flex flex-col"}`}>
       {
-        data.map((f) => (
+        viewData.map((f) => (
           <div
             key={f.id}
             className="grid gap-x-2 h-12 border-b-2 border-surface0 hover:bg-overlay0/30"

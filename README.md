@@ -67,7 +67,7 @@ npm run start
 * verify the magic numbers for mime types
 
 ## WIP
-* Sort & Filters
+* Filters
 
 ## TODO
 * Search
@@ -79,4 +79,3 @@ npm run start
 ## LATER
 * Preview in grid view.
 * Move folder to trash
-* Trash items option menu
