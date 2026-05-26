@@ -194,7 +194,7 @@ export async function softDelete<T extends Prisma.FileSelect>(
   fileWhere: Prisma.FileWhereUniqueInput,
   select: T,
 ): Promise<Prisma.FileGetPayload<{ select: T }>> {
-  const data = { deletedAt: new Date() };
+  const data = { deletedAt: new Date(), directDelete: true };
   return await updateFile(userWhere, fileWhere, data, select);
 }
 
@@ -210,6 +210,7 @@ export async function getDeletedFiles<T extends Prisma.FileSelect>(
         user: userWhere,
       },
       deletedAt: { not: null },
+      directDelete: true,
     },
     select,
     orderBy: {
@@ -231,7 +232,7 @@ export async function restoreFile(
   userWhere: Prisma.UserWhereUniqueInput,
   fileId: number,
 ): Promise<void> {
-  const data = { deletedAt: null };
+  const data = { deletedAt: null, directDelete: null };
   const fileWhere = { id: fileId, deletedAt: { not: null } };
   await updateFile(userWhere, fileWhere, data, { id: true });
 }

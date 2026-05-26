@@ -1,5 +1,6 @@
 import { GroupedContentData } from "@/components/content/types";
 import { getDeletedFiles } from "@/lib/query/file";
+import { getDeletedFolders } from "@/lib/query/folder";
 import utils from "@/lib/utils";
 import { groupByTimeline } from "@/lib/utils/date";
 import { getServerSession } from "next-auth";
@@ -10,7 +11,7 @@ export async function getTrashFiles(): Promise<GroupedContentData> {
   const email = session?.user.email;
   if (email == null) return {} as GroupedContentData;
 
-  const select = {
+  const fileSelect = {
     id: true,
     name: true,
     updatedAt: false,
@@ -28,8 +29,26 @@ export async function getTrashFiles(): Promise<GroupedContentData> {
       },
     }
   };
-  const files = await getDeletedFiles({ email }, select);
+
+  const folderSelect = {
+    id: true,
+    name: true,
+    updatedAt: false,
+    deletedAt: true,
+    user: {
+      select: { name: true, email: true },
+    }
+  }
+
+  const [files, folders] = await Promise.all([
+    getDeletedFiles({ email }, fileSelect),
+    getDeletedFolders({ email }, folderSelect),
+  ]);
+
   const filesData = files.map(f => utils.map2FileData(email, f));
-  filesData.forEach((f) => f.reason = undefined);
-  return groupByTimeline(filesData, (i) => i.deletedAt!);
+  const foldersData = folders.map(f => utils.map2FolderData(email, f));
+
+  const content = [...filesData, ...foldersData];
+  content.forEach((f) => f.reason = undefined);
+  return groupByTimeline(content, (i) => i.deletedAt!);
 }

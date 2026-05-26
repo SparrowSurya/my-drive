@@ -40,6 +40,9 @@ export async function getFolders<T extends Prisma.FolderSelect>(
       parent: {
         is: { ...parentWhere, user: userWhere },
       },
+      folder: {
+        deletedAt: null,
+      },
     },
     select: {
       folder: { select },
@@ -213,10 +216,11 @@ export async function getFolder(
   folderWhere: Prisma.FolderWhereUniqueInput,
   select?: Prisma.FolderSelect,
 ): Promise<Prisma.FolderGetPayload<{ select?: Prisma.FolderSelect }>> {
-  return await prisma.folder.findUniqueOrThrow({
+  return await prisma.folder.findFirstOrThrow({
     where: {
       user: userWhere,
       ...folderWhere,
+      deletedAt: null,
     },
     select,
   });
@@ -256,7 +260,10 @@ export async function getFolderContents(
     }
 
     const folders = await prisma.hierarchy.findMany({
-      where: { parentId },
+      where: {
+        parentId,
+        folder: { deletedAt: null },
+      },
       select: {
         folderId: true,
         folder: { select: { name: true } },
@@ -280,7 +287,7 @@ export async function getRecentFolders<T extends Prisma.FolderSelect>(
   take?: number,
 ): Promise<Prisma.FolderGetPayload<{ select: T }>[]> {
   return await prisma.folder.findMany({
-    where: { user: userWhere },
+    where: { user: userWhere, deletedAt: null },
     orderBy: { createdAt: "desc" },
     select,
     take,
@@ -296,7 +303,10 @@ export async function getChildren<T extends Prisma.FolderSelect>(
   return (await prisma.hierarchy.findMany({
     where: {
       parentId: id,
-      folder: { user: userWhere },
+      folder: {
+        user: userWhere,
+        deletedAt: null,
+      },
     },
     orderBy: {
       folder: { updatedAt: "desc" },
@@ -319,6 +329,100 @@ export async function moveFolder(
     },
     data: {
       parentId: targetFolderId,
+    },
+  });
+}
+
+export async function softDeleteFolder(
+  userWhere: Prisma.UserWhereUniqueInput,
+  folderId: number,
+): Promise<Prisma.FolderGetPayload<{ select: { name: true } }>> {
+  const now = new Date();
+
+  const folder = await prisma.folder.update({
+    where: { id: folderId, user: userWhere },
+    data: { deletedAt: now, directDelete: true },
+    select: { name: true },
+  });
+
+  const stack = [folderId];
+  while (stack.length > 0) {
+    const currentId = stack.pop()!;
+
+    await prisma.file.updateMany({
+      where: { folderId: currentId, deletedAt: null },
+      data: { deletedAt: now, directDelete: false },
+    });
+
+    const children = await prisma.hierarchy.findMany({
+      where: { parentId: currentId },
+      select: { folderId: true },
+    });
+
+    for (const child of children) {
+      const updatedChild = await prisma.folder.updateMany({
+        where: { id: child.folderId, deletedAt: null },
+        data: { deletedAt: now, directDelete: false },
+      });
+
+      if (updatedChild.count > 0) {
+        stack.push(child.folderId);
+      }
+    }
+  }
+
+  return folder;
+}
+
+export async function restoreFolder(
+  userWhere: Prisma.UserWhereUniqueInput,
+  folderId: number,
+): Promise<void> {
+  await prisma.folder.update({
+    where: { id: folderId, user: userWhere },
+    data: { deletedAt: null, directDelete: null },
+  });
+
+  const stack = [folderId];
+  while (stack.length > 0) {
+    const currentId = stack.pop()!;
+
+    await prisma.file.updateMany({
+      where: { folderId: currentId, directDelete: false },
+      data: { deletedAt: null, directDelete: null },
+    });
+
+    const children = await prisma.hierarchy.findMany({
+      where: { parentId: currentId },
+      select: { folderId: true },
+    });
+
+    for (const child of children) {
+      const updatedChild = await prisma.folder.updateMany({
+        where: { id: child.folderId, directDelete: false },
+        data: { deletedAt: null, directDelete: null },
+      });
+
+      if (updatedChild.count > 0) {
+        stack.push(child.folderId);
+      }
+    }
+  }
+}
+
+export async function getDeletedFolders<T extends Prisma.FolderSelect>(
+  userWhere: Prisma.UserWhereUniqueInput,
+  select: T,
+): Promise<Prisma.FolderGetPayload<{ select: T }>[]> {
+  return await prisma.folder.findMany({
+    where: {
+      user: userWhere,
+      deletedAt: { not: null },
+      directDelete: true,
+    },
+    select,
+    orderBy: {
+      deletedAt: "desc",
     },
   });
 }
