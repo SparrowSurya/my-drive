@@ -2,15 +2,17 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ContentData } from "@/components/content/types";
+import { ContentData, GroupedContentData } from "@/components/content/types";
+import { isArchive, isAudio, isDocument, isImage, isPdf, isPresentation, isSpreadsheet, isVideo } from "@/lib/mime/utils";
+import utils from "@/lib/utils";
 
 
 export type FilterPredicate = (item: ContentData) => boolean;
 
 export type ActiveFilters = Record<string, FilterPredicate>;
 
-export type FilterProps = {
-  data: ContentData[];
+export type FilterProps<T extends ContentData[] | GroupedContentData> = {
+  data: T;
 };
 
 export type FilterFn = (value: any) => boolean;
@@ -52,13 +54,26 @@ export const FilterBuilders = {
   },
 };
 
-export default function useFilter({ data }: Readonly<FilterProps>) {
+export default function useFilter<T extends ContentData[] | GroupedContentData>({ data }: Readonly<FilterProps<T>>) {
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
 
   const filteredData = useMemo(() => {
-    return data.filter((item) => {
+    const filterItem = (item: ContentData) => {
       return Object.values(activeFilters).every((predicate) => predicate(item));
-    });
+    };
+
+    if (Array.isArray(data)) {
+      return data.filter(filterItem) as T;
+    } else {
+      const result = {} as GroupedContentData;
+      for (const [group, items] of Object.entries(data)) {
+        const filteredItems = (items as ContentData[]).filter(filterItem);
+        if (filteredItems.length > 0) {
+          result[group as keyof GroupedContentData] = filteredItems;
+        }
+      }
+      return result as T;
+    }
   }, [data, activeFilters]);
 
   const applyFilter = (key: string, predicate: FilterPredicate | null) => {
@@ -82,3 +97,44 @@ export default function useFilter({ data }: Readonly<FilterProps>) {
     clearFilters,
   };
 }
+
+const filters = {
+  mimeType: [
+    ["Documents", FilterBuilders.filter("mimeType", (v) => isDocument(v))],
+    ["Images", FilterBuilders.filter("mimeType", (v) => isImage(v))],
+    ["Videos", FilterBuilders.filter("mimeType", (v) => isVideo(v))],
+    ["Audio", FilterBuilders.filter("mimeType", (v) => isAudio(v))],
+    ["PDFs", FilterBuilders.filter("mimeType", (v) => isPdf(v))],
+    ["Spreadsheets", FilterBuilders.filter("mimeType", (v) => isSpreadsheet(v))],
+    ["Presentations", FilterBuilders.filter("mimeType", (v) => isPresentation(v))],
+    ["Archives", FilterBuilders.filter("mimeType", (v) => isArchive(v))],
+    ["Files", FilterBuilders.filter("type", (v) => v === "file")],
+    ["Folders", FilterBuilders.filter("type", (v) => v === "folder")],
+  ],
+  updatedAt: [
+    ["Today", FilterBuilders.isAfter("updatedAt", utils.startOfDay(new Date()))],
+    ["This week", FilterBuilders.isAfter("updatedAt", utils.startOfWeek(new Date()))],
+    ["This month", FilterBuilders.isAfter("updatedAt", utils.startOfMonth(new Date()))],
+    ["This year", FilterBuilders.isAfter("updatedAt", utils.startOfYear(new Date()))],
+    ["Last year", FilterBuilders.inDateRange(
+      "updatedAt",
+      utils.startOfYear(new Date(new Date().getFullYear() - 1, 0, 1)),
+      utils.startOfYear(new Date())
+    )],
+  ],
+};
+
+const mimeTypeByLabel: Record<string, string | undefined> = {
+  "Documents": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "Images": "image/png",
+  "Videos": "video/mp4",
+  "Audio": "audio/wav",
+  "PDFs": "application/pdf",
+  "Spreadsheets": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "Presentations": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "Archives": "application/zip",
+  "Files": "",
+  "Folders": undefined,
+};
+
+export { filters, mimeTypeByLabel };

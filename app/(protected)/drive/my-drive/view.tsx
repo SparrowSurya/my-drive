@@ -9,9 +9,7 @@ import { SegmentData } from "@/components/breadcrumbs/breadcrumbs";
 import ContentViewToggleButton from "@/components/contentViewToggleButton";
 import { EmptyStateProps } from "@/components/emptyState";
 import MenuButton from "@/components/menuButton";
-import useFilter, { FilterBuilders, FilterPredicate } from "@/hooks/useFilter";
-import { isArchive, isAudio, isDocument, isImage, isPdf, isPresentation, isSpreadsheet, isVideo } from "@/lib/mime/utils";
-import utils from "@/lib/utils";
+import useFilter, { FilterPredicate, filters, mimeTypeByLabel } from "@/hooks/useFilter";
 import FileIcon from "@/components/content/fileIcon";
 import { Option } from "@/components/option";
 
@@ -22,48 +20,8 @@ export type FolderViewProps = {
   emptyStateProps: EmptyStateProps,
 };
 
-const filters = {
-  mimeType: [
-    ["Documents", FilterBuilders.filter("mimeType", (v) => isDocument(v))],
-    ["Images", FilterBuilders.filter("mimeType", (v) => isImage(v))],
-    ["Videos", FilterBuilders.filter("mimeType", (v) => isVideo(v))],
-    ["Audio", FilterBuilders.filter("mimeType", (v) => isAudio(v))],
-    ["PDFs", FilterBuilders.filter("mimeType", (v) => isPdf(v))],
-    ["Spreadsheets", FilterBuilders.filter("mimeType", (v) => isSpreadsheet(v))],
-    ["Presentations", FilterBuilders.filter("mimeType", (v) => isPresentation(v))],
-    ["Archives", FilterBuilders.filter("mimeType", (v) => isArchive(v))],
-    ["Files", FilterBuilders.filter("type", (v) => v === "file")],
-    ["Folders", FilterBuilders.filter("type", (v) => v === "folder")],
-  ],
-  updatedAt: [
-    ["Today", FilterBuilders.isAfter("updatedAt", utils.startOfDay(new Date()))],
-    ["This week", FilterBuilders.isAfter("updatedAt", utils.startOfWeek(new Date()))],
-    ["This month", FilterBuilders.isAfter("updatedAt", utils.startOfMonth(new Date()))],
-    ["This year", FilterBuilders.isAfter("updatedAt", utils.startOfYear(new Date()))],
-    ["Last year", FilterBuilders.inDateRange(
-      "updatedAt",
-      utils.startOfYear(new Date(new Date().getFullYear() - 1, 0, 1)),
-      utils.startOfYear(new Date())
-    )],
-  ],
-};
-
-const mimeTypeByLabel: Record<string, string | undefined> = {
-  "Documents": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  "Images": "image/png",
-  "Videos": "video/mp4",
-  "Audio": "audio/wav",
-  "PDFs": "application/pdf",
-  "Spreadsheets": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  "Presentations": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-  "Archives": "application/zip",
-  "Files": "",
-  "Folders": undefined,
-};
-
 export default function FolderView({ data, segments, emptyStateProps }: Readonly<FolderViewProps>) {
   const { filteredData, activeFilters, applyFilter } = useFilter({ data });
-  console.log("FileteredData:", filteredData);
 
   const selectedMimeOption = filters.mimeType.find(([label]) => activeFilters[label as string])?.[0] as string | undefined;
   const selectedModifiedOption = filters.updatedAt.find(([label]) => activeFilters[label as string])?.[0] as string | undefined;
