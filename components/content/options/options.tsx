@@ -27,15 +27,31 @@ export default function ContentOptionMenu({ data, isTrash = false }: Readonly<Co
   const { downloadFile, downloadFolder } = useDownload();
 
   const buttonRef = useRef<HTMLDivElement>(null);
-  const [menuPos, setMenuPos] = useState({ top: 0, left: 0 });
+  const [menuPos, setMenuPos] = useState<{ top?: number, bottom?: number, left: number }>({ top: 0, left: 0 });
 
   useEffect(() => {
     if (showOptionMenu && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
-      setMenuPos({
-        top: rect.bottom + 8,
-        left: rect.right - 256,
-      });
+      const vh = window.innerHeight;
+      const vw = window.innerWidth;
+      
+      const spaceBelow = vh - rect.bottom;
+      const spaceAbove = rect.top;
+      const menuWidth = 256;
+      
+      const left = Math.max(8, Math.min(rect.right - menuWidth, vw - menuWidth - 8));
+
+      if (spaceBelow < 320 && spaceAbove > spaceBelow) {
+        setMenuPos({
+          bottom: vh - rect.top + 8,
+          left,
+        });
+      } else {
+        setMenuPos({
+          top: rect.bottom + 8,
+          left,
+        });
+      }
     }
   }, [showOptionMenu]);
 
@@ -134,6 +150,7 @@ export default function ContentOptionMenu({ data, isTrash = false }: Readonly<Co
             className="fixed shadow-2xl"
             style={{
               top: menuPos.top,
+              bottom: menuPos.bottom,
               left: menuPos.left,
               zIndex: 1000001
             }}
