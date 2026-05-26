@@ -12,6 +12,8 @@ import RenameFolderDialog from "./dialogues/renameFolder";
 import SoftDeleteDialog from "./dialogues/softDelete";
 import useModal from "@/hooks/useModal";
 import OrganiseContentDialog from "./dialogues/organiseContent";
+import { restoreDeletedFile } from "./actions";
+import useSnackbar from "@/hooks/useSnackbar";
 
 
 export type ContentOptionProps = {
@@ -22,6 +24,7 @@ export type ContentOptionProps = {
 export default function ContentOptionMenu({ data, isTrash = false }: Readonly<ContentOptionProps>) {
   const router = useRouter();
   const modal = useModal();
+  const snackbar = useSnackbar();
   const [isTransition, startTransition] = useTransition(); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [showOptionMenu, setShowOptionMenu] = useState<boolean>(false);
   const { downloadFile, downloadFolder } = useDownload();
@@ -34,11 +37,11 @@ export default function ContentOptionMenu({ data, isTrash = false }: Readonly<Co
       const rect = buttonRef.current.getBoundingClientRect();
       const vh = window.innerHeight;
       const vw = window.innerWidth;
-      
+
       const spaceBelow = vh - rect.bottom;
       const spaceAbove = rect.top;
       const menuWidth = 256;
-      
+
       const left = Math.max(8, Math.min(rect.right - menuWidth, vw - menuWidth - 8));
 
       if (spaceBelow < 320 && spaceAbove > spaceBelow) {
@@ -131,6 +134,21 @@ export default function ContentOptionMenu({ data, isTrash = false }: Readonly<Co
     {
       leading: <Icon icon={faRefresh} />,
       label: "Restore",
+      props: {
+        async onClick() {
+          closeOptionMenu();
+          if (!!data.id) {
+            const success = await restoreDeletedFile(data.id);
+            const message = success
+              ? `Restored ${data.type} "${data.name}"`
+              : `Failed to restore ${data.type} "${data.name}`;
+            snackbar.show({ message });
+            if (success) router.refresh();
+          } else {
+            console.error(`Tried to delete ${data.type} with invalid ID=${data.id}`);
+          }
+        }
+      },
     },
     {
       leading: <Icon icon={faTrash} />,

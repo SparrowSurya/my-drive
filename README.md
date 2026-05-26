@@ -73,7 +73,6 @@ npm run start
 * verify the magic numbers for mime types
 
 ## WIP
-* Restore deleted file
 * Move folder to trash
 * Restore deleted folder
 

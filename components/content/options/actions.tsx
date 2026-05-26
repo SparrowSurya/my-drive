@@ -2,7 +2,7 @@
 
 import { getServerSession } from "next-auth";
 import { updateFolder } from "@/lib/query/folder";
-import { softDelete, updateFile } from "@/lib/query/file";
+import { restoreFile, softDelete, updateFile } from "@/lib/query/file";
 import { RenameFolderSchema, RenameFileSchema, FileSoftDeleteSchema } from "@/lib/schema";
 
 
@@ -127,4 +127,19 @@ export async function FileSoftDeleteAction(state: FileSoftDeleteState, formData:
       errors: { root: "Something went wrong" },
     };
   }
+}
+
+export async function restoreDeletedFile(id: number): Promise<boolean> {
+  const session = await getServerSession();
+  const { email } = session?.user ?? {};
+  if (!email) return false;
+
+  let success = true;
+  try {
+    await restoreFile({ email }, id);
+  } catch {
+    success = false;
+  }
+
+  return success;
 }

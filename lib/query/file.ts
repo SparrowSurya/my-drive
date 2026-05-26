@@ -67,8 +67,8 @@ export async function updateFile<T extends Prisma.FileSelect>(
       folder: {
         user: userWhere,
       },
-      ...fileWhere,
       deletedAt: null,
+      ...fileWhere,
     },
     data: values,
     select,
@@ -225,4 +225,13 @@ export async function moveFile(
 ): Promise<void> {
   const data = { folder: { connect: { id: folderId } } };
   await updateFile(userWhere, { id: fileId }, data, { id: true });
+}
+
+export async function restoreFile(
+  userWhere: Prisma.UserWhereUniqueInput,
+  fileId: number,
+): Promise<void> {
+  const data = { deletedAt: null };
+  const fileWhere = { id: fileId, deletedAt: { not: null } };
+  await updateFile(userWhere, fileWhere, data, { id: true });
 }
