@@ -1,8 +1,8 @@
 import React from "react";
 import { GroupedContentData } from "../types";
-import { TimelineGroupValues } from "@/lib/utils/date";
 import { ListViewColumn, ViewContext } from "./types";
 import ContentListView from "./view";
+import useSort from "@/hooks/useSort";
 
 
 export type GroupedContentListViewProps = {
@@ -14,10 +14,10 @@ export type GroupedContentListViewProps = {
 };
 
 export default function GroupedContentListView({ data, cols, showFile, showFolder, viewCtx }: Readonly<GroupedContentListViewProps>) {
+  const { sortedData, applySort, sortOption } = useSort({ data });
   const isEmpty = Object.keys(data).length === 0;
-  if (isEmpty) return null;
 
-  const groups = TimelineGroupValues.filter((group) => data[group] && data[group].length > 0);
+  if (isEmpty) return null;
 
   return (
     <>
@@ -29,10 +29,13 @@ export default function GroupedContentListView({ data, cols, showFile, showFolde
           showFile={showFile}
           showFolder={showFolder}
           viewCtx={viewCtx}
+          internalSort={false}
+          applySortProp={applySort}
+          sortOptionProp={sortOption}
         />
       </div>
       <div className="flex flex-col gap-3 overflow-y-auto">
-        {groups.map((group) => (
+        {Object.entries(sortedData).map(([group, data]) => (
           <div key={`ListGroup-${group}`}>
             <div className="sticky top-0 bg-mantle z-10 pb-1">
               <div className="text-md font-medium tracking-wide text-subtext0">
@@ -41,11 +44,12 @@ export default function GroupedContentListView({ data, cols, showFile, showFolde
             </div>
             <ContentListView
               showHeading={false}
-              data={data[group]}
+              data={data}
               cols={cols}
               showFile={showFile}
               showFolder={showFolder}
               viewCtx={viewCtx}
+              internalSort={false}
             />
           </div>
         ))}

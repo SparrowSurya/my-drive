@@ -4,7 +4,7 @@ import React from "react";
 import { ContentData } from "../types";
 import { listColumnTemplate, ViewContext, type ListViewColumn } from "./types";
 import columnRenderer from "./columns";
-import useSort from "@/hooks/useSort";
+import useSort, { SortOption } from "@/hooks/useSort";
 
 
 export type FileListViewProps = {
@@ -17,6 +17,9 @@ export type FileListViewProps = {
   showHeading?: boolean,
   headings?: Partial<Record<ListViewColumn, string>>,
   viewCtx?: ViewContext,
+  internalSort?: boolean,
+  sortOptionProp?: SortOption | null,
+  applySortProp?: (opt: SortOption | null) => void,
 };
 
 
@@ -30,13 +33,24 @@ export default function ContentListView({
   showHeading = true,
   headings = {},
   viewCtx,
+  internalSort = true,
+  applySortProp,
+  sortOptionProp,
 }: Readonly<FileListViewProps>) {
   const gridTemplateColumns = cols.map((c) => listColumnTemplate[c]).join(' ');
   const { sortedData, sortOption, applySort } = useSort({ data });
-  const updatedData = [
-    ...sortedData.filter((f) => f.type === "folder"),
-    ...sortedData.filter((f) => f.type === "file"),
-  ];
+  const updatedData =  internalSort
+    ? [
+        ...sortedData.filter((f) => f.type === "folder"),
+        ...sortedData.filter((f) => f.type === "file"),
+      ]
+    : data;
+
+  const headingProps = {
+    headings,
+    applySort: internalSort ? applySort : applySortProp,
+    sortOption: internalSort ? sortOption : sortOptionProp,
+  };
 
   return (
     <div className={className ?? "flex flex-col h-full w-full select-none overflow-hidden"}>
@@ -47,7 +61,7 @@ export default function ContentListView({
         >
           {
             cols.map((col) =>
-              columnRenderer[col].heading(col, { headings, applySort, sortOption })
+              columnRenderer[col].heading(col, headingProps)
             )
           }
         </div>
