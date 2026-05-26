@@ -15,7 +15,7 @@ export default function GroupedContentGridView({ data, showFile, showFolder, vie
   const isEmpty = Object.keys(data).length === 0;
   if (isEmpty) return null;
 
-  const groups = TimelineGroupValues.filter((group) => data[group].length > 0);
+  const groups = TimelineGroupValues.filter((group) => (data[group]?.length ?? 0) > 0);
 
   return (
     <div className="flex flex-col gap-6 overflow-y-auto">
