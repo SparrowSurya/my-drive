@@ -46,6 +46,7 @@ npm run start
 * My drive: display files and folders (list view)
 * display folder contents (list view)
 * file(s)/folder(s) upload via drag drop
+* Sort & Filters
 
 3. Navbar
 * Display navlinks (with navigation)
@@ -57,17 +58,22 @@ npm run start
 * Display files & folders in list/grid view
 * Show options (download, rename, organise, share, move to trash)
 * Rename option
+* Sort & Filters
 
 5. Home
 * File suggestions
 * Folder suggestions
+* Sort & Filters
+
+6. Trash
+* Display files and folders in grouped list/grid view
+* Show options (non functional)
 
 ## Partially Tested
-* Preview text file contents
 * verify the magic numbers for mime types
 
 ## WIP
-* Filters (GrouedContentView)
+* Sort on grouped content data list view
 
 ## TODO
 * Search
