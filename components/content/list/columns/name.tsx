@@ -5,7 +5,7 @@ import Icon from "@/components/icon";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 
 
-export function ListColumnNameHeading({ headings, applySort, sortOption }: Readonly<ListColumnHeadingBuilderProps>) {
+export function ListColumnNameHeading({ headings, applySort, sortOption, viewCtx }: Readonly<ListColumnHeadingBuilderProps>) {
   const myKey = "name";
   const order = sortOption?.order;
   const heading = headings[myKey] ?? "Name";
@@ -13,7 +13,8 @@ export function ListColumnNameHeading({ headings, applySort, sortOption }: Reado
     ? (order === "asc" ? faArrowUp : order === "desc" ? faArrowDown : null)
     : null;
 
-  const sort = !!applySort ? () => {
+  const enable = viewCtx !== "recent";
+  const sort = (!!applySort && enable) ? () => {
     const nextOrder = order === "asc" ? "desc" : order === "desc" ? null : "asc";
     const opt = nextOrder === null ? null : {
       key: myKey,

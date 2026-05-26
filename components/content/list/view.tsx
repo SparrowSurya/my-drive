@@ -48,6 +48,7 @@ export default function ContentListView({
 
   const headingProps = {
     headings,
+    viewCtx,
     applySort: internalSort ? applySort : applySortProp,
     sortOption: internalSort ? sortOption : sortOptionProp,
   };
