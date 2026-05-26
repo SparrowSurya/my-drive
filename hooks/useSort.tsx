@@ -1,5 +1,5 @@
 import { ContentData } from "@/components/content/types";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
 
 export type SortKey = "name" | "updatedAt";
@@ -36,10 +36,9 @@ export type SortProps = {
 };
 
 export default function useSort({ data }: Readonly<SortProps>) {
-  const [updatedData, setUpdatedData] = useState<ContentData[]>(data);
   const [sortOption, setSortOption] = useState<SortOption | null>(null);
 
-  useEffect(() => {
+  const sortedData = useMemo(() => {
     const newData = [ ...data ];
     const compareFn = sortOption === null
       ? null
@@ -49,14 +48,14 @@ export default function useSort({ data }: Readonly<SortProps>) {
       newData.sort((a, b) => compareFn(a, b, sortOption.order));
     }
 
-    setUpdatedData(newData);
+    return newData;
   }, [data, sortOption]);
 
   const applySort = (opt: SortOption | null) => setSortOption(opt);
   const clearSort = () => setSortOption(null);
 
   return {
-    updatedData,
+    sortedData,
     sortOption,
     applySort,
     clearSort,

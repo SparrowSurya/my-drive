@@ -32,10 +32,10 @@ export default function ContentListView({
   viewCtx,
 }: Readonly<FileListViewProps>) {
   const gridTemplateColumns = cols.map((c) => listColumnTemplate[c]).join(' ');
-  const { updatedData, sortOption, applySort } = useSort({ data });
-  const viewData = [
-    ...updatedData.filter((f) => f.type === "folder"),
-    ...updatedData.filter((f) => f.type === "file"),
+  const { sortedData, sortOption, applySort } = useSort({ data });
+  const updatedData = [
+    ...sortedData.filter((f) => f.type === "folder"),
+    ...sortedData.filter((f) => f.type === "file"),
   ];
 
   return (
@@ -54,7 +54,7 @@ export default function ContentListView({
       )}
       <div className={`w-full ${scrollable ? "w-full flex-1 overflow-y-auto min-h-0" : "w-full flex flex-col"}`}>
       {
-        viewData.map((f) => (
+        updatedData.map((f) => (
           <div
             key={f.id}
             className="grid gap-x-2 h-12 border-b-2 border-surface0 hover:bg-overlay0/30"

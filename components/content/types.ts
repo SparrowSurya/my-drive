@@ -26,6 +26,7 @@ export interface FileData extends BaseData {
 export interface FolderData extends BaseData {
   parentId?: number,
   children?: Array<FolderData>,
+  mimeType?: undefined,
   type: "folder",
 };
 

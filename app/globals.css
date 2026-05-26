@@ -97,20 +97,20 @@ body {
 
 @layer components {
 	.fileIcon {
-		&.fileIcon-image { @apply text-teal; }
-		&.fileIcon-audio { @apply text-pink; }
-		&.fileIcon-video { @apply text-maroon; }
-		&.fileIcon-pdf { @apply text-red; }
-		&.fileIcon-code { @apply text-mauve; }
-		&.fileIcon-config { @apply text-sapphire; }
-		&.fileIcon-text { @apply text-blue; }
-		&.fileIcon-spreadsheet { @apply text-green; }
-		&.fileIcon-document { @apply text-sky; }
-		&.fileIcon-presentation { @apply text-peach; }
-		&.fileIcon-archive { @apply text-yellow; }
-		&.fileIcon-font { @apply text-flamingo; }
-		&.fileIcon-file { @apply text-subtext1; }
-		&.fileIcon-folder { @apply text-subtext1; }
+		&.fileIcon-image, &.fileIcon-images { @apply text-teal; }
+		&.fileIcon-audio, &.fileIcon-audios { @apply text-pink; }
+		&.fileIcon-video, &.fileIcon-videos { @apply text-maroon; }
+		&.fileIcon-pdf, &.fileIcon-pdfs { @apply text-red; }
+		&.fileIcon-code, &.fileIcon-codes { @apply text-mauve; }
+		&.fileIcon-config, &.fileIcon-configs { @apply text-sapphire; }
+		&.fileIcon-text, &.fileIcon-texts { @apply text-blue; }
+		&.fileIcon-spreadsheet, &.fileIcon-spreadsheets { @apply text-green; }
+		&.fileIcon-document, &.fileIcon-documents { @apply text-blue; }
+		&.fileIcon-presentation, &.fileIcon-presentations { @apply text-rosewater; }
+		&.fileIcon-archive, &.fileIcon-archives { @apply text-yellow; }
+		&.fileIcon-font, &.fileIcon-fonts { @apply text-flamingo; }
+		&.fileIcon-file, &.fileIcon-files { @apply text-lavender; }
+		&.fileIcon-folder, &.fileIcon-folders { @apply text-subtext0; }
 	}
 
 	.text-button {
@@ -124,17 +124,27 @@ body {
 		.option-item {
 			@apply flex flex-row items-center py-2 px-4 hover:bg-surface0 cursor-pointer transition-all duration-200;
 
+			svg:not(.fileIcon) {
+				@apply text-subtext0;
+			}
+
 			svg {
-				@apply w-4 mr-4 text-subtext0;
+				@apply w-4 mr-4;
 			}
 
 			.option-item-text {
 				@apply text-text font-medium text-sm;
 			}
+
+			&.selected {
+				@apply bg-surface0;
+				svg:not(.fileIcon) { @apply text-blue; }
+				.option-item-text { @apply text-blue; }
+			}
 		}
 
 		.option-item:hover {
-			svg { @apply text-blue; }
+			svg:not(.fileIcon) { @apply text-blue; }
 			.option-item-text { @apply text-blue; }
 		}
 

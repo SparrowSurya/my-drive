@@ -12,7 +12,7 @@ export default function OptionItem({ option, className, ...restProps }: Readonly
       { option.leading ?? null }
       {
         (typeof option.label === "string") ? (
-          <span className="option-item-text truncate text-lg">{ option.label }</span>
+          <span className="option-item-text truncate text-md">{ option.label }</span>
         ) : option.label
       }
       {

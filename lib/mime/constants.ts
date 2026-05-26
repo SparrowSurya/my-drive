@@ -153,8 +153,8 @@ export const MIME_CATEGORY_MAP: Array<[RegExp, MimeCategory]> = [
   [/^application\/pdf$/, "pdf"],
   [/^application\/(json|xml|javascript|typescript|x-sh|sql|toml|wasm|rtf|dart|x-powershell)/, "text"],
   [/spreadsheet|excel|\.sheet/, "spreadsheet"],
-  [/presentation|powerpoint|\.presentation/, "presentation"],
-  [/word|document|msword|odt|pages|epub/, "document"],
+  [/presentation|powerpoint/, "presentation"],
+  [/wordprocessingml|msword|odt|pages|epub/, "document"],
   [/zip|gzip|tar|bzip|rar|7z|xz/, "archive"],
   [/wasm|sqlite|x-elf|x-msdownload|octet-stream/, "binary"],
 ];

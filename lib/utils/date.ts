@@ -43,13 +43,13 @@ export const TimelineGroupValues = [
   TimelineGroup.older,
 ];
 
-function startOfDay(date: Date) {
+export function startOfDay(date: Date) {
   const d = new Date(date);
   d.setHours(0, 0, 0, 0);
   return d;
 }
 
-function startOfWeek(date: Date) {
+export function startOfWeek(date: Date) {
   const d = startOfDay(date);
 
   // Monday as first day of week
@@ -60,11 +60,11 @@ function startOfWeek(date: Date) {
   return d;
 }
 
-function startOfMonth(date: Date) {
+export function startOfMonth(date: Date) {
   return new Date(date.getFullYear(), date.getMonth(), 1);
 }
 
-function startOfYear(date: Date) {
+export function startOfYear(date: Date) {
   return new Date(date.getFullYear(), 0, 1);
 }
 

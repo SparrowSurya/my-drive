@@ -67,7 +67,7 @@ npm run start
 * verify the magic numbers for mime types
 
 ## WIP
-* Filters
+* Filters (GrouedContentView)
 
 ## TODO
 * Search
