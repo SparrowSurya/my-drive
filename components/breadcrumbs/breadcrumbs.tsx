@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { faAngleRight, faEllipsis, faFolder } from "@fortawesome/free-solid-svg-icons";
@@ -20,16 +20,43 @@ export type BreadcrumbsProps = {
 export default function Breadcrumbs({ data, className, ...props }: Readonly<BreadcrumbsProps>) {
   const [showMenu, setShowMenu] = useState(false);
   const router = useRouter();
-  const index = Math.max(0, data.length-3);
+  const buttonRef = useRef<HTMLDivElement>(null);
+  const [menuPos, setMenuPos] = useState<{ top?: number, bottom?: number, left: number }>({ top: 0, left: 0 });
+
+  const index = Math.max(0, data.length - 3);
   const initial = data.slice(0, index);
   const last3 = data.slice(index);
+
+  useEffect(() => {
+    if (showMenu && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      const vh = window.innerHeight;
+      
+      const spaceBelow = vh - rect.bottom;
+      const spaceAbove = rect.top;
+      const menuMaxHeight = vh * 0.4;
+      
+      if (spaceBelow < menuMaxHeight && spaceAbove > spaceBelow) {
+        setMenuPos({
+          bottom: vh - rect.top + 4,
+          left: rect.left,
+        });
+      } else {
+        setMenuPos({
+          top: rect.bottom + 4,
+          left: rect.left,
+        });
+      }
+    }
+  }, [showMenu]);
 
   const options: Option[] = initial.map((segment) => ({
     leading: <Icon icon={faFolder} className="mx-4" />,
     label: segment.name,
     props: {
       onClick() {
-        router.push(segment.url)
+        router.push(segment.url);
+        setShowMenu(false);
       }
     }
   }));
@@ -38,12 +65,20 @@ export default function Breadcrumbs({ data, className, ...props }: Readonly<Brea
     <div className={`flex flex-row items-center ${className ?? ""}`} {...props}>
       {
         (initial.length > 0) && (
-          <>
+          <div className="flex flex-row items-center" ref={buttonRef}>
             {
               showMenu && (
                 <OptionMenu
-                  className="absolute top-10.5"
+                  portal="id_dialog"
                   onClickOutside={() => setShowMenu(false)}
+                  className="fixed shadow-2xl overflow-y-auto"
+                  style={{
+                    top: menuPos.top,
+                    bottom: menuPos.bottom,
+                    left: menuPos.left,
+                    maxHeight: "40vh",
+                    zIndex: 1000001
+                  }}
                   options={options}
                 />
               )
@@ -59,7 +94,7 @@ export default function Breadcrumbs({ data, className, ...props }: Readonly<Brea
               className="text-subtext1 cursor-default"
               style={{ fontSize: "medium" }}
             />
-          </>
+          </div>
         )
       }
       {
