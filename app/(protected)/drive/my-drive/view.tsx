@@ -32,7 +32,6 @@ export default function FolderView({ data, segments, emptyStateProps }: Readonly
     props: {
       className: `option-item ${selectedMimeOption === label ? "selected" : ""}`,
       onClick() {
-        console.log("Label:", label, mimeTypeByLabel[label as string]);
         filters.mimeType.forEach(([l]) => {
           if (l !== label) applyFilter(l as string, null);
         });

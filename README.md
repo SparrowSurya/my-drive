@@ -73,7 +73,9 @@ npm run start
 * verify the magic numbers for mime types
 
 ## WIP
-* Sort on grouped content data list view
+* Restore deleted file
+* Move folder to trash
+* Restore deleted folder
 
 ## TODO
 * Search
@@ -84,4 +86,3 @@ npm run start
 
 ## LATER
 * Preview in grid view.
-* Move folder to trash
