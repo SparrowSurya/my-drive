@@ -35,7 +35,7 @@ export default function Breadcrumbs({ data, className, ...props }: Readonly<Brea
   }));
 
   return (
-    <div className={`flex flex-row items-center ml-3 ${className ?? ""}`} {...props}>
+    <div className={`flex flex-row items-center ${className ?? ""}`} {...props}>
       {
         (initial.length > 0) && (
           <>
@@ -68,7 +68,7 @@ export default function Breadcrumbs({ data, className, ...props }: Readonly<Brea
             {
               (index !== 0) && <Icon icon={faAngleRight} className="text-subtext1 cursor-default" style={{ fontSize: "medium" }} />
             }
-            <Link href={ segment.url } className="drivePageHeading text-button">
+            <Link href={ segment.url } className="drivePageHeading text-button rounded-md">
               { segment.name }
             </Link>
           </React.Fragment>

@@ -65,10 +65,9 @@ export default function FolderView({ data, segments, emptyStateProps }: Readonly
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden h-full">
-      <div className="flex flex-row justify-between shrink-0 mb-4">
+      <div className="flex flex-row justify-between shrink-0 mb-4 ml-3">
         <Breadcrumbs
-          className="text-2xl cursor-pointer"
-          style={{ transform: "translateX(-12px)" }}
+          className="cursor-pointer"
           data={segments}
         />
         <div className="flex flex-row gap-2 items-center">
@@ -76,7 +75,7 @@ export default function FolderView({ data, segments, emptyStateProps }: Readonly
           { (data.length > 0) && <Icon icon={faInfoCircle} hover={true} /> }
         </div>
       </div>
-      <div className="flex flex-row gap-4 mb-4">
+      <div className="flex flex-row gap-4 mb-4 ml-3">
         <MenuButton
           label="Type"
           selectedLabel={selectedMimeOption}

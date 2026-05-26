@@ -8,13 +8,15 @@ export const metadata: Metadata = {
 
 export default function StoragePage() {
   return (
-    <>
-      <div className="drivePageHeading">Storage</div>
-      <EmptyState
-        image="/assets/svg/empty_state_storage.svg"
-        title="No files are using storage"
-        para="Items you own will use Drive storage"
-      />
-    </>
+    <div className="flex flex-col flex-1 overflow-hidden h-full ml-3">
+      <div className="drivePageHeading mb-4">Storage</div>
+      <div className="flex-1 flex flex-col min-h-0">
+        <EmptyState
+          image="/assets/svg/empty_state_storage.svg"
+          title="No files are using storage"
+          para="Items you own will use Drive storage"
+        />
+      </div>
+    </div>
   );
 }

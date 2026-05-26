@@ -8,13 +8,15 @@ export const metadata: Metadata = {
 
 export default function StarredPage() {
   return (
-    <>
-      <div className="drivePageHeading">Starred</div>
-      <EmptyState
-        image="/assets/svg/empty_state_storage.svg"
-        title="No starred files"
-        para="Add stars to things that you want to easily find later"
-      />
-    </>
+    <div className="flex flex-col flex-1 overflow-hidden h-full ml-3">
+      <div className="drivePageHeading mb-4">Starred</div>
+      <div className="flex-1 flex flex-col min-h-0">
+        <EmptyState
+          image="/assets/svg/empty_state_storage.svg"
+          title="No starred files"
+          para="Add stars to things that you want to easily find later"
+        />
+      </div>
+    </div>
   );
-}
+  }

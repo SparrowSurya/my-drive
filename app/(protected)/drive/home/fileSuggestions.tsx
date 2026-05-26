@@ -36,7 +36,7 @@ export default function FileSuggestions({ files }: Readonly<FileSuggestionsProps
     <div className="flex flex-col flex-none">
       <div className="flex flex-row justify-between shrink-0 sticky top-0 bg-mantle z-20 py-1">
         <button
-          className="flex flex-row items-center rounded-4xl px-3 py-1 font-medium hover:text-blue hover:bg-blue/25"
+          className="flex flex-row items-center rounded-4xl -ml-3 px-3 py-1 font-medium hover:text-blue hover:bg-blue/25"
           onClick={() => setShow(!show)}
         >
           <Icon icon={show ? faCaretDown : faCaretRight}  />

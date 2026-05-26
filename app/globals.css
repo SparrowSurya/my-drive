@@ -154,6 +154,6 @@ body {
 	}
 
 	.drivePageHeading {
-		@apply text-2xl text-lavender;
+		@apply text-2xl text-lavender p-1;
 	}
 }

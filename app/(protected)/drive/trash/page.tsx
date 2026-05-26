@@ -33,7 +33,7 @@ export default async function TrashPage() {
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden h-full">
-      <div className="flex flex-row justify-between shrink-0 mb-4">
+      <div className="flex flex-row justify-between shrink-0 mb-4 ml-3">
         <div className="drivePageHeading">Trash</div>
         <div className="flex flex-row gap-2 items-center">
           <ContentViewToggleButton visible={!isEmpty} />
