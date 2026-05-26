@@ -92,6 +92,7 @@ export function map2FileData<S extends Prisma.FileDefaultArgs>(
 ): FileData {
   const mimeType = extract<string>(file, "mimeType", "string") ?? "";
   const data = extract<Uint8Array>(file, "data", Uint8Array);
+  const folderName = file.folder?.name ?? "";
 
   return {
     type: "file",
@@ -105,7 +106,7 @@ export function map2FileData<S extends Prisma.FileDefaultArgs>(
     deletedAt: extract<Date>(file, "deletedAt", Date),
     folderId: extract<number>(file, "folderId", "number")
       ?? extract<number>(file.folder, "id", "number"),
-    folderName: extract<string>(file.folder, "name", "string"),
+    location: folderName === "" ? "My Drive" : folderName,
     mimeType: mimeType === "" && !!data
       ? detectMimeTypeFromBuffer(data).mimeType
       : mimeType ?? "application/octet-stream",

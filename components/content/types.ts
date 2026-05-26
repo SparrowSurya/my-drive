@@ -11,13 +11,14 @@ interface BaseData {
   type: ContentType,
   parent?: string
   size?: number,
+  location?: string,
 }
 
 export type ContentType = "file" | "folder";
 
 export interface FileData extends BaseData {
   folderId?: number,
-  folderName?: string,
+  location?: string,
   mimeType?: string,
   data?: Uint8Array,
   type: "file",
