@@ -7,7 +7,7 @@ import { GroupedContentData } from "./types";
 import GroupedContentGridView from "./grid/groupedView";
 import GroupedContentListView from "./list/groupedView";
 import useShowContent from "@/hooks/useShowContent";
-import { ListViewColumn, ViewContext } from "./list/types";
+import { ListViewColumn } from "./list/types";
 import useFilter, { FilterPredicate, filters, mimeTypeByLabel } from "@/hooks/useFilter";
 import MenuButton from "../menuButton";
 import { Option } from "../option";
@@ -18,10 +18,9 @@ export type GroupedContentViewProps = {
   data: GroupedContentData,
   emptyStateProps: EmptyStateProps,
   cols: ListViewColumn[],
-  viewCtx?: ViewContext,
 };
 
-export default function GroupedContentView({ data, cols, emptyStateProps, viewCtx }: Readonly<GroupedContentViewProps>) {
+export default function GroupedContentView({ data, cols, emptyStateProps }: Readonly<GroupedContentViewProps>) {
   const { showFolder, showFile } = useShowContent();
   const { gridView } = useContentView();
   
@@ -93,14 +92,12 @@ export default function GroupedContentView({ data, cols, emptyStateProps, viewCt
                 data={filteredData}
                 showFolder={showFolder}
                 showFile={showFile}
-                viewCtx={viewCtx}
               />
             : <GroupedContentListView
                 data={filteredData}
                 cols={cols}
                 showFolder={showFolder}
                 showFile={showFile}
-                viewCtx={viewCtx}
               />
         )}
       </div>

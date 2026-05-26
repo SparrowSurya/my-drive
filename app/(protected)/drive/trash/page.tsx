@@ -41,7 +41,7 @@ export default async function TrashPage() {
         </div>
       </div>
       <div className="ml-3 flex-1 flex flex-col min-h-0">
-        <GroupedContentView data={data} cols={headings} emptyStateProps={emptyStateProps} viewCtx="trash" />
+        <GroupedContentView data={data} cols={headings} emptyStateProps={emptyStateProps} />
       </div>
     </div>
   );

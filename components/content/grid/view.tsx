@@ -1,7 +1,6 @@
 import FileGridItem from "./fileItem";
 import FolderGridItem from "./folderItem";
 import { type ContentData } from "../types";
-import { ViewContext } from "../list/types";
 
 export type GridViewProps = {
   data: ContentData[],
@@ -9,7 +8,6 @@ export type GridViewProps = {
   showFile: (id?: number) => void,
   className?: string,
   scrollable?: boolean,
-  viewCtx?: ViewContext,
 };
 
 export default function ContentGridView({
@@ -18,7 +16,6 @@ export default function ContentGridView({
   showFile,
   className,
   scrollable = true,
-  viewCtx,
 }: Readonly<GridViewProps>) {
   const files = data.filter((item) => item.type == "file");
   const folders = data.filter((item) => item.type == "folder");
@@ -38,7 +35,6 @@ export default function ContentGridView({
                 key={index}
                 folder={folder}
                 showFolder={showFolder}
-                viewCtx={viewCtx}
                 />
               ))
             }
@@ -52,7 +48,6 @@ export default function ContentGridView({
                 key={index}
                 file={file}
                 showFile={showFile}
-                viewCtx={viewCtx}
               />
             ))
           }

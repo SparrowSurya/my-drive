@@ -3,9 +3,11 @@ import FileIcon from "../../fileIcon";
 import { ListColumnContentBuilderProps, ListColumnHeadingBuilderProps } from "../types";
 import Icon from "@/components/icon";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import usePageView from "@/hooks/usePageView";
 
 
-export function ListColumnNameHeading({ headings, applySort, sortOption, viewCtx }: Readonly<ListColumnHeadingBuilderProps>) {
+export function ListColumnNameHeading({ headings, applySort, sortOption }: Readonly<ListColumnHeadingBuilderProps>) {
+  const { page } = usePageView();
   const myKey = "name";
   const order = sortOption?.order;
   const heading = headings[myKey] ?? "Name";
@@ -13,7 +15,7 @@ export function ListColumnNameHeading({ headings, applySort, sortOption, viewCtx
     ? (order === "asc" ? faArrowUp : order === "desc" ? faArrowDown : null)
     : null;
 
-  const enable = viewCtx !== "recent";
+  const enable = page !== "recent";
   const sort = (!!applySort && enable) ? () => {
     const nextOrder = order === "asc" ? "desc" : order === "desc" ? null : "asc";
     const opt = nextOrder === null ? null : {

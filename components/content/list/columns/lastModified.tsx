@@ -3,16 +3,18 @@ import { ListColumnContentBuilderProps, ListColumnHeadingBuilderProps } from "..
 import { SortOption } from "@/hooks/useSort";
 import Icon from "@/components/icon";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import usePageView from "@/hooks/usePageView";
 
 
-export function ListColumnLastModifiedHeading({ headings, applySort, sortOption, viewCtx }: Readonly<ListColumnHeadingBuilderProps>) {
+export function ListColumnLastModifiedHeading({ headings, applySort, sortOption }: Readonly<ListColumnHeadingBuilderProps>) {
+  const { page } = usePageView();
   const myKey = "updatedAt";
   const order = sortOption?.order;
   const icon = sortOption?.key == myKey
   ? (order === "asc" ? faArrowUp : order === "desc" ? faArrowDown : null)
   : null;
 
-  const enable = viewCtx !== "recent";
+  const enable = page !== "recent";
   const heading = enable ? (headings[myKey] ?? "Last modified") : "";
   const sort = (!!applySort && enable) ? () => {
     const nextOrder = order === "asc" ? "desc" : order === "desc" ? null : "asc";

@@ -6,8 +6,12 @@ import Icon from "@/components/icon";
 import useShowContent from "@/hooks/useShowContent";
 
 
-export function ListColumnLocationHeading({ headings, viewCtx }: Readonly<ListColumnHeadingBuilderProps>) {
-  const heading = viewCtx === "trash" ? "Original Location" : headings["location"] ?? "Location";
+import usePageView from "@/hooks/usePageView";
+
+
+export function ListColumnLocationHeading({ headings }: Readonly<ListColumnHeadingBuilderProps>) {
+  const { page } = usePageView();
+  const heading = page === "trash" ? "Original Location" : headings["location"] ?? "Location";
 
   return (
     <div className="flex items-center">

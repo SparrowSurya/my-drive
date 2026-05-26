@@ -1,6 +1,6 @@
 import React from "react";
 import { GroupedContentData } from "../types";
-import { ListViewColumn, ViewContext } from "./types";
+import { ListViewColumn } from "./types";
 import ContentListView from "./view";
 import useSort from "@/hooks/useSort";
 
@@ -10,10 +10,9 @@ export type GroupedContentListViewProps = {
   cols: ListViewColumn[],
   showFolder: (id?: number) => void,
   showFile: (id?: number) => void,
-  viewCtx?: ViewContext,
 };
 
-export default function GroupedContentListView({ data, cols, showFile, showFolder, viewCtx }: Readonly<GroupedContentListViewProps>) {
+export default function GroupedContentListView({ data, cols, showFile, showFolder }: Readonly<GroupedContentListViewProps>) {
   const { sortedData, applySort, sortOption } = useSort({ data });
   const isEmpty = Object.keys(data).length === 0;
 
@@ -28,7 +27,6 @@ export default function GroupedContentListView({ data, cols, showFile, showFolde
           cols={cols}
           showFile={showFile}
           showFolder={showFolder}
-          viewCtx={viewCtx}
           internalSort={false}
           applySortProp={applySort}
           sortOptionProp={sortOption}
@@ -48,7 +46,6 @@ export default function GroupedContentListView({ data, cols, showFile, showFolde
               cols={cols}
               showFile={showFile}
               showFolder={showFolder}
-              viewCtx={viewCtx}
               internalSort={false}
             />
           </div>

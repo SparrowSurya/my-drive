@@ -1,17 +1,18 @@
 import FileIcon from "../fileIcon";
 import { type FolderData } from "../types";
 import ContentOptionMenu from "../options";
-import { ViewContext } from "../list/types";
+import usePageView from "@/hooks/usePageView";
 
 
 export type FolderGridItemProps = {
   folder: FolderData,
   showFolder: (id?: number) => void,
-  viewCtx?: ViewContext,
 };
 
 
-export default function FolderGridItem({ folder, showFolder, viewCtx }: Readonly<FolderGridItemProps>) {
+export default function FolderGridItem({ folder, showFolder }: Readonly<FolderGridItemProps>) {
+  const { page } = usePageView();
+
   return (
     <div
       className="bg-surface2 hover:bg-surface1 px-2 py-3 rounded-2xl cursor-pointer"
@@ -23,7 +24,7 @@ export default function FolderGridItem({ folder, showFolder, viewCtx }: Readonly
           <span className="truncate font-medium">{ folder.name }</span>
           {folder.reason && <span className="truncate text-xs">{ folder.reason }</span>}
         </div>
-        <ContentOptionMenu data={folder} isTrash={viewCtx === "trash"} />
+        <ContentOptionMenu data={folder} isTrash={page === "trash"} />
       </div>
     </div>
   );

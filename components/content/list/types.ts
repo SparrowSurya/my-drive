@@ -25,21 +25,15 @@ export const listColumnTemplate: Record<ListViewColumn, string> = {
   "elipsis": "64px",
 } as const;
 
-export type ViewContext = "home" | "my-drive" | "recent" | "trash";
-
-type ListColumnBuilderProps = {
-  viewCtx?: ViewContext;
-};
-
 export type ListColumnHeadingBuilderProps = {
   headings: Partial<Record<ListViewColumn, string>>;
   applySort?: (opt: SortOption | null) => void;
   sortOption?: SortOption | null,
-} & ListColumnBuilderProps;
+};
 
 export type ListColumnContentBuilderProps = {
   data: ContentData;
-} & ListColumnBuilderProps;
+};
 
 export type ListColumnHeadingBuilder = (key: string, props: Readonly<ListColumnHeadingBuilderProps>) => ReactNode;
 export type ListColumnContentBuilder = (key: string, props: Readonly<ListColumnContentBuilderProps>) => ReactNode;

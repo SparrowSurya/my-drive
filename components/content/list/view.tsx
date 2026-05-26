@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ContentData } from "../types";
-import { listColumnTemplate, ViewContext, type ListViewColumn } from "./types";
+import { listColumnTemplate, type ListViewColumn } from "./types";
 import columnRenderer from "./columns";
 import useSort, { SortOption } from "@/hooks/useSort";
 
@@ -16,7 +16,6 @@ export type FileListViewProps = {
   scrollable?: boolean,
   showHeading?: boolean,
   headings?: Partial<Record<ListViewColumn, string>>,
-  viewCtx?: ViewContext,
   internalSort?: boolean,
   sortOptionProp?: SortOption | null,
   applySortProp?: (opt: SortOption | null) => void,
@@ -32,7 +31,6 @@ export default function ContentListView({
   scrollable = true,
   showHeading = true,
   headings = {},
-  viewCtx,
   internalSort = true,
   applySortProp,
   sortOptionProp,
@@ -48,7 +46,6 @@ export default function ContentListView({
 
   const headingProps = {
     headings,
-    viewCtx,
     applySort: internalSort ? applySort : applySortProp,
     sortOption: internalSort ? sortOption : sortOptionProp,
   };
@@ -77,7 +74,7 @@ export default function ContentListView({
             onDoubleClick={f.type == "folder" ? () => showFolder(f.id): () => showFile(f.id)}
           >
             {
-              cols.map((col) => columnRenderer[col].content(col, { data: f, viewCtx }))
+              cols.map((col) => columnRenderer[col].content(col, { data: f }))
             }
           </div>
         ))
