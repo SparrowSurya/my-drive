@@ -14,6 +14,15 @@ export const Months = [
   "December",
 ];
 
+export const toDate = (val: string | number | Date): Date | null => {
+  if (val instanceof Date) return val;
+  if (typeof val === "string") {
+    const d = new Date(val);
+    return isNaN(d.getTime()) ? null : d;
+  }
+  return null;
+};
+
 export const formatDate = (d: Date): string => {
   if (!d) return '';
   const date = d.getDate();

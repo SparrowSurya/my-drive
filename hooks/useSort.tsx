@@ -1,4 +1,5 @@
-import { ContentData } from "@/components/content/types";
+import { ContentData, GroupedContentData } from "@/components/content/types";
+import utils from "@/lib/utils";
 import { useMemo, useState } from "react";
 
 
@@ -19,9 +20,10 @@ function compareText(a: ContentData, b: ContentData, ord: SortOrder, field: Extr
   return ord === "asc" ? result : -result;
 }
 
+
 function compareDate(a: ContentData, b: ContentData, ord: SortOrder, field: Extract<keyof ContentData, string>): number {
-  const dateA = (a[field] as Date | undefined)?.getTime() ?? 0;
-  const dateB = (b[field] as Date | undefined)?.getTime() ?? 0;
+  const dateA = utils.toDate(a[field] as Date)?.getTime() ?? 0;
+  const dateB = utils.toDate(b[field] as Date)?.getTime() ?? 0;
   const result = dateA - dateB;
   return ord === "asc" ? result : -result;
 }
@@ -31,24 +33,35 @@ const contentDataCompareFn: Record<SortKey, ContentDataCompareFn> = {
   updatedAt: (a, b, ord) => compareDate(a, b, ord, "updatedAt"),
 };
 
-export type SortProps = {
-  data: ContentData[],
+export type SortProps<T extends ContentData[] | GroupedContentData> = {
+  data: T;
 };
 
-export default function useSort({ data }: Readonly<SortProps>) {
+export default function useSort<T extends ContentData[] | GroupedContentData>({ data }: Readonly<SortProps<T>>) {
   const [sortOption, setSortOption] = useState<SortOption | null>(null);
 
   const sortedData = useMemo(() => {
-    const newData = [ ...data ];
     const compareFn = sortOption === null
       ? null
       : contentDataCompareFn[sortOption.key];
 
-    if (sortOption !== null && !!compareFn) {
-      newData.sort((a, b) => compareFn(a, b, sortOption.order));
-    }
+    const sortFn = (items: ContentData[]) => {
+      const copy = [...items];
+      if (sortOption !== null && !!compareFn) {
+        copy.sort((a, b) => compareFn(a, b, sortOption.order));
+      }
+      return copy;
+    };
 
-    return newData;
+    if (Array.isArray(data)) {
+      return sortFn(data) as T;
+    } else {
+      const result = {} as GroupedContentData;
+      for (const [group, items] of Object.entries(data)) {
+        result[group as keyof GroupedContentData] = sortFn(items as ContentData[]);
+      }
+      return result as T;
+    }
   }, [data, sortOption]);
 
   const applySort = (opt: SortOption | null) => setSortOption(opt);
