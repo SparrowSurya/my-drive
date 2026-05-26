@@ -13,19 +13,19 @@ export function ListColumnNameHeading({ headings, applySort, sortOption }: Reado
     ? (order === "asc" ? faArrowUp : order === "desc" ? faArrowDown : null)
     : null;
 
-  const sort = () => {
+  const sort = !!applySort ? () => {
     const nextOrder = order === "asc" ? "desc" : order === "desc" ? null : "asc";
     const opt = nextOrder === null ? null : {
       key: myKey,
       order: nextOrder,
     } as SortOption;
     applySort?.(opt);
-  };
+  } : undefined;
 
   return (
-    <div className="flex items-center gap-1 hover:bg-overlay2/10" onClick={sort}>
+    <div className={`flex items-center gap-1 ${sort && "hover:bg-overlay2/10"}`} onClick={sort}>
       { heading }
-      {icon && <Icon icon={icon} />}
+      {sort && icon && <Icon icon={icon} />}
     </div>
   );
 }
