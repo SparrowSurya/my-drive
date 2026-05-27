@@ -38,8 +38,9 @@ model Folder {
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: NoAction)
 
-  name   String
-  isRoot Boolean @default(false)
+  name    String
+  isRoot  Boolean @default(false)
+  starred Boolean?
 
   files    File[]
   children Hierarchy[] @relation("FolderAsParent")
@@ -75,8 +76,9 @@ model File {
 
   name     String
   size     Int
-  mimeType String @default("")
+  mimeType String  @default("")
   data     Bytes
+  starred  Boolean?
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
