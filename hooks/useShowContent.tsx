@@ -23,7 +23,7 @@ export default function useShowContent() {
       console.log("Failed to open file with invalid ID:", id);
       return;
     }
-    model.show(<FilePreview id={id} close={model.close} />);
+    model.show(<FilePreview id={id} close={() => model.close(false)} />);
   }
 
   return { showFolder, showFile };
