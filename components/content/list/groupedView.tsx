@@ -30,6 +30,8 @@ export default function GroupedContentListView({ data, cols, showFile, showFolde
           internalSort={false}
           applySortProp={applySort}
           sortOptionProp={sortOption}
+          scrollable={false}
+          className="flex flex-col w-full select-none"
         />
       </div>
       <div className="flex flex-col gap-3 overflow-y-auto">
@@ -47,6 +49,8 @@ export default function GroupedContentListView({ data, cols, showFile, showFolde
               showFile={showFile}
               showFolder={showFolder}
               internalSort={false}
+              scrollable={false}
+              className="flex flex-col w-full select-none"
             />
           </div>
         ))}
