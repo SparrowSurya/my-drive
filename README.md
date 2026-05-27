@@ -73,15 +73,13 @@ npm run start
 * verify the magic numbers for mime types
 
 ## WIP
-* Move folder to trash
-* Restore deleted folder
+* Storage
 
 ## TODO
 * Search
 * Activity
 * Share
 * Versions
-* Storage
 
 ## LATER
 * Preview in grid view.

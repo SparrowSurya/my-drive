@@ -483,6 +483,12 @@ export async function getDeletedParentHierarchy<T extends Prisma.FolderSelect>(
   const segments: Prisma.FolderGetPayload<{ select: T }>[] = [];
   let id = folder.id;
 
+  type extra = {
+    isRoot: boolean,
+    parent: { parentId: number | null } | null,
+    directDelete: boolean | null,
+  };
+
   while (!!id) {
     const folder = await prisma.folder.findUniqueOrThrow({
       where: { id },
@@ -493,12 +499,8 @@ export async function getDeletedParentHierarchy<T extends Prisma.FolderSelect>(
         isRoot: true,
         deletedAt: true,
         directDelete: true,
-      },
-    }) as Prisma.FolderGetPayload<{ select: T }> & {
-      isRoot: boolean,
-      parent: { parentId: number | null } | null,
-      directDelete: boolean | null,
-    };
+      } as Prisma.FolderGetPayload<{ select: T & extra }>,
+    }) as Prisma.FolderGetPayload<{ select: T }> & extra;
 
     // FIXME - This may add extra fields due to above select
     segments.push(folder);
