@@ -215,12 +215,13 @@ export async function getFolder(
   userWhere: Prisma.UserWhereUniqueInput,
   folderWhere: Prisma.FolderWhereUniqueInput,
   select?: Prisma.FolderSelect,
+  deleted?: boolean,
 ): Promise<Prisma.FolderGetPayload<{ select?: Prisma.FolderSelect }>> {
   return await prisma.folder.findFirstOrThrow({
     where: {
       user: userWhere,
       ...folderWhere,
-      deletedAt: null,
+      ...(deleted ? {} : { deletedAt: null })
     },
     select,
   });

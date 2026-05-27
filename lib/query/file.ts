@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { Prisma } from "@/app/generated/prisma";
-import { getOrCreateRootFolder } from "./folder";
+import { getOrCreateRootFolder, isFolderDeleted } from "./folder";
 import { detectMimeTypeFromBuffer } from "../mime/detection";
 
 
@@ -101,10 +101,21 @@ export async function addFileWithRelativePath(
   select?: Prisma.FileSelect,
 ): Promise<Prisma.FileGetPayload<{ select?: Prisma.FileSelect }>> {
   let folderId = file.folderId;
+  let isParentDeleted = false;
+
   if (folderId === 0) {
-    const root = await getOrCreateRootFolder(userWhere, { id: true });
+    const root = await getOrCreateRootFolder(userWhere, { id: true, deletedAt: true });
     folderId = root.id;
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [isDeleted, directDelete] = await isFolderDeleted(userWhere, folderId);
+    isParentDeleted = isDeleted;
   }
+
+  const deletedArgs = isParentDeleted ? {
+    deletedAt: new Date(),
+    directDelete: false,
+  } : {};
 
   // HACK: Try to run this atmost 3 times to make sure we did our best
   for (let i=0; i<3; i++) {
@@ -127,6 +138,7 @@ export async function addFileWithRelativePath(
                 user: { connect: userWhere },
                 name: folderName,
                 parent: { create: { parentId: folderId } },
+                ...deletedArgs,
               }
             })
             folderId = newFolder.id;
@@ -151,6 +163,7 @@ export async function addFileWithRelativePath(
       size: file.data.length,
       mimeType: detectMimeTypeFromBuffer(file.data).mimeType,
       data: new Uint8Array(file.data),
+      ...deletedArgs,
     },
     select,
   });

@@ -65,7 +65,7 @@ export async function getFolderName(id: number): Promise<{ name: string }> {
 
   const select = { name: true };
   try {
-    return await getFolder({ email }, { id }, select);
+    return await getFolder({ email }, { id }, select, true);
   } catch {
     return { name: "" };
   }
