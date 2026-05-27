@@ -27,6 +27,7 @@ export default function ContentOptionMenuDialog({
     return [
       ContentOption.download,
       ContentOption.rename,
+      ContentOption.seperator,
       ContentOption.organise,
       ContentOption.share,
       ContentOption.moveToTrash,

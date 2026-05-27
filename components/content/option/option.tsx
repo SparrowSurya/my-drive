@@ -24,14 +24,16 @@ export default function ContentOptionMenu({ data }: Readonly<{ data: ContentData
 
       const left = Math.max(8, Math.min(rect.right - menuWidth, vw - menuWidth - 8));
 
-      if (spaceBelow < 320 && spaceAbove > spaceBelow) {
+      const menuHeightEstimate = 250;
+
+      if (spaceBelow >= menuHeightEstimate || spaceBelow >= spaceAbove) {
         setMenuPos({
-          bottom: vh - rect.top + 8,
+          top: rect.bottom + 8,
           left,
         });
       } else {
         setMenuPos({
-          top: rect.bottom + 8,
+          bottom: vh - rect.top + 8,
           left,
         });
       }
@@ -46,6 +48,7 @@ export default function ContentOptionMenu({ data }: Readonly<{ data: ContentData
           <ContentOptionMenuDialog
             data={data}
             onClickOutside={() => setShowOptionMenu(false)}
+            onClick={() => setShowOptionMenu(false)}
             className="fixed shadow-2xl"
             style={{
               top: menuPos.top,

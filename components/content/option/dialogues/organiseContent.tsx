@@ -124,12 +124,12 @@ export default function OrganiseContentDialog({ data, closeModal }: Readonly<Org
       onClick={() => closeModal(false)}
     >
       <div
-        className="rounded-3xl p-8 bg-surface0 shadow-2xl shadow-crust w-full max-w-xl flex flex-col gap-6"
+        className="rounded-md p-8 bg-surface0 shadow-2xl shadow-crust w-full max-w-xl flex flex-col gap-6"
         onClick={(e) => e.stopPropagation()}
       >
         <h3 className="text-2xl font-semibold text-text">Move {`"${data.name}"`}</h3>
 
-        <div className="flex items-center gap-2 text-sm text-subtext1 bg-base p-3 rounded-xl overflow-x-auto whitespace-nowrap scrollbar-hide border border-surface1">
+        <div className="flex items-center gap-2 text-sm text-subtext1 bg-base p-3 rounded-md overflow-x-auto whitespace-nowrap scrollbar-hide border border-surface1">
           {path.map((segment, index) => (
             <React.Fragment key={segment.id}>
               <button
@@ -144,7 +144,7 @@ export default function OrganiseContentDialog({ data, closeModal }: Readonly<Org
           ))}
         </div>
 
-        <div className="flex flex-col bg-base rounded-2xl border border-surface1 overflow-hidden h-72">
+        <div className="flex flex-col bg-base rounded-md border border-surface1 overflow-hidden h-72">
           <div className="flex-1 overflow-y-auto custom-scrollbar">
             {(loading && !cache[active]) ? (
               <div className="flex items-center justify-center h-full text-subtext0">

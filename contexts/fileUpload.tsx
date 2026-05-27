@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useState, useTransition } from "react";
+import React, { createContext, useEffect, useRef, useState, useTransition } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import useDebounce from "@/hooks/useDebounce";
 import FileUploadToast from "@/components/fileUploadToast";
@@ -13,6 +13,8 @@ import { detectMimeTypeFromBuffer } from "@/lib/mime/detection";
 export type UploadContextType = {
   uploads: FileUpload[];
   uploadFile: (file: FileWithRelativePath) => void;
+  requestFileUpload: () => void;
+  requestFolderUpload: () => void;
 };
 
 export const FileUploadContext = createContext<UploadContextType | undefined>(undefined);
@@ -20,10 +22,20 @@ export const FileUploadContext = createContext<UploadContextType | undefined>(un
 export default function FileUploadProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const router = useRouter();
   const [isTransition, startTransition] = useTransition(); // eslint-disable-line @typescript-eslint/no-unused-vars
+  const path = usePathname();
+
   const [uploads, setUploads] = useState<FileUpload[]>([]);
   const [showUpload, setShowUpload] = useState(true);
-  const path = usePathname();
   const { refresh: refreshTransition } = useDebounce(() => startTransition(() => router.refresh()), 1000);
+
+  const fileUploadRef = useRef<HTMLInputElement>(null);
+  const folderUploadRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (folderUploadRef.current) {
+      folderUploadRef.current.setAttribute("webkitdirectory", "");
+    }
+  }, []);
 
   const uploadFile = async (file: FileWithRelativePath) => {
     const id = crypto.randomUUID();
@@ -74,8 +86,44 @@ export default function FileUploadProvider({ children }: Readonly<{ children: Re
     xhr.send(formData);
   };
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      Array.from(files).forEach((file) => {
+        (file as FileWithRelativePath).relativePath = file.name;
+        uploadFile(file as FileWithRelativePath);
+      });
+    }
+    if (fileUploadRef.current) {
+      fileUploadRef.current.value = "";
+    }
+  };
+
+  const handleFolderUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      Array.from(files).forEach((file) => {
+        (file as FileWithRelativePath).relativePath = file.webkitRelativePath;
+        uploadFile(file as FileWithRelativePath);
+      });
+    }
+    if (folderUploadRef.current) {
+      folderUploadRef.current.value = "";
+    }
+  };
+
+  const requestFileUpload = () => fileUploadRef.current?.click();
+  const requestFolderUpload = () => folderUploadRef.current?.click();
+
+  const value = {
+    uploads,
+    uploadFile,
+    requestFileUpload,
+    requestFolderUpload
+  };
+
   return (
-    <FileUploadContext.Provider value={{ uploads, uploadFile }}>
+    <FileUploadContext.Provider value={value}>
       { children }
       {
         (uploads.length > 0) && showUpload && (
@@ -89,6 +137,8 @@ export default function FileUploadProvider({ children }: Readonly<{ children: Re
           />
         )
       }
+      <input ref={fileUploadRef} type="file" multiple style={{ display: "none" }} onChange={handleFileUpload} />
+      <input ref={folderUploadRef} type="file" multiple style={{ display: "none" }} onChange={handleFolderUpload} />
     </FileUploadContext.Provider>
   );
 };
