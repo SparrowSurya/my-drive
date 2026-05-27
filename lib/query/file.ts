@@ -160,12 +160,13 @@ export async function getFile<T extends Prisma.FileSelect>(
   userWhere: Prisma.UserWhereUniqueInput,
   fileWhere: Prisma.FileWhereUniqueInput,
   select: T,
+  deleted: boolean = false,
 ): Promise<Prisma.FileGetPayload<{ select: T }>> {
   return await prisma.file.findFirstOrThrow({
     where: {
       folder: { user: userWhere },
       ...fileWhere,
-      deletedAt: null,
+      ...(deleted ? {} : { deletedAt: null }),
     },
     select,
   });
@@ -189,7 +190,7 @@ export async function getRecentFiles<T extends Prisma.FileSelect>(
   });
 }
 
-export async function softDelete<T extends Prisma.FileSelect>(
+export async function softDeleteFile<T extends Prisma.FileSelect>(
   userWhere: Prisma.UserWhereUniqueInput,
   fileWhere: Prisma.FileWhereUniqueInput,
   select: T,
@@ -198,7 +199,7 @@ export async function softDelete<T extends Prisma.FileSelect>(
   return await updateFile(userWhere, fileWhere, data, select);
 }
 
-export async function getDeletedFiles<T extends Prisma.FileSelect>(
+export async function getDirectDeletedFiles<T extends Prisma.FileSelect>(
   userWhere: Prisma.UserWhereUniqueInput,
   select: T,
   folderWhere?: Prisma.FolderWhereUniqueInput,
@@ -235,4 +236,21 @@ export async function restoreFile(
   const data = { deletedAt: null, directDelete: null };
   const fileWhere = { id: fileId, deletedAt: { not: null } };
   await updateFile(userWhere, fileWhere, data, { id: true });
+}
+
+export async function getDeletedFiles<T extends Prisma.FileSelect>(
+  userWhere: Prisma.UserWhereUniqueInput,
+  folderId: number,
+  select: T,
+): Promise<Prisma.FileGetPayload<{ select: T }>[]> {
+  return await prisma.file.findMany({
+    where: {
+      folder: {
+        user: userWhere,
+        id: folderId,
+      },
+      deletedAt: { not: null },
+    },
+    select,
+  });
 }

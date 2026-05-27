@@ -3,8 +3,9 @@
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Icon from "@/components/icon";
 import useModal from "@/hooks/useModal";
-import SoftDeleteDialog from "../dialogues/softDelete";
+import FileSoftDeleteDialog from "../dialogues/softDeleteFile";
 import { ContentData } from "../../types";
+import FolderSoftDeleteDialog from "../dialogues/softDeleteFolder";
 
 
 export default function MoveToTrashOption({ data }: Readonly<{ data: ContentData }>) {
@@ -15,7 +16,11 @@ export default function MoveToTrashOption({ data }: Readonly<{ data: ContentData
   };
 
   const handleRename = () => {
-    modal.show(<SoftDeleteDialog data={data} closeModal={closeModal} />);
+    if (data.type === "file") {
+      modal.show(<FileSoftDeleteDialog data={data} closeModal={closeModal} />);
+    } else if (data.type === "folder") {
+      modal.show(<FolderSoftDeleteDialog data={data} closeModal={closeModal} />);
+    }
   };
 
   return (

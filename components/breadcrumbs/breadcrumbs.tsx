@@ -31,11 +31,11 @@ export default function Breadcrumbs({ data, className, ...props }: Readonly<Brea
     if (showMenu && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
       const vh = window.innerHeight;
-      
+
       const spaceBelow = vh - rect.bottom;
       const spaceAbove = rect.top;
       const menuMaxHeight = vh * 0.4;
-      
+
       if (spaceBelow < menuMaxHeight && spaceAbove > spaceBelow) {
         setMenuPos({
           bottom: vh - rect.top + 4,
@@ -51,7 +51,7 @@ export default function Breadcrumbs({ data, className, ...props }: Readonly<Brea
   }, [showMenu]);
 
   const options: Option[] = initial.map((segment) => ({
-    leading: <Icon icon={faFolder} className="mx-4" />,
+    leading: <Icon icon={faFolder} />,
     label: segment.name,
     props: {
       onClick() {

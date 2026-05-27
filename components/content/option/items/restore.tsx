@@ -3,7 +3,7 @@
 import { faRefresh } from "@fortawesome/free-solid-svg-icons";
 import Icon from "@/components/icon";
 import { ContentData } from "../../types";
-import { restoreDeletedFile } from "../actions";
+import { restoreDeletedFile, restoreDeletedFolder } from "../actions";
 import useSnackbar from "@/hooks/useSnackbar";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
@@ -15,9 +15,13 @@ export default function RestoreOption({ data }: Readonly<{ data: ContentData }>)
   const router = useRouter();
   const snackbar = useSnackbar();
 
+  const restoreContent = data.type === "file"
+    ? restoreDeletedFile
+    : restoreDeletedFolder;
+
   const handleRestore = async () => {
     if (!!data.id) {
-      const success = await restoreDeletedFile(data.id);
+      const success = await restoreContent(data.id);
       const message = success
         ? `Restored ${data.type} "${data.name}"`
         : `Failed to restore ${data.type} "${data.name}`;

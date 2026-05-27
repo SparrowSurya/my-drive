@@ -1,9 +1,8 @@
-import NavItem from "./item";
-import { getStorageUsed } from "@/lib/query/file";
-import utils from "@/lib/utils";
-import { getServerSession } from "next-auth";
-import NewButton from "@/components/newButton";
 import { faHome, faClock, faTrash, faCloud, faHardDrive, faUserGroup, faStar } from "@fortawesome/free-solid-svg-icons";
+import utils from "@/lib/utils";
+import NewButton from "@/components/newButton";
+import NavItem from "./item";
+import { storageUsed } from "./query";
 
 
 export const navGroups = [
@@ -23,9 +22,7 @@ export const navGroups = [
 ];
 
 export default async function Navbar() {
-  const session = await getServerSession();
-  const { email } = session!.user;
-  const storageSize = await getStorageUsed({ email });
+  const storageSize = await storageUsed();
 
   return (
     <nav className="ml-5 mt-3 mr-2 flex flex-col items-start max-h-max">

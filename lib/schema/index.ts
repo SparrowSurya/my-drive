@@ -57,3 +57,7 @@ export const FileSoftDeleteSchema = z.object({
 export const FolderChildrenDataSchema = z.object({
   id: field.folderId.nullable(),
 });
+
+export const FolderSoftDeleteSchema = z.object({
+  folderId: field.folderId,
+});

@@ -1,6 +1,6 @@
 import { GroupedContentData } from "@/components/content/types";
-import { getDeletedFiles } from "@/lib/query/file";
-import { getDeletedFolders } from "@/lib/query/folder";
+import { getDirectDeletedFiles } from "@/lib/query/file";
+import { getDirectDeletedFolders } from "@/lib/query/folder";
 import utils from "@/lib/utils";
 import { groupByTimeline } from "@/lib/utils/date";
 import { getServerSession } from "next-auth";
@@ -41,8 +41,8 @@ export async function getTrashFiles(): Promise<GroupedContentData> {
   }
 
   const [files, folders] = await Promise.all([
-    getDeletedFiles({ email }, fileSelect),
-    getDeletedFolders({ email }, folderSelect),
+    getDirectDeletedFiles({ email }, fileSelect),
+    getDirectDeletedFolders({ email }, folderSelect),
   ]);
 
   const filesData = files.map(f => utils.map2FileData(email, f));

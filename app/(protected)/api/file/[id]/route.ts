@@ -42,7 +42,7 @@ export async function GET(
   };
 
   try {
-    const f = await getFile({ email }, { id: fileId }, fileSelect);
+    const f = await getFile({ email }, { id: fileId }, fileSelect, true);
     if (f.mimeType === "") {
       f.mimeType = detectMimeTypeFromBuffer(f.data).mimeType;
     }

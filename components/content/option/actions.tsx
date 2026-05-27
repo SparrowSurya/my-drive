@@ -1,9 +1,9 @@
 "use server";
 
 import { getServerSession } from "next-auth";
-import { updateFolder } from "@/lib/query/folder";
-import { restoreFile, softDelete, updateFile } from "@/lib/query/file";
-import { RenameFolderSchema, RenameFileSchema, FileSoftDeleteSchema } from "@/lib/schema";
+import { restoreFolder, softDeleteFolder, updateFolder } from "@/lib/query/folder";
+import { restoreFile, softDeleteFile, updateFile } from "@/lib/query/file";
+import { RenameFolderSchema, RenameFileSchema, FileSoftDeleteSchema, FolderSoftDeleteSchema } from "@/lib/schema";
 
 
 export type RenameFolderFormState = {
@@ -94,7 +94,10 @@ export type FileSoftDeleteState = {
   errors?: Partial<Record<keyof Omit<FileSoftDeleteState, "errors">, string[]>> & { root?: string },
 };
 
-export async function FileSoftDeleteAction(state: FileSoftDeleteState, formData: FormData): Promise<FileSoftDeleteState> {
+export async function FileSoftDeleteAction(
+  state: FileSoftDeleteState,
+  formData: FormData,
+): Promise<FileSoftDeleteState> {
   const result = FileSoftDeleteSchema.safeParse(Object.fromEntries(formData.entries()));
   if (!result.success) return {
     ...state,
@@ -115,7 +118,7 @@ export async function FileSoftDeleteAction(state: FileSoftDeleteState, formData:
   };
 
   try {
-    const { name } = await softDelete({ email }, { id: fileId }, { name: true });
+    const { name } = await softDeleteFile({ email }, { id: fileId }, { name: true });
     return {
       ...result.data,
       success: true,
@@ -137,6 +140,66 @@ export async function restoreDeletedFile(id: number): Promise<boolean> {
   let success = true;
   try {
     await restoreFile({ email }, id);
+  } catch {
+    success = false;
+  }
+
+  return success;
+}
+
+export type FolderSoftDeleteState = {
+  success?: true;
+  message?: string;
+  folderId: number;
+  errors?: Partial<Record<keyof Omit<FolderSoftDeleteState, "errors">, string[]>> & { root?: string },
+};
+
+export async function FolderSoftDeleteAction(
+  state: FolderSoftDeleteState,
+  formData: FormData,
+): Promise<FolderSoftDeleteState> {
+  const result = FolderSoftDeleteSchema.safeParse(Object.fromEntries(formData.entries()));
+  if (!result.success) return {
+    ...state,
+    errors: result.error?.flatten().fieldErrors,
+  };
+
+  const session = await getServerSession();
+  const { email } = session?.user ?? {};
+  if (!email) return {
+    ...state,
+    errors: { root: "Something went wrong" },
+  };
+
+  const { folderId } = result.data;
+  if (folderId !== state.folderId) return {
+    ...state,
+    errors: { root: "Something went wrong" },
+  };
+
+  try {
+    const { name } = await softDeleteFolder({ email }, folderId);
+    return {
+      ...result.data,
+      success: true,
+      message: `Folder "${name}" sent to trash`,
+    };
+  } catch {
+    return {
+      ...state,
+      errors: { root: "Something went wrong" },
+    }
+  }
+}
+
+export async function restoreDeletedFolder(id: number): Promise<boolean> {
+  const session = await getServerSession();
+  const { email } = session?.user ?? {};
+  if (!email) return false;
+
+  let success = true;
+  try {
+    await restoreFolder({ email }, id);
   } catch {
     success = false;
   }

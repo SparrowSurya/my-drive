@@ -2,26 +2,26 @@
 
 import { useActionState, useEffect } from "react";
 import { Form } from "@/components/form";
-import { FileSoftDeleteAction } from "../actions";
+import { FolderSoftDeleteAction } from "../actions";
 import type { ContentData } from "../../types";
 import useSnackbar from "@/hooks/useSnackbar";
 
 
-export type ConfirmSoftDeleteDialogProps = {
+export type FolderSoftDeleteDialogProps = {
   data: ContentData,
   closeModal: (refresh: boolean) => void,
 };
 
-export default function SoftDeleteDialog({ data, closeModal }: Readonly<ConfirmSoftDeleteDialogProps>) {
+export default function FolderSoftDeleteDialog({ data, closeModal }: Readonly<FolderSoftDeleteDialogProps>) {
   const snackbar = useSnackbar();
-  const [state, formAction, isSubmitting] = useActionState(FileSoftDeleteAction, {
-    fileId: data.id as number,
+  const [state, formAction, isSubmitting] = useActionState(FolderSoftDeleteAction, {
+    folderId: data.id as number,
   });
 
   useEffect(() => {
     if (!!state.success) {
       snackbar.show({
-        message: state.message ?? `File "${data.name}" sent to trash`,
+        message: state.message ?? `Folder "${data.name}" sent to trash`,
       });
       closeModal(true);
     }
@@ -41,7 +41,7 @@ export default function SoftDeleteDialog({ data, closeModal }: Readonly<ConfirmS
           <p className="text-subtext0 mb-8">
             <span className="font-medium text-text">{`"${data.name}"`}</span> {data.type} will be deleted permanently after 30 days
           </p>
-          <input type="hidden" name="fileId" value={data.id} />
+          <input type="hidden" name="folderId" value={data.id} />
           <div className="flex flex-row justify-end items-center gap-4">
             <button
               type="button"

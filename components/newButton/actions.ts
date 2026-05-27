@@ -24,7 +24,7 @@ export async function createFolderAction(state: CreateFolderFormState, formData:
   };
 
   const session = await getServerSession();
-  const { email } = session!.user;
+  const { email } = session?.user ?? {};
   if (!email) return {
     ...state,
     errors: { root: "Something went wrong" },
@@ -60,7 +60,7 @@ export async function uploadFiles(parentId: number, files: {
   data: Uint8Array,
 }[]): Promise<string | { name: string }[]> {
   const session = await getServerSession();
-  const { email } = session!.user ;
+  const { email } = session?.user ?? {};
   if (!email) return "Something went wrong";
 
   try {
@@ -85,7 +85,7 @@ export async function uploadFolder(parentId: number, files: {
 }[]): Promise<true | string> {
 
   const session = await getServerSession();
-  const { email } = session!.user ;
+  const { email } = session?.user ?? {};
   if (!email) return "Something went wrong";
 
   try {

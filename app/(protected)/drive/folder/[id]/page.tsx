@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getFolderContents, getPathSegments, getFolderName } from "./query";
+import { getFolderContents, getPathSegments, getFolderName, folderDeletionStatus, getDeletedFolderContents, getDeletedPathSegments } from "./query";
 import { redirect } from "next/navigation";
 import FolderView from "../../my-drive/view";
 import { EmptyStateProps } from "@/components/emptyState";
@@ -28,16 +28,27 @@ export default async function FolderPage({
     return redirect("/drive/my-drive");
   }
 
-  const data = await getFolderContents(id);
-  const segments = (await getPathSegments(id)).map((segment) => (
-    (segment.name.length === 0) ? {
-      name: "My Drive",
-      url: "/drive/my-drive",
-    } : {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isDeleted, directDelete] = await folderDeletionStatus(id);
+
+  const data = isDeleted
+    ? await getDeletedFolderContents(id)
+    : await getFolderContents(id);
+
+  const segments = isDeleted
+    ? (await getDeletedPathSegments(id)).map((segment) => ({
       name: segment.name,
       url: `/drive/folder/${segment.id}`,
-    }
-  ));
+    }))
+    : (await getPathSegments(id)).map((segment) => (
+      (segment.name.length === 0) ? {
+        name: "My Drive",
+        url: "/drive/my-drive",
+      } : {
+        name: segment.name,
+        url: `/drive/folder/${segment.id}`,
+      }
+    ));
 
   const emptyStateProps: EmptyStateProps = {
     image: '/assets/svg/empty_state_empty_folder.svg',

@@ -85,3 +85,6 @@ npm run start
 
 ## LATER
 * Preview in grid view.
+* Item selection
+* More sort options on elipsis column
+* File/Folder information

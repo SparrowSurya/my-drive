@@ -195,7 +195,7 @@ export async function getParentHierarchy(
       where: { id },
       select: {
         ...(select ?? {}),
-        parent: { select: { parentId: true }},
+        parent: { select: { parentId: true } },
         id: true,
         isRoot: true,
       },
@@ -410,7 +410,7 @@ export async function restoreFolder(
   }
 }
 
-export async function getDeletedFolders<T extends Prisma.FolderSelect>(
+export async function getDirectDeletedFolders<T extends Prisma.FolderSelect>(
   userWhere: Prisma.UserWhereUniqueInput,
   select: T,
 ): Promise<Prisma.FolderGetPayload<{ select: T }>[]> {
@@ -425,4 +425,86 @@ export async function getDeletedFolders<T extends Prisma.FolderSelect>(
       deletedAt: "desc",
     },
   });
+}
+
+export async function isFolderDeleted(
+  userWhere: Prisma.UserWhereUniqueInput,
+  folderId: number,
+): Promise<[boolean, boolean]> {
+  const folder = await prisma.folder.findUnique({
+    where: {
+      user: userWhere,
+      id: folderId,
+      deletedAt: { not: null },
+    },
+    select: {
+      id: true,
+      directDelete: true,
+    },
+  });
+  return (folder === null) ? [false, false] : [true, folder.directDelete ?? false];
+}
+
+export async function getDeletedChildFolders<T extends Prisma.FolderSelect>(
+  userWhere: Prisma.UserWhereUniqueInput,
+  folderId: number,
+  select: T,
+): Promise<Prisma.FolderGetPayload<{ select: T }>[]> {
+  const children = await prisma.hierarchy.findMany({
+    where: {
+      parent: {
+        user: userWhere,
+        id: folderId,
+        deletedAt: { not: null },
+      },
+    },
+    select: {
+      folder: { select },
+    },
+  });
+  return children.map((c) => c.folder);
+}
+
+export async function getDeletedParentHierarchy<T extends Prisma.FolderSelect>(
+  userWhere: Prisma.UserWhereUniqueInput,
+  folderId: number,
+  select: T,
+): Promise<Prisma.FolderGetPayload<{ select: T }>[]> {
+  const folder = await prisma.folder.findUniqueOrThrow({
+    where: {
+      user: userWhere,
+      id: folderId,
+      deletedAt: { not: null },
+    },
+    select: { id: true, isRoot: true },
+  });
+
+  const segments: Prisma.FolderGetPayload<{ select: T }>[] = [];
+  let id = folder.id;
+
+  while (!!id) {
+    const folder = await prisma.folder.findUniqueOrThrow({
+      where: { id },
+      select: {
+        ...select,
+        parent: { select: { parentId: true } },
+        id: true,
+        isRoot: true,
+        deletedAt: true,
+        directDelete: true,
+      },
+    }) as Prisma.FolderGetPayload<{ select: T }> & {
+      isRoot: boolean,
+      parent: { parentId: number | null } | null,
+      directDelete: boolean | null,
+    };
+
+    // FIXME - This may add extra fields due to above select
+    segments.push(folder);
+
+    if (folder.isRoot || !(folder.parent?.parentId) || folder.directDelete === true) break;
+    id = folder.parent?.parentId;
+  }
+
+  return segments.reverse();
 }
