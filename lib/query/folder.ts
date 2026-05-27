@@ -411,6 +411,35 @@ export async function restoreFolder(
   }
 }
 
+export async function starFolder(
+  userWhere: Prisma.UserWhereUniqueInput,
+  folderId: number,
+): Promise<Prisma.FolderGetPayload<{ select: { name: true } }>> {
+  return await updateFolder(userWhere, { id: folderId }, { starred: true }, { name: true });
+}
+
+export async function unstarFolder(
+  userWhere: Prisma.UserWhereUniqueInput,
+  folderId: number,
+): Promise<Prisma.FolderGetPayload<{ select: { name: true } }>> {
+  return await updateFolder(userWhere, { id: folderId }, { starred: false }, { name: true });
+}
+
+export async function getDirectStarredFolders<T extends Prisma.FolderSelect>(
+  userWhere: Prisma.UserWhereUniqueInput,
+  select: T,
+): Promise<Prisma.FolderGetPayload<{ select: T }>[]> {
+  return await prisma.folder.findMany({
+    where: {
+      user: userWhere,
+      deletedAt: null,
+      starred: true,
+    },
+    select,
+    orderBy: { updatedAt: "desc" },
+  });
+}
+
 export async function getDirectDeletedFolders<T extends Prisma.FolderSelect>(
   userWhere: Prisma.UserWhereUniqueInput,
   select: T,

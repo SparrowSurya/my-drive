@@ -7,6 +7,7 @@ import OrganiseOption from "./organise";
 import RenameOption from "./rename";
 import RestoreOption from "./restore";
 import ShareOption from "./share";
+import StarredOption from "./starred";
 import { OptionSeperatorProps } from "@/components/option/seperator";
 
 
@@ -18,6 +19,7 @@ export enum ContentOption {
   moveToTrash = "MoveToTrash",
   restore = "Restore",
   deleteForever = "DeleteForever",
+  starred = "Starred",
   seperator = "Seperator",
 };
 
@@ -36,5 +38,6 @@ export const OptionBuilder: Record<
   [ContentOption.moveToTrash]: (props) => <MoveToTrashOption {...props} />,
   [ContentOption.restore]: (props) => <RestoreOption {...props} />,
   [ContentOption.deleteForever]: (props) => <DeleteForeverOption {...props} />,
+  [ContentOption.starred]: (props) => <StarredOption {...props} />,
   [ContentOption.seperator]: (props) => <OptionSeperator {...(props as OptionSeperatorProps)} />,
 };

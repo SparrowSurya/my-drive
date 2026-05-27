@@ -1,8 +1,8 @@
 "use server";
 
 import { getServerSession } from "next-auth";
-import { restoreFolder, softDeleteFolder, updateFolder } from "@/lib/query/folder";
-import { restoreFile, softDeleteFile, updateFile } from "@/lib/query/file";
+import { restoreFolder, softDeleteFolder, starFolder, unstarFolder, updateFolder } from "@/lib/query/folder";
+import { restoreFile, softDeleteFile, starFile, unstarFile, updateFile } from "@/lib/query/file";
 import { RenameFolderSchema, RenameFileSchema, FileSoftDeleteSchema, FolderSoftDeleteSchema } from "@/lib/schema";
 
 
@@ -148,9 +148,9 @@ export async function restoreDeletedFile(id: number): Promise<boolean> {
 }
 
 export type FolderSoftDeleteState = {
-  success?: true;
-  message?: string;
-  folderId: number;
+  success?: true,
+  message?: string,
+  folderId: number,
   errors?: Partial<Record<keyof Omit<FolderSoftDeleteState, "errors">, string[]>> & { root?: string },
 };
 
@@ -205,4 +205,56 @@ export async function restoreDeletedFolder(id: number): Promise<boolean> {
   }
 
   return success;
+}
+
+export async function addFileStar(id: number): Promise<boolean> {
+  const session = await getServerSession();
+  const { email } = session?.user ?? {};
+  if (!email) return false;
+
+  try {
+    await starFile({ email }, id);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function removeFileStar(id: number): Promise<boolean> {
+  const session = await getServerSession();
+  const { email } = session?.user ?? {};
+  if (!email) return false;
+
+  try {
+    await unstarFile({ email }, id);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function addFolderStar(id: number): Promise<boolean> {
+  const session = await getServerSession();
+  const { email } = session?.user ?? {};
+  if (!email) return false;
+
+  try {
+    await starFolder({ email }, id);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function removeFolderStar(id: number): Promise<boolean> {
+  const session = await getServerSession();
+  const { email } = session?.user ?? {};
+  if (!email) return false;
+
+  try {
+    await unstarFolder({ email }, id);
+    return true;
+  } catch {
+    return false;
+  }
 }

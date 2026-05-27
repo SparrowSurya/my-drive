@@ -80,6 +80,7 @@ export function map2FolderData<S extends Prisma.FolderDefaultArgs>(
     owner: folder.user?.name ?? undefined,
     updatedAt: extract<Date>(folder, "updatedAt", Date),
     deletedAt: extract<Date>(folder, "deletedAt", Date),
+    starred: extract<boolean>(folder, "starred", "boolean"),
     parentId: extract<number>(folder.parent, "parentId", "number"),
     children: children?.map((f) => map2FolderData(ownerEmail, f)),
   };
@@ -104,6 +105,7 @@ export function map2FileData<S extends Prisma.FileDefaultArgs>(
     owner: file.folder?.user?.name ?? "Gabbar",
     updatedAt: extract<Date>(file, "updatedAt", Date),
     deletedAt: extract<Date>(file, "deletedAt", Date),
+    starred: extract<boolean>(file, "starred", "boolean"),
     folderId: extract<number>(file, "folderId", "number")
       ?? extract<number>(file.folder, "id", "number"),
     location: folderName === "" ? "My Drive" : folderName,

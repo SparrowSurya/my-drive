@@ -16,6 +16,7 @@ export async function getFileSuggestions(count?: number): Promise<FileData[]> {
     size: true,
     folderId: true,
     mimeType: true,
+    starred: true,
     folder: {
       select: {
         id: true,
@@ -37,6 +38,7 @@ export async function getFolderSuggestions(count?: number): Promise<FolderData[]
   const select = {
     id: true,
     name: true,
+    starred: true,
     parent: { select: { id: true } },
     user: { select: { name: true, email: true } },
     updatedAt: true,

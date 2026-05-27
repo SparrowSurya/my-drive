@@ -2,7 +2,7 @@ import { SortOption } from "@/hooks/useSort";
 import FileIcon from "../../fileIcon";
 import { ListColumnContentBuilderProps, ListColumnHeadingBuilderProps } from "../types";
 import Icon from "@/components/icon";
-import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { faArrowDown, faArrowUp, faStar } from "@fortawesome/free-solid-svg-icons";
 import usePageView from "@/hooks/usePageView";
 
 
@@ -38,9 +38,10 @@ export function ListColumnNameContent({ data }: Readonly<ListColumnContentBuilde
   const mimeType = data.type === "file" ? data.mimeType : undefined;
 
   return (
-    <div className="flex flex-row items-center truncate">
-      <FileIcon mimeType={mimeType} />
-      <span className="truncate overflow-hidden whitespace-nowrap">{ data.name }</span>
+    <div className="flex flex-row items-center gap-2 overflow-hidden">
+      <FileIcon mimeType={mimeType} className="shrink-0" />
+      <span className="truncate whitespace-nowrap overflow-hidden">{ data.name }</span>
+      {data.starred && <Icon icon={faStar} className="text-text shrink-0 size-3" style={{ transform: "scale(0.75)" }} />}
     </div>
   );
 }

@@ -251,6 +251,35 @@ export async function restoreFile(
   await updateFile(userWhere, fileWhere, data, { id: true });
 }
 
+export async function starFile(
+  userWhere: Prisma.UserWhereUniqueInput,
+  fileId: number,
+): Promise<Prisma.FileGetPayload<{ select: { name: true } }>> {
+  return await updateFile(userWhere, { id: fileId }, { starred: true }, { name: true });
+}
+
+export async function unstarFile(
+  userWhere: Prisma.UserWhereUniqueInput,
+  fileId: number,
+): Promise<Prisma.FileGetPayload<{ select: { name: true } }>> {
+  return await updateFile(userWhere, { id: fileId }, { starred: false }, { name: true });
+}
+
+export async function getDirectStarredFiles<T extends Prisma.FileSelect>(
+  userWhere: Prisma.UserWhereUniqueInput,
+  select: T,
+): Promise<Prisma.FileGetPayload<{ select: T }>[]> {
+  return await prisma.file.findMany({
+    where: {
+      folder: { user: userWhere },
+      deletedAt: null,
+      starred: true,
+    },
+    select,
+    orderBy: { updatedAt: "desc" },
+  });
+}
+
 export async function getDeletedFiles<T extends Prisma.FileSelect>(
   userWhere: Prisma.UserWhereUniqueInput,
   folderId: number,

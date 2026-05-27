@@ -33,7 +33,9 @@ export default function ContentOptionMenuDialog({
       ...(isDeleted ? [] : [
         ContentOption.seperator,
         ContentOption.organise,
+        ContentOption.starred,
         ContentOption.share,
+        ContentOption.seperator,
         ContentOption.moveToTrash,
       ]),
     ];
@@ -41,8 +43,8 @@ export default function ContentOptionMenuDialog({
 
   return (
     <Modal className={`option-menu ${className}`} {...props}>
-      {options.map((opt) => (
-        <React.Fragment key={opt.toString()}>
+      {options.map((opt, index) => (
+        <React.Fragment key={`${opt.toString()}-${index}`}>
           { OptionBuilder[opt]({ data }) }
         </React.Fragment>
       ))}

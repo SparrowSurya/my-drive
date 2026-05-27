@@ -9,9 +9,10 @@ interface BaseData {
   isMe: boolean,
   owner?: string,
   type: ContentType,
-  parent?: string
+  parent?: string,
   size?: number,
   location?: string,
+  starred?: boolean,
 }
 
 export type ContentType = "file" | "folder";
