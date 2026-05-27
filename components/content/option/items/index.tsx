@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useMemo } from "react";
 import usePageView from "@/hooks/usePageView";
 import Modal, { ModalProps } from "@/components/modal";
@@ -15,6 +17,7 @@ export default function ContentOptionMenuDialog({
   ...props
 }: Readonly<ContentOptionMenuType>) {
   const page = usePageView();
+  const isDeleted = data.deletedAt instanceof Date;
 
   const options = useMemo(() => {
     if (page === "trash") {
@@ -27,12 +30,14 @@ export default function ContentOptionMenuDialog({
     return [
       ContentOption.download,
       ContentOption.rename,
-      ContentOption.seperator,
-      ContentOption.organise,
-      ContentOption.share,
-      ContentOption.moveToTrash,
+      ...(isDeleted ? [] : [
+        ContentOption.seperator,
+        ContentOption.organise,
+        ContentOption.share,
+        ContentOption.moveToTrash,
+      ]),
     ];
-  }, [page]);
+  }, [page, isDeleted]);
 
   return (
     <Modal className={`option-menu ${className}`} {...props}>

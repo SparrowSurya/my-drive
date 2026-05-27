@@ -94,7 +94,7 @@ export async function getDeletedFolderContents(id: number): Promise<ContentData[
     size: true,
     folderId: true,
     mimeType: true,
-    deletedAt: false,
+    deletedAt: true,
     folder: {
       select: {
         id: false,
