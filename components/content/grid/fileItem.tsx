@@ -11,6 +11,7 @@ export type FileGridItemProps = {
 };
 
 export default function FileGridItem({ file, showFile }: Readonly<FileGridItemProps>) {
+  const mimeType = file.type === "file" ? file.mimeType : undefined;
   const lastModified = file.updatedAt instanceof Date
     ? utils.formatDate(file.updatedAt)
     : null;
@@ -21,12 +22,12 @@ export default function FileGridItem({ file, showFile }: Readonly<FileGridItemPr
       onDoubleClick={() => showFile(file.id)}
     >
       <div className="flex flex-row items-center gap-1">
-        <FileIcon mimeType={ file.type === "file" ? file.mimeType : undefined } />
+        <FileIcon mimeType={mimeType} />
         <span className="flex-1 truncate font-medium">{ file.name }</span>
         <ContentOptionMenu data={ file } />
       </div>
       <div
-        className="p-3 bg-mantle rounded-md h-42 my-3 overflow-clip"
+        className="p-3 bg-mantle rounded-md h-42 my-3 overflow-clip flex justify-center items-center"
         style={{
           backgroundImage: `
             repeating-linear-gradient(
@@ -37,7 +38,15 @@ export default function FileGridItem({ file, showFile }: Readonly<FileGridItemPr
               transparent 8px
             )
           `,
-        }}></div>
+        }}>
+          <FileIcon
+            mimeType={mimeType}
+            style={{
+              transform: "scale(8)",
+              opacity: 0.75,
+            }}
+          />
+        </div>
       {file.reason && (
         <div className="flex flex-row gap-3 items-center mx-2">
           <Avatar text={ file.owner } size="small" className="bg-lavender text-base my-2" />

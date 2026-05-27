@@ -1,6 +1,9 @@
+"use client";
+
 import FileGridItem from "./fileItem";
 import FolderGridItem from "./folderItem";
 import { type ContentData } from "../types";
+import usePageView from "@/hooks/usePageView";
 
 export type GridViewProps = {
   data: ContentData[],
@@ -17,6 +20,8 @@ export default function ContentGridView({
   className,
   scrollable = true,
 }: Readonly<GridViewProps>) {
+  const page = usePageView();
+
   const files = data.filter((item) => item.type == "file");
   const folders = data.filter((item) => item.type == "folder");
 
@@ -27,7 +32,7 @@ export default function ContentGridView({
 
   return (
     <div className={className ?? baseClassName}>
-      {(folders.length > 0) && (
+      {(folders.length > 0 && page !== "trash") && (
         <div className="grid grid-cols-4 gap-3 shrink-0">
           {
             folders.map((folder, index) => (
@@ -40,10 +45,23 @@ export default function ContentGridView({
             }
         </div>
       )}
-      {(files.length > 0) && (
+      {(files.length > 0 && page !== "trash") && (
         <div className="grid grid-cols-4 gap-3 shrink-0">
           {
             files.map((file, index) => (
+              <FileGridItem
+                key={index}
+                file={file}
+                showFile={showFile}
+              />
+            ))
+          }
+        </div>
+      )}
+      {(data.length > 0 && page === "trash") && (
+        <div className="grid grid-cols-4 gap-3 shrink-0">
+          {
+            data.map((file, index) => (
               <FileGridItem
                 key={index}
                 file={file}

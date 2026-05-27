@@ -5,10 +5,10 @@ import * as mimeUtils from "@/lib/mime/utils";
 
 export type FileIconProps = {
   mimeType?: string,
-} & Omit<IconProp, "icon">;
+} & Omit<IconProp, "icon"> ;
 
 
-export default function FileIcon({ mimeType, style, className }: Readonly<FileIconProps>) {
+export default function FileIcon({ mimeType, style, size, className, ...rest }: Readonly<FileIconProps>) {
   const [icon, type] = fileIconFromMime(mimeType);
 
   return (
@@ -16,6 +16,8 @@ export default function FileIcon({ mimeType, style, className }: Readonly<FileIc
       icon={icon}
       className={`fileIcon fileIcon-${type} ${className ?? ""}`}
       style={style}
+      size={size}
+      {...rest}
     />
   );
 }
