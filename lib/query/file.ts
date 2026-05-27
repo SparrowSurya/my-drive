@@ -296,3 +296,19 @@ export async function getDeletedFiles<T extends Prisma.FileSelect>(
     select,
   });
 }
+
+export async function getFilesByUsage<T extends Prisma.FileSelect>(
+  userWhere: Prisma.UserWhereUniqueInput,
+  select: T,
+): Promise<Prisma.FileGetPayload<{ select: T }>[]> {
+  return await prisma.file.findMany({
+    where: {
+      folder: { user: userWhere },
+      deletedAt: null,
+    },
+    select,
+    orderBy: {
+      size: "desc",
+    },
+  });
+}

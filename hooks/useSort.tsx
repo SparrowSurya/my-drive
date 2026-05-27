@@ -3,7 +3,7 @@ import utils from "@/lib/utils";
 import { useMemo, useState } from "react";
 
 
-export type SortKey = "name" | "updatedAt";
+export type SortKey = "name" | "updatedAt" | "fileSize";
 export type SortOrder = "asc" | "desc";
 
 export type SortOption = {
@@ -28,9 +28,17 @@ function compareDate(a: ContentData, b: ContentData, ord: SortOrder, field: Extr
   return ord === "asc" ? result : -result;
 }
 
+function compareNumber(a: ContentData, b: ContentData, ord: SortOrder, field: Extract<keyof ContentData, string>): number {
+  const numA = (a[field] as number) ?? 0;
+  const numB = (b[field] as number) ?? 0;
+  const result = numA - numB;
+  return ord === "asc" ? result : -result;
+}
+
 const contentDataCompareFn: Record<SortKey, ContentDataCompareFn> = {
   name: (a, b, ord) => compareText(a, b, ord, "name"),
   updatedAt: (a, b, ord) => compareDate(a, b, ord, "updatedAt"),
+  fileSize: (a, b, ord) => compareNumber(a, b, ord, "size"),
 };
 
 export type SortProps<T extends ContentData[] | GroupedContentData> = {

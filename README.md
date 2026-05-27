@@ -73,11 +73,9 @@ npm run start
 * verify the magic numbers for mime types
 
 ## WIP
-* Starred
+* Search
 
 ## TODO
-* Storage
-* Search
 * Activity
 * Share
 * Versions

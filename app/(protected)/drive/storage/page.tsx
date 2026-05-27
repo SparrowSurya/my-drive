@@ -1,22 +1,28 @@
 import { Metadata } from "next";
-import EmptyState from "@/components/emptyState";
+import StorageView from "./view";
+import { getFilesData } from "./query";
+import { storageUsed } from "../@navbar/query";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import Icon from "@/components/icon";
 
 
 export const metadata: Metadata = {
   title: "Storage - Drive",
 };
 
-export default function StoragePage() {
+export default async function StoragePage() {
+  const files = await getFilesData();
+  const storage = await storageUsed();
+
   return (
-    <div className="flex flex-col flex-1 overflow-hidden h-full ml-3">
-      <div className="drivePageHeading mb-4">Storage</div>
-      <div className="flex-1 flex flex-col min-h-0">
-        <EmptyState
-          image="/assets/svg/empty_state_storage.svg"
-          title="No files are using storage"
-          para="Items you own will use Drive storage"
-        />
+    <div className="flex flex-col flex-1 overflow-hidden h-full">
+      <div className="flex flex-row justify-between shrink-0 mb-4 ml-3">
+        <div className="drivePageHeading">Storage</div>
+        <div className="flex flex-row gap-2 items-center">
+          <Icon icon={faInfoCircle} hover={true} />
+        </div>
       </div>
+      <StorageView data={files} storageUsed={storage} />
     </div>
   );
 }

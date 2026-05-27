@@ -15,7 +15,7 @@ export function ListColumnNameHeading({ headings, applySort, sortOption }: Reado
     ? (order === "asc" ? faArrowUp : order === "desc" ? faArrowDown : null)
     : null;
 
-  const enable = page !== "recent";
+  const enable = page !== "recent" && page !== "storage";
   const sort = (!!applySort && enable) ? () => {
     const nextOrder = order === "asc" ? "desc" : order === "desc" ? null : "asc";
     const opt = nextOrder === null ? null : {
