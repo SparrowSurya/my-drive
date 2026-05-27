@@ -10,7 +10,7 @@ import usePageView from "@/hooks/usePageView";
 
 
 export function ListColumnLocationHeading({ headings }: Readonly<ListColumnHeadingBuilderProps>) {
-  const { page } = usePageView();
+  const page = usePageView();
   const heading = page === "trash" ? "Original Location" : headings["location"] ?? "Location";
 
   return (

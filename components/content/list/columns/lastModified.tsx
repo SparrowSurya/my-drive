@@ -7,7 +7,7 @@ import usePageView from "@/hooks/usePageView";
 
 
 export function ListColumnLastModifiedHeading({ headings, applySort, sortOption }: Readonly<ListColumnHeadingBuilderProps>) {
-  const { page } = usePageView();
+  const page = usePageView();
   const myKey = "updatedAt";
   const order = sortOption?.order;
   const icon = sortOption?.key == myKey

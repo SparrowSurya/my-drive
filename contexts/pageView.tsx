@@ -29,13 +29,11 @@ export const urlToPageView = (url: string): PageViewType | null => {
   return entry?.[0] as PageViewType | null;
 };
 
-export type PageViewContextType = {
-  page: PageViewType | null,
-};
+export type PageViewContextType = PageViewType | null;
 
 export default function PageViewProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const path = usePathname();
-  const [page, setPage] = useState<PageViewType | null>(null)
+  const [page, setPage] = useState<PageViewType | null>(() => urlToPageView(path));
 
   useEffect(() => {
     const newPage = urlToPageView(path);
@@ -43,7 +41,7 @@ export default function PageViewProvider({ children }: Readonly<{ children: Reac
   }, [path, page]);
 
   return (
-    <PageViewContext.Provider value={{ page }}>
+    <PageViewContext.Provider value={page}>
       { children }
     </PageViewContext.Provider>
   );

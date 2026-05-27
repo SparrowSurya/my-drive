@@ -1,26 +1,34 @@
 "use client";
 
 import Modal from "@/components/modal";
-import React, { createContext, useCallback, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { createContext, useCallback, useMemo, useState, useTransition } from "react";
 
 export const ModalContext = createContext<ModalContextType | null>(null);
 
 export type ModalContextType = {
   isOpen: boolean;
+  isTransition: boolean;
   show: (child: React.ReactNode) => void;
-  close: () => void;
+  close: (refresh: boolean) => void;
 };
 
 export default function ModalProvider({ children }: Readonly<{ children: React.ReactNode }>) {
+  const router = useRouter();
+  const [isTransition, startTransition] = useTransition();
   const [content, setContent] = useState<React.ReactNode | null>(null);
 
-  const close = useCallback(() => setContent(null), []);
+  const close = useCallback((refresh: boolean) => {
+    setContent(null);
+    if (refresh) startTransition(() => router.refresh())
+  }, [router]);
   const show = useCallback((modal: React.ReactNode) => setContent(modal), []);
   const value = useMemo(() => ({
     isOpen: content != null,
     show,
     close,
-  }), [content, show, close]);
+    isTransition,
+  }), [content, show, close, isTransition]);
 
   return (
     <ModalContext.Provider value={value}>

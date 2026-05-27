@@ -1,9 +1,8 @@
 import FileIcon from "../fileIcon";
 import { type ContentData } from "../types";
-import ContentOptionMenu from "../options";
+import ContentOptionMenu from "../option";
 import { Avatar } from "@/components/avatar";
 import utils from "@/lib/utils";
-import usePageView from "@/hooks/usePageView";
 
 
 export type FileGridItemProps = {
@@ -12,7 +11,6 @@ export type FileGridItemProps = {
 };
 
 export default function FileGridItem({ file, showFile }: Readonly<FileGridItemProps>) {
-  const { page } = usePageView();
   const lastModified = file.updatedAt instanceof Date
     ? utils.formatDate(file.updatedAt)
     : null;
@@ -25,7 +23,7 @@ export default function FileGridItem({ file, showFile }: Readonly<FileGridItemPr
       <div className="flex flex-row items-center gap-1">
         <FileIcon mimeType={ file.type === "file" ? file.mimeType : undefined } />
         <span className="flex-1 truncate font-medium">{ file.name }</span>
-        <ContentOptionMenu data={ file } isTrash={page === "trash"} />
+        <ContentOptionMenu data={ file } />
       </div>
       <div
         className="p-3 bg-mantle rounded-md h-42 my-3 overflow-clip"

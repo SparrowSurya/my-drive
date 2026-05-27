@@ -7,7 +7,7 @@ import usePageView from "@/hooks/usePageView";
 
 
 export function ListColumnNameHeading({ headings, applySort, sortOption }: Readonly<ListColumnHeadingBuilderProps>) {
-  const { page } = usePageView();
+  const page = usePageView();
   const myKey = "name";
   const order = sortOption?.order;
   const heading = headings[myKey] ?? "Name";
