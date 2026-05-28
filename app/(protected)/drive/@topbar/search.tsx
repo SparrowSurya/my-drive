@@ -20,9 +20,10 @@ export default function ContentSearchInput() {
 
   const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = new FormData(e.target);
-    const query = data.get(fieldName);
-    const url = `/drive/search?q=${query}`;
+    const data = new FormData(e.currentTarget);
+    const query = data.get(fieldName)?.toString() || "";
+    const params = new URLSearchParams({ q: query });
+    const url = `/drive/search?${params.toString()}`;
     router.push(url);
   };
 

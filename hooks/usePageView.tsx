@@ -7,7 +7,8 @@ import { useContext } from "react";
 export default function usePageView() {
   const context = useContext(PageViewContext);
   if (!context) {
-    throw new Error("usePageView must be used inside PageViewProvider");
+    console.warn("usePageView must be used inside PageViewProvider");
+    return null;
   }
 
   return context;

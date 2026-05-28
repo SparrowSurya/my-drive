@@ -11,12 +11,15 @@ import { FilterType } from "@/hooks/useFilter";
 export default async function SearchPage({
   searchParams
 }: Readonly<{
-  searchParams: Promise<{ q?: string }>,
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>,
 }>) {
-  const { q } = await searchParams;
-  if (!q || q === '') redirect('/drive/home');
+  const resolvedParams = await searchParams;
+  const q = resolvedParams.q;
+  const query = (Array.isArray(q) ? q[0] : q)?.trim() ?? "";
 
-  const [files, folders] = await Promise.all([ queryFiles(q), queryFolders(q) ]);
+  if (!query || query === '') redirect('/drive/home');
+
+  const [files, folders] = await Promise.all([ queryFiles(query), queryFolders(query) ]);
   const data = [ ...folders, ...files ];
 
   const headings: ListViewColumn[] = ["name", "owner", "updatedAt", "fileSize", "elipsis"];
