@@ -38,7 +38,7 @@ export function ListColumnNameContent({ data }: Readonly<ListColumnContentBuilde
   const mimeType = data.type === "file" ? data.mimeType : undefined;
 
   return (
-    <div className="flex flex-row items-center gap-2 overflow-hidden">
+    <div className="flex flex-row items-center gap-0 overflow-hidden">
       <FileIcon mimeType={mimeType} className="shrink-0" />
       <span className="truncate whitespace-nowrap overflow-hidden">{ data.name }</span>
       {data.starred && <Icon icon={faStar} className="text-text shrink-0 size-3" style={{ transform: "scale(0.75)" }} />}
