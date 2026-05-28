@@ -41,7 +41,7 @@ export default function ContentSearchInput() {
           className="text-lg focus:outline-none caret-rosewater font-poppins border-none"
           autoComplete="off"
         />
-        <Icon icon={faXmark} hover onClick={() => setValue("")} />
+        {value !== "" && <Icon icon={faXmark} hover onClick={() => setValue("")} />}
         <Icon icon={faSliders} hover />
       </div>
     </form>
