@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/nextauth";
 
 
 export const metadata: Metadata = {
@@ -8,6 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
+  const session = await getServerSession(authOptions);
+
   return (
     <div className="grid grid-cols-12 gap-0 px-8 py-16 w-full">
       <div></div>
@@ -24,14 +28,23 @@ export default async function Home() {
         <h1 className="text-5xl font-bold">Store and share files online</h1>
         <p className="text-lg text-subtext0">AI-powered cloud storage for seamless file sharing and enhanced collaboration.</p>
         <div className="flex flex-row items-center gap-3">
-          <Link
-            href="/auth/signin"
-            className="px-3 py-2 bg-mauve text-base border rounded-lg cursor-pointer hover:bg-mauve/90"
-          >SignIn</Link>
-          <Link
-            href="/auth/login"
-            className="px-3 py-2 bg-base text-subtext0 border border-overlay0 rounded-lg cursor-pointer hover:border-mauve hover:text-mauve"
-          >LogIn</Link>
+          {session ? (
+            <Link
+              href="/drive/home"
+              className="px-3 py-2 bg-mauve text-base border rounded-lg cursor-pointer hover:bg-mauve/90"
+            >Go to Drive</Link>
+          ) : (
+            <>
+              <Link
+                href="/auth/signin"
+                className="px-3 py-2 bg-mauve text-base border rounded-lg cursor-pointer hover:bg-mauve/90"
+              >SignIn</Link>
+              <Link
+                href="/auth/login"
+                className="px-3 py-2 bg-base text-subtext0 border border-overlay0 rounded-lg cursor-pointer hover:border-mauve hover:text-mauve"
+              >LogIn</Link>
+            </>
+          )}
         </div>
       </section>
       <div></div>
