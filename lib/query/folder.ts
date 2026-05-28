@@ -540,3 +540,20 @@ export async function getDeletedParentHierarchy<T extends Prisma.FolderSelect>(
 
   return segments.reverse();
 }
+
+export async function searchFolder<T extends Prisma.FolderSelect>(
+  userWhere: Prisma.UserWhereUniqueInput,
+  query: string,
+  select: T,
+): Promise<Prisma.FolderGetPayload<{ select: T }>[]> {
+  return await prisma.folder.findMany({
+    where: {
+      user: userWhere,
+      name: { contains: query },
+      deletedAt: null,
+      isRoot: false,
+    },
+    orderBy: { updatedAt: "desc" },
+    select,
+  });
+}

@@ -27,7 +27,7 @@ export default function PasswordInput({
         required={required}
         placeholder={placeholder}
         name={name}
-        className={`bg-inherit border-1 rounded-sm text-md p-1 ${errorText ? "border-red" : "border-overlay0"}`}
+        className={`bg-inherit border rounded-sm text-md p-1 ${errorText ? "border-red" : "border-overlay0"}`}
         {...restProps}
       />
       { errorText && <span className="text-red text-sm">{ errorText }</span> }

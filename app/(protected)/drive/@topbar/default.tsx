@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { faMagnifyingGlass, faXmark, faSliders } from "@fortawesome/free-solid-svg-icons";
-import Icon from "@/components/icon";
 import ProfileInfo from "./profile";
+import ContentSearchInput from "./search";
+
 
 export default async function Header() {
   return (
@@ -15,16 +15,7 @@ export default async function Header() {
         />
         <span className="text-2xl text-text">Drive</span>
       </div>
-      <div className="col-span-5 flex flex-row items-center bg-surface0 gap-3 p-2 rounded-4xl">
-          <Icon icon={faMagnifyingGlass} hover />
-        <input
-          type="text"
-          placeholder="Search in Drive"
-          className="flex-1 text-lg focus:outline-none caret-rosewater font-poppins"
-        />
-        <Icon icon={faXmark} hover />
-        <Icon icon={faSliders} hover />
-      </div>
+      <ContentSearchInput />
       <div className="col-span-3 flex flex-row justify-end items-center gap-2">
         <ProfileInfo />
       </div>

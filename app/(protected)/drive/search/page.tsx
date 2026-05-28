@@ -2,6 +2,10 @@ import { redirect } from "next/navigation";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import ContentViewToggleButton from "@/components/contentViewToggleButton";
 import Icon from "@/components/icon";
+import { queryFiles, queryFolders } from "./query";
+import ContentView from "@/components/content/view";
+import { ListViewColumn } from "@/components/content/list/types";
+import { FilterType } from "@/hooks/useFilter";
 
 
 export default async function SearchPage({
@@ -12,7 +16,11 @@ export default async function SearchPage({
   const { q } = await searchParams;
   if (!q || q === '') redirect('/drive/home');
 
-  const data = [];
+  const [files, folders] = await Promise.all([ queryFiles(q), queryFolders(q) ]);
+  const data = [ ...folders, ...files ];
+
+  const headings: ListViewColumn[] = ["name", "owner", "updatedAt", "fileSize", "elipsis"];
+  const filterTypes: FilterType[] = ["mimeType", "updatedAt"];
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden h-full">
@@ -23,6 +31,7 @@ export default async function SearchPage({
           <Icon icon={faInfoCircle} hover={true} />
         </div>
       </div>
+      <ContentView data={data} headings={headings} filterTypes={filterTypes} />
     </div>
   );
 }

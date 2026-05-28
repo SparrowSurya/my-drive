@@ -312,3 +312,19 @@ export async function getFilesByUsage<T extends Prisma.FileSelect>(
     },
   });
 }
+
+export async function searchFile<T extends Prisma.FileSelect>(
+  userWhere: Prisma.UserWhereUniqueInput,
+  query: string,
+  select: T,
+): Promise<Prisma.FileGetPayload<{ select: T }>[]> {
+  return await prisma.file.findMany({
+    where: {
+      folder: { user: userWhere },
+      name: { contains: query },
+      deletedAt: null,
+    },
+    orderBy: { updatedAt: "desc" },
+    select,
+  });
+}

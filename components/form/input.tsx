@@ -19,7 +19,7 @@ export default function Input({
   ...restProps
 }: InputProps) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col flex-1">
       {
         labelText && (
           <label
