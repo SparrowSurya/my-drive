@@ -288,7 +288,7 @@ export async function getRecentFolders<T extends Prisma.FolderSelect>(
   take?: number,
 ): Promise<Prisma.FolderGetPayload<{ select: T }>[]> {
   return await prisma.folder.findMany({
-    where: { user: userWhere, deletedAt: null },
+    where: { user: userWhere, deletedAt: null, isRoot: false },
     orderBy: { createdAt: "desc" },
     select,
     take,

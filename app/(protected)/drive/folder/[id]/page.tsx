@@ -1,8 +1,7 @@
 import { Metadata } from "next";
 import { getFolderContents, getPathSegments, getFolderName, folderDeletionStatus, getDeletedFolderContents, getDeletedPathSegments } from "./query";
 import { redirect } from "next/navigation";
-import FolderView from "../../my-drive/view";
-import { EmptyStateProps } from "@/components/emptyState";
+import FolderView from "./view";
 
 
 export async function generateMetadata({
@@ -50,13 +49,7 @@ export default async function FolderPage({
       }
     ));
 
-  const emptyStateProps: EmptyStateProps = {
-    image: '/assets/svg/empty_state_empty_folder.svg',
-    title: 'Drop files here',
-    para: 'Or use the "New" button',
-  };
-
   return (
-    <FolderView data={data} segments={segments} emptyStateProps={emptyStateProps} />
+    <FolderView data={data} segments={segments} />
   );
 }

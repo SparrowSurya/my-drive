@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { EmptyStateProps } from "@/components/emptyState";
 import { getStarredData } from "./query";
 import ContentViewToggleButton from "@/components/contentViewToggleButton";
 import Icon from "@/components/icon";
@@ -15,12 +14,6 @@ export const metadata: Metadata = {
 export default async function StarredPage() {
   const data = await getStarredData();
   const isEmpty = data.length == 0;
-
-  const emptyStateProps: EmptyStateProps = {
-    image: "/assets/svg/empty_state_storage.svg",
-    title: "No starred files",
-    para: "Add stars to things that you want to easily find later",
-  };
 
   const headings: ListViewColumn[] = [
     "name",
@@ -41,7 +34,7 @@ export default async function StarredPage() {
         </div>
       </div>
       <div className="ml-3 flex-1 flex flex-col min-h-0">
-        <StarredCustomView data={data} cols={headings} emptyStateProps={emptyStateProps} />
+        <StarredCustomView data={data} cols={headings} />
       </div>
     </div>
   );

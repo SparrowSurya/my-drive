@@ -1,13 +1,12 @@
 "use client";
 
 import Breadcrumbs from "@/components/breadcrumbs";
-import ContentView from "../../../../components/content/view";
+import ContentView from "../../../../../components/content/view";
 import Icon from "@/components/icon";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { ContentData } from "@/components/content/types";
 import { SegmentData } from "@/components/breadcrumbs/breadcrumbs";
 import ContentViewToggleButton from "@/components/contentViewToggleButton";
-import { EmptyStateProps } from "@/components/emptyState";
 import MenuButton from "@/components/menuButton";
 import useFilter, { FilterPredicate, filters, mimeTypeByLabel } from "@/hooks/useFilter";
 import FileIcon from "@/components/content/fileIcon";
@@ -17,10 +16,9 @@ import { Option } from "@/components/option";
 export type FolderViewProps = {
   data: ContentData[],
   segments: SegmentData[],
-  emptyStateProps: EmptyStateProps,
 };
 
-export default function FolderView({ data, segments, emptyStateProps }: Readonly<FolderViewProps>) {
+export default function FolderView({ data, segments }: Readonly<FolderViewProps>) {
   const { filteredData, activeFilters, applyFilter } = useFilter({ data });
 
   const selectedMimeOption = filters.mimeType.find(([label]) => activeFilters[label as string])?.[0] as string | undefined;
@@ -53,13 +51,6 @@ export default function FolderView({ data, segments, emptyStateProps }: Readonly
     },
   } as Option));
 
-
-  const filterEmptyState: EmptyStateProps = {
-    image: '/assets/svg/empty_state_recent.svg',
-    title: 'No matching results',
-    para: 'Adjust your filters or try searching all of Drive',
-  };
-
   const isFiltersApplied = Object.keys(activeFilters).length > 0;
 
   return (
@@ -89,7 +80,7 @@ export default function FolderView({ data, segments, emptyStateProps }: Readonly
         />
       </div>
       <div className="ml-3 flex-1 flex flex-col min-h-0">
-        <ContentView data={filteredData} emptyStateProps={isFiltersApplied ? filterEmptyState : emptyStateProps} />
+        <ContentView data={filteredData} isFiltered={isFiltersApplied} />
       </div>
     </div>
   );

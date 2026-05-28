@@ -6,7 +6,7 @@ import FileSuggestions from "./fileSuggestions";
 
 
 export const metadata: Metadata = {
-  title: "Home - Drive"
+  title: "Home - Drive",
 };
 
 export default async function DriveHomePage() {
@@ -14,17 +14,14 @@ export default async function DriveHomePage() {
     getFileSuggestions(24),
     getFolderSuggestions(8),
   ]);
-  const isEmpty = files.length == 0 && folders.length == 0;
+  const isEmpty = files.length === 0 && folders.length === 0;
 
   return (
     <div className="flex flex-col gap-4 flex-1 overflow-y-auto min-h-0 outline-none">
       <div className="drivePageHeading shrink-0 ml-3">Welcome to Drive</div>
       {isEmpty ? (
-        <div className="ml-3">
-          <EmptyState
-            image="/assets/svg/empty_state_home.svg"
-            title="Drag your files and folders here or use the 'New' button to upload"
-          />
+        <div className="ml-3 min-h-0 h-full">
+          <EmptyState />
         </div>
       ) : (
         <div className="flex flex-col ml-3">

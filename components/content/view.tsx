@@ -7,24 +7,30 @@ import { ContentData } from "@/components/content/types";
 import ContentDropZone from "./dropzone";
 import useShowContent from "@/hooks/useShowContent";
 import useContentView from "@/hooks/useContentView";
-import EmptyState, { EmptyStateProps } from "../emptyState";
+import EmptyState from "../emptyState";
 
-
-const headings: ListViewColumn[] = ["name", "owner", "updatedAt", "fileSize", "elipsis"];
 
 export type ContentViewProps = {
-  emptyStateProps: EmptyStateProps,
-  data: ContentData[],
+  data: ContentData[];
+  isFiltered?: boolean;
 };
 
-export default function ContentView({ data, emptyStateProps }: Readonly<ContentViewProps>) {
+export default function ContentView({ data, isFiltered }: Readonly<ContentViewProps>) {
   const { showFolder, showFile } = useShowContent();
   const { gridView } = useContentView();
+
+  const headings: ListViewColumn[] = [
+    "name",
+    "owner",
+    "updatedAt",
+    "fileSize",
+    "elipsis",
+  ];
 
   return (
     <>
       <ContentDropZone>
-        {(data === null || data.length == 0) && <EmptyState {...emptyStateProps} />}
+        {(data === null || data.length == 0) && <EmptyState isFiltered={isFiltered} />}
         {
           data && data.length > 0 && (
             gridView
@@ -33,8 +39,6 @@ export default function ContentView({ data, emptyStateProps }: Readonly<ContentV
           )
         }
       </ContentDropZone>
-      {
-      }
     </>
   );
 }

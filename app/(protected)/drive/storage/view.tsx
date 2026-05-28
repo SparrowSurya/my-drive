@@ -9,7 +9,7 @@ import { ContentListView } from "@/components/content";
 import { ListViewColumn } from "@/components/content/list/types";
 import useShowContent from "@/hooks/useShowContent";
 import utils from "@/lib/utils";
-import EmptyState, { EmptyStateProps } from "@/components/emptyState";
+import EmptyState from "@/components/emptyState";
 import { faCloud } from "@fortawesome/free-solid-svg-icons";
 import Icon from "@/components/icon";
 
@@ -55,19 +55,6 @@ export default function StorageView({ data, storageUsed }: Readonly<StorageViewP
     },
   } as Option));
 
-
-  const emptyStateProps: EmptyStateProps = {
-    image: "/assets/svg/empty_state_storage.svg",
-    title: "No files are using storage",
-    para: "Items you own will use Drive storage",
-  };
-
-  const filterEmptyState: EmptyStateProps = {
-    image: "/assets/svg/empty_state_recent.svg",
-    title: "No matching results",
-    para: "Adjust your filters or try searching all of Drive",
-  };
-
   const isFiltersApplied = Object.keys(activeFilters).length > 0;
   const isEmpty = filteredData.length === 0;
 
@@ -88,18 +75,20 @@ export default function StorageView({ data, storageUsed }: Readonly<StorageViewP
         />
       </div>
       <div className="flex-1 overflow-y-auto min-h-0 ml-3">
-        <div className="mb-8 mt-4 flex flex-row gap-2 justify-items-center items-center">
-          <Icon icon={faCloud} className="w-24" style={{ transform: "scale(3)" }} />
-          <div className="">
-            <div className="text-lavender">Total used</div>
-            <div className="text-4xl text-text font-medium">
-              {utils.formatBytes(storageUsed)}
+        {!isEmpty && (
+          <div className="mb-8 mt-4 flex flex-row gap-2 justify-items-center items-center">
+            <Icon icon={faCloud} className="w-24" style={{ transform: "scale(3)" }} />
+            <div className="">
+              <div className="text-lavender">Total used</div>
+              <div className="text-4xl text-text font-medium">
+                {utils.formatBytes(storageUsed)}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex-1 flex flex-col">
+        )}
+        <div className="flex-1 flex flex-col h-full">
           {isEmpty ? (
-            <EmptyState {...(isFiltersApplied ? filterEmptyState : emptyStateProps)} />
+            <EmptyState isFiltered={isFiltersApplied} />
           ) : (
             <ContentListView
               data={filteredData}

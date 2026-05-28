@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { EmptyStateProps } from "@/components/emptyState";
 import { getRecentFilesData } from "./query";
 import ContentViewToggleButton from "@/components/contentViewToggleButton";
 import Icon from "@/components/icon";
@@ -15,12 +14,6 @@ export const metadata: Metadata = {
 export default async function RecentPage() {
   const data = await getRecentFilesData();
   const isEmpty = Object.keys(data).length == 0;
-
-  const emptyStateProps: EmptyStateProps = {
-    image: "/assets/svg/empty_state_recent.svg",
-    title: "No recent files",
-    para: "See all the files that you've recently edited or opened",
-  };
 
   const headings: ListViewColumn[] = [
     "name",
@@ -41,7 +34,7 @@ export default async function RecentPage() {
         </div>
       </div>
       <div className="ml-3 flex-1 flex flex-col min-h-0">
-        <GroupedContentView data={data} cols={headings} emptyStateProps={emptyStateProps} />
+        <GroupedContentView data={data} cols={headings} />
       </div>
     </div>
   );

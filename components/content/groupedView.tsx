@@ -2,7 +2,7 @@
 
 import React from "react";
 import useContentView from "@/hooks/useContentView";
-import EmptyState, { EmptyStateProps } from "../emptyState";
+import EmptyState from "../emptyState";
 import { GroupedContentData } from "./types";
 import GroupedContentGridView from "./grid/groupedView";
 import GroupedContentListView from "./list/groupedView";
@@ -15,15 +15,14 @@ import FileIcon from "./fileIcon";
 
 
 export type GroupedContentViewProps = {
-  data: GroupedContentData,
-  emptyStateProps: EmptyStateProps,
-  cols: ListViewColumn[],
+  data: GroupedContentData;
+  cols: ListViewColumn[];
 };
 
-export default function GroupedContentView({ data, cols, emptyStateProps }: Readonly<GroupedContentViewProps>) {
+export default function GroupedContentView({ data, cols }: Readonly<GroupedContentViewProps>) {
   const { showFolder, showFile } = useShowContent();
   const { gridView } = useContentView();
-  
+
   const { filteredData, activeFilters, applyFilter } = useFilter({ data });
 
   const selectedMimeOption = filters.mimeType.find(([label]) => activeFilters[label as string])?.[0] as string | undefined;
@@ -56,12 +55,6 @@ export default function GroupedContentView({ data, cols, emptyStateProps }: Read
     },
   } as Option));
 
-  const filterEmptyState: EmptyStateProps = {
-    image: "/assets/svg/empty_state_recent.svg",
-    title: "No matching results",
-    para: "Adjust your filters or try searching all of Drive",
-  };
-
   const isFiltersApplied = Object.keys(activeFilters).length > 0;
   const isEmpty = Object.keys(filteredData).length === 0;
 
@@ -83,9 +76,9 @@ export default function GroupedContentView({ data, cols, emptyStateProps }: Read
       </div>
 
       <div className="flex-1 flex flex-col min-h-0">
-        {(isEmpty && !isFiltersApplied) && <EmptyState {...emptyStateProps} />}
-        {(isEmpty && isFiltersApplied) && <EmptyState {...filterEmptyState} />}
-        
+        {(isEmpty && !isFiltersApplied) && <EmptyState isFiltered={isFiltersApplied} />}
+        {(isEmpty && isFiltersApplied) && <EmptyState isFiltered={isFiltersApplied} />}
+
         {!isEmpty && (
           gridView
             ? <GroupedContentGridView

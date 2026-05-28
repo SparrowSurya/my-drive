@@ -2,7 +2,7 @@
 
 import React from "react";
 import useContentView from "@/hooks/useContentView";
-import EmptyState, { EmptyStateProps } from "@/components/emptyState";
+import EmptyState from "@/components/emptyState";
 import { ContentData } from "@/components/content/types";
 import useShowContent from "@/hooks/useShowContent";
 import { ListViewColumn } from "@/components/content/list/types";
@@ -15,12 +15,11 @@ import ContentDropZone from "@/components/content/dropzone";
 
 
 export type CustomViewProps = {
-  data: ContentData[],
-  emptyStateProps: EmptyStateProps,
-  cols: ListViewColumn[],
+  data: ContentData[];
+  cols: ListViewColumn[];
 };
 
-export default function StarredCustomView({ data, cols, emptyStateProps }: Readonly<CustomViewProps>) {
+export default function StarredCustomView({ data, cols }: Readonly<CustomViewProps>) {
   const { showFolder, showFile } = useShowContent();
   const { gridView } = useContentView();
 
@@ -56,12 +55,6 @@ export default function StarredCustomView({ data, cols, emptyStateProps }: Reado
     },
   } as Option));
 
-  const filterEmptyState: EmptyStateProps = {
-    image: "/assets/svg/empty_state_recent.svg",
-    title: "No matching results",
-    para: "Adjust your filters or try searching all of Drive",
-  };
-
   const isFiltersApplied = Object.keys(activeFilters).length > 0;
   const isEmpty = filteredData.length === 0;
 
@@ -84,8 +77,8 @@ export default function StarredCustomView({ data, cols, emptyStateProps }: Reado
 
       <div className="flex-1 flex flex-col min-h-0">
         <ContentDropZone>
-          {(isEmpty && !isFiltersApplied) && <EmptyState {...emptyStateProps} />}
-          {(isEmpty && isFiltersApplied) && <EmptyState {...filterEmptyState} />}
+          {(isEmpty && !isFiltersApplied) && <EmptyState isFiltered={isFiltersApplied} />}
+          {(isEmpty && isFiltersApplied) && <EmptyState isFiltered={isFiltersApplied} />}
 
           {!isEmpty && (
             gridView

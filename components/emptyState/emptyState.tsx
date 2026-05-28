@@ -1,20 +1,23 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
+import { EmptyStateData, emptyStates } from "./constants";
+import { PageView, PageViewType } from "@/contexts/pageView";
+import usePageView from "@/hooks/usePageView";
 
 
 export type EmptyStateProps = {
-  image: string | React.ReactNode,
-  title: string | React.ReactNode,
-  para?: string | React.ReactNode,
+  data?: EmptyStateData;
+  isFiltered?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-export default function EmptyState({
-  image,
-  title,
-  para,
-  className,
-  ...props
-}: Readonly<EmptyStateProps>) {
+
+export default function EmptyState({ data, isFiltered, className, ...props }: Readonly<EmptyStateProps>) {
+  const page = usePageView();
+  const pageKey = !!isFiltered ? PageView.search as PageViewType : page;
+  const { image, title, para } = data ?? emptyStates[pageKey];
+
   return (
     <div className={className ?? "flex flex-col justify-center items-center w-full h-full"} {...props}>
       {

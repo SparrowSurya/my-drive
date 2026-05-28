@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { EmptyStateProps } from "@/components/emptyState";
 import { getTrashFiles } from "./query";
 import ContentViewToggleButton from "@/components/contentViewToggleButton";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
@@ -15,12 +14,6 @@ export const metadata: Metadata = {
 export default async function TrashPage() {
   const data = await getTrashFiles();
   const isEmpty = Object.keys(data).length == 0;
-
-  const emptyStateProps: EmptyStateProps = {
-    image: '/assets/svg/empty_state_trash.svg',
-    title: 'Trash is empty',
-    para: 'Items moved to the trash will be deleted forever after 30 days',
-  };
 
   const headings: ListViewColumn[] = [
     "name",
@@ -41,7 +34,7 @@ export default async function TrashPage() {
         </div>
       </div>
       <div className="ml-3 flex-1 flex flex-col min-h-0">
-        <GroupedContentView data={data} cols={headings} emptyStateProps={emptyStateProps} />
+        <GroupedContentView data={data} cols={headings} />
       </div>
     </div>
   );
