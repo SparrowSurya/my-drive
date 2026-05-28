@@ -51,7 +51,7 @@ export default function ContentListView({
   };
 
   return (
-    <div className={className ?? "flex flex-col h-full w-full select-none overflow-hidden"}>
+    <div className={className ?? "flex flex-col h-full w-full select-none overflow-y-auto"}>
       {showHeading && (
         <div
           className={`grid gap-x-2 h-12 border-2 border-b-surface0 border-t-transparent border-l-transparent border-r-transparent font-bold shrink-0 sticky top-0 z-10 bg-mantle`}

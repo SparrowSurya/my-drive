@@ -25,16 +25,16 @@ export default function ContentView({ data, headings, filterTypes }: Readonly<Co
   const isFiltersApplied = Object.keys(filter.activeFilters).length > 0;
 
   return (
-    <div className="flex flex-col gap-4 ml-3">
+    <div className="flex flex-col flex-1 gap-4 ml-3 min-h-0">
       <FilterButtons filter={filter} filterTypes={filterTypes} />
-      <div className="flex-1 min-h-0">
+      <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
         <ContentDropZone>
           {(data === null || data.length == 0) && <EmptyState isFiltered={isFiltersApplied} />}
           {
             data && data.length > 0 && (
               gridView
-                ? <ContentGridView data={data} showFolder={showFolder} showFile={showFile} />
-                : <ContentListView data={data} cols={headings} showFolder={showFolder} showFile={showFile} />
+                ? <ContentGridView data={filter.filteredData} showFolder={showFolder} showFile={showFile} />
+                : <ContentListView data={filter.filteredData} cols={headings} showFolder={showFolder} showFile={showFile} />
             )
           }
         </ContentDropZone>

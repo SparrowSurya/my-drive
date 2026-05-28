@@ -12,7 +12,7 @@ export async function getFolderContents(id: number): Promise<ContentData[]> {
   const { email } = session?.user ?? {};
   if (!email) return [];
 
-  const select = { id: true, name: true, updatedAt: true };
+  const select = { id: true, name: true, updatedAt: true, starred: true };
   const fileSelect = {
     ...select,
     size: true,
