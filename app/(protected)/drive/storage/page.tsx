@@ -11,8 +11,10 @@ export const metadata: Metadata = {
 };
 
 export default async function StoragePage() {
-  const files = await getFilesData();
-  const storage = await storageUsed();
+  const [files, storage] = await Promise.all([
+    getFilesData(),
+    storageUsed(),
+  ]);
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden h-full">

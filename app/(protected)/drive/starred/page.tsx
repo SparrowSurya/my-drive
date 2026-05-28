@@ -3,8 +3,9 @@ import { getStarredData } from "./query";
 import ContentViewToggleButton from "@/components/contentViewToggleButton";
 import Icon from "@/components/icon";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import StarredCustomView from "./view";
 import { ListViewColumn } from "@/components/content/list/types";
+import { FilterType } from "@/hooks/useFilter";
+import ContentView from "@/components/content/view";
 
 
 export const metadata: Metadata = {
@@ -15,6 +16,7 @@ export default async function StarredPage() {
   const data = await getStarredData();
   const isEmpty = data.length == 0;
 
+  const filterTypes: FilterType[] = ["mimeType", "updatedAt"];
   const headings: ListViewColumn[] = [
     "name",
     "owner",
@@ -33,8 +35,8 @@ export default async function StarredPage() {
           { !isEmpty && <Icon icon={faInfoCircle} hover={true} /> }
         </div>
       </div>
-      <div className="ml-3 flex-1 flex flex-col min-h-0">
-        <StarredCustomView data={data} cols={headings} />
+      <div className="flex-1 flex flex-col min-h-0">
+        <ContentView data={data} headings={headings} filterTypes={filterTypes} />
       </div>
     </div>
   );

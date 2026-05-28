@@ -20,7 +20,7 @@ export const listColumnTemplate: Record<ListViewColumn, string> = {
   "owner": "minmax(0,2fr)",
   "updatedAt": "minmax(0,2fr)",
   "deletedAt": "minmax(0,2fr)",
-  "fileSize": "minmax(0,1fr)",
+  "fileSize": "120px",
   "location": "minmax(0,2fr)",
   "elipsis": "64px",
 } as const;

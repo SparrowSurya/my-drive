@@ -124,6 +124,8 @@ const filters = {
   ],
 };
 
+export type FilterType = keyof typeof filters;
+
 const mimeTypeByLabel: Record<string, string | undefined> = {
   "Documents": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "Images": "image/png",

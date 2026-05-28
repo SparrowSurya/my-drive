@@ -31,7 +31,7 @@ export function ListColumnLocationContent({ data }: Readonly<ListColumnContentBu
 
   return (
     <div
-      className={`flex flex-row items-center`}
+      className="flex flex-row items-center"
       onDoubleClick={(e) => {
         if (data.type === "file") {
           e.stopPropagation();
@@ -39,8 +39,10 @@ export function ListColumnLocationContent({ data }: Readonly<ListColumnContentBu
         }
       }}
     >
-      <Icon icon={icon} />
-      <span className="ml-2 truncate">{ location }</span>
+      <div className="flex flex-row items-center px-2 py-1 rounded-2xl hover:bg-overlay0/50">
+        <Icon icon={icon} />
+        <span className="ml-2 truncate">{ location }</span>
+      </div>
     </div>
   );
 }

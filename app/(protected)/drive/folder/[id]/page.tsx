@@ -2,6 +2,8 @@ import { Metadata } from "next";
 import { getFolderContents, getPathSegments, getFolderName, folderDeletionStatus, getDeletedFolderContents, getDeletedPathSegments } from "./query";
 import { redirect } from "next/navigation";
 import FolderView from "./view";
+import { ListViewColumn } from "@/components/content/list/types";
+import { FilterType } from "@/hooks/useFilter";
 
 
 export async function generateMetadata({
@@ -35,10 +37,15 @@ export default async function FolderPage({
     : await getFolderContents(id);
 
   const segments = isDeleted
-    ? (await getDeletedPathSegments(id)).map((segment) => ({
-      name: segment.name,
-      url: `/drive/folder/${segment.id}`,
-    }))
+    ? (await getDeletedPathSegments(id)).map((segment) => (
+      (segment.name.length === 0) ? {
+        name: "Trash",
+        url: "/drive/trash",
+      } : {
+        name: segment.name,
+        url: `/drive/folder/${segment.id}`,
+      }
+    ))
     : (await getPathSegments(id)).map((segment) => (
       (segment.name.length === 0) ? {
         name: "My Drive",
@@ -49,7 +56,15 @@ export default async function FolderPage({
       }
     ));
 
+  const headings: ListViewColumn[] = ["name", "owner", "updatedAt", "fileSize", "elipsis"];
+  const filterTypes: FilterType[] = ["mimeType", "updatedAt"];
+
   return (
-    <FolderView data={data} segments={segments} />
+    <FolderView
+      data={data}
+      segments={segments}
+      headings={headings}
+      filterTypes={filterTypes}
+    />
   );
 }

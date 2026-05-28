@@ -8,37 +8,37 @@ import ContentDropZone from "./dropzone";
 import useShowContent from "@/hooks/useShowContent";
 import useContentView from "@/hooks/useContentView";
 import EmptyState from "../emptyState";
+import useFilter, { FilterType } from "@/hooks/useFilter";
+import FilterButtons from "../filterButtons";
 
 
 export type ContentViewProps = {
   data: ContentData[];
-  isFiltered?: boolean;
+  filterTypes: FilterType[];
+  headings: ListViewColumn[];
 };
 
-export default function ContentView({ data, isFiltered }: Readonly<ContentViewProps>) {
+export default function ContentView({ data, headings, filterTypes }: Readonly<ContentViewProps>) {
+  const filter = useFilter({ data });
   const { showFolder, showFile } = useShowContent();
   const { gridView } = useContentView();
-
-  const headings: ListViewColumn[] = [
-    "name",
-    "owner",
-    "updatedAt",
-    "fileSize",
-    "elipsis",
-  ];
+  const isFiltersApplied = Object.keys(filter.activeFilters).length > 0;
 
   return (
-    <>
-      <ContentDropZone>
-        {(data === null || data.length == 0) && <EmptyState isFiltered={isFiltered} />}
-        {
-          data && data.length > 0 && (
-            gridView
-              ? <ContentGridView data={data} showFolder={showFolder} showFile={showFile} />
-              : <ContentListView data={data} cols={headings} showFolder={showFolder} showFile={showFile} />
-          )
-        }
-      </ContentDropZone>
-    </>
+    <div className="flex flex-col gap-4 ml-3">
+      <FilterButtons filter={filter} filterTypes={filterTypes} />
+      <div className="flex-1 min-h-0">
+        <ContentDropZone>
+          {(data === null || data.length == 0) && <EmptyState isFiltered={isFiltersApplied} />}
+          {
+            data && data.length > 0 && (
+              gridView
+                ? <ContentGridView data={data} showFolder={showFolder} showFile={showFile} />
+                : <ContentListView data={data} cols={headings} showFolder={showFolder} showFile={showFile} />
+            )
+          }
+        </ContentDropZone>
+      </div>
+    </div>
   );
 }
