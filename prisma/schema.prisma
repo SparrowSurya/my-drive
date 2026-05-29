@@ -27,7 +27,8 @@ model User {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  folders Folder[]
+  folders    Folder[]
+  activities Activity[]
 
   @@map("users")
 }
@@ -39,7 +40,7 @@ model Folder {
   user   User @relation(fields: [userId], references: [id], onDelete: NoAction)
 
   name    String
-  isRoot  Boolean @default(false)
+  isRoot  Boolean  @default(false)
   starred Boolean?
 
   files    File[]
@@ -51,6 +52,8 @@ model Folder {
   deletedAt DateTime?
 
   directDelete Boolean?
+
+  activities Activity[]
 
   @@map("folders")
 }
@@ -76,7 +79,7 @@ model File {
 
   name     String
   size     Int
-  mimeType String  @default("")
+  mimeType String   @default("")
   data     Bytes
   starred  Boolean?
 
@@ -86,6 +89,29 @@ model File {
 
   directDelete Boolean?
 
+  activities Activity[]
+
   @@unique([name, folderId])
   @@map("files")
+}
+
+model Activity {
+  id Int @id @default(autoincrement())
+
+  actorId Int
+  actor   User @relation(fields: [actorId], references: [id], onDelete: NoAction)
+
+  name String
+
+  fileId Int?
+  file   File? @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  folderId Int?
+  folder   Folder? @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("activities")
 }

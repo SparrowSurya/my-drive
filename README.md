@@ -25,58 +25,13 @@ npm run build
 npm run start
 ```
 
-
-## Progress
-
-0. Misc
-* 404 page (common for all)
-* Database (local)
-* Home page
-* File Upload Toast
-
-1. Authentication
-* Signin
-* Login
-* Oauth (google)
-* Logout
-* middleware (protected routes)
-
-2. Drive
-* basic pages (home, shared-with-me, my-drive, recent, starred, trash, storage)
-* My drive: display files and folders (list view)
-* display folder contents (list view)
-* file(s)/folder(s) upload via drag drop
-* Sort & Filters
-
-3. Navbar
-* Display navlinks (with navigation)
-* Create folder (folder context)
-* Upload file (folder context)
-* Upload folder (folder context with structure)
-
-4. Files/Folder views
-* Display files & folders in list/grid view
-* Show options (download, rename, organise, share, move to trash)
-* Rename option
-* Sort & Filters
-
-5. Home
-* File suggestions
-* Folder suggestions
-* Sort & Filters
-
-6. Trash
-* Display files and folders in grouped list/grid view
-* Show options (non functional)
+## WIP
+* Activity
 
 ## Partially Tested
 * verify the magic numbers for mime types
 
-## WIP
-* Search
-
 ## TODO
-* Activity
 * Share
 * Versions
 
@@ -85,3 +40,4 @@ npm run start
 * Item selection
 * More sort options on elipsis column
 * File/Folder information
+* Advanced search filters
