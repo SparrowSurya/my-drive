@@ -1,3 +1,4 @@
+import { ContentType } from "@/lib/query/activity";
 import { TimelineGroup } from "@/lib/utils/date";
 
 interface BaseData {
@@ -14,8 +15,6 @@ interface BaseData {
   location?: string,
   starred?: boolean,
 }
-
-export type ContentType = "file" | "folder";
 
 export interface FileData extends BaseData {
   folderId?: number,
