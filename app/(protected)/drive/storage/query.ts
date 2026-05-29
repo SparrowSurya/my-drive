@@ -1,5 +1,5 @@
 import { FileData } from "@/components/content/types";
-import { getFilesByUsage } from "@/lib/query/file";
+import FileQuery from "@/lib/query/file";
 import utils from "@/lib/utils";
 import { getServerSession } from "next-auth";
 
@@ -28,8 +28,11 @@ export async function getFilesData(): Promise<FileData[]> {
         }
       }
     }
-  };
+  } as const;
+  const options = {
+    orderBy: { size: "desc" },
+  } as const;
 
-  const files = await getFilesByUsage({ email }, select);
+  const files = await FileQuery.readMany({ email }, {}, { deletedAt: null }, select, options);
   return files.map(f => utils.map2FileData(email, f));
 }

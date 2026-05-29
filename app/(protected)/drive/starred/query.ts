@@ -1,5 +1,5 @@
 import { ContentData } from "@/components/content/types";
-import { getDirectStarredFiles } from "@/lib/query/file";
+import FileQuery from "@/lib/query/file";
 import { getDirectStarredFolders } from "@/lib/query/folder";
 import utils from "@/lib/utils";
 import { getServerSession } from "next-auth";
@@ -28,7 +28,10 @@ export async function getStarredData(): Promise<ContentData[]> {
         }
       },
     }
-  };
+  } as const;
+  const fileOptions = {
+    orderBy: { updatedAt: "desc" },
+  } as const;
 
   const folderSelect = {
     id: true,
@@ -39,10 +42,10 @@ export async function getStarredData(): Promise<ContentData[]> {
     user: {
       select: { name: true, email: true },
     }
-  }
+  } as const;
 
   const [files, folders] = await Promise.all([
-    getDirectStarredFiles({ email }, fileSelect),
+    FileQuery.readMany({ email }, {}, { starred: true }, fileSelect, fileOptions),
     getDirectStarredFolders({ email }, folderSelect),
   ]);
 

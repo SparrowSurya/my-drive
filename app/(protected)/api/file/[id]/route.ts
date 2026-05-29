@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { getFile } from "@/lib/query/file";
+import FileQuery from "@/lib/query/file";
 import { ReadFileDataSchema } from "@/lib/schema";
 import utils from "@/lib/utils";
 import { detectMimeTypeFromBuffer } from "@/lib/mime/detection";
@@ -42,7 +42,7 @@ export async function GET(
   };
 
   try {
-    const f = await getFile({ email }, { id: fileId }, fileSelect, true);
+    const f = await FileQuery.read({ email }, { id: fileId }, fileSelect);
     if (f.mimeType === "") {
       f.mimeType = detectMimeTypeFromBuffer(f.data).mimeType;
     }

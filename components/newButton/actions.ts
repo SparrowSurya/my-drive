@@ -2,7 +2,7 @@
 
 import { getServerSession } from "next-auth";
 import { getOrCreateRootFolder, createFolder, folderExists, createFileTree, getFolder } from "@/lib/query/folder";
-import { addFiles } from "@/lib/query/file";
+import FileQuery from "@/lib/query/file";
 import utils from "@/lib/utils";
 import { CreateFolderSchema } from "@/lib/schema";
 
@@ -65,13 +65,11 @@ export async function uploadFiles(parentId: number, files: {
 
   try {
     const id = (parentId === 0) ? (await getOrCreateRootFolder({ email }, { id: true })).id : parentId;
-    const typedFiles = files.map(
-      (file) => ({
-        ...file,
-        data: new Uint8Array(file.data),
-      })
-    );
-    return await addFiles({ email }, { id }, typedFiles, { name: true }) ;
+    const typedFiles = files.map((file) => ({
+      file: { ...file, data: new Uint8Array(file.data) },
+      folderId: id,
+    }));
+    return await FileQuery.uploadMany({ email }, typedFiles, { name: true }) ;
   } catch {
     return "Something went wrong";
   }

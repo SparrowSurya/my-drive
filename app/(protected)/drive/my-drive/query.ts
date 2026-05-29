@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { getOrCreateRootFolder, getFolders } from "@/lib/query/folder";
-import { getFiles } from "@/lib/query/file";
+import FileQuery from "@/lib/query/file";
 import utils from "@/lib/utils";
 import type { ContentData } from "@/components/content/types";
 
@@ -33,7 +33,7 @@ export async function getFilesAndFolders(): Promise<ContentData[]> {
   }
 
   const [files, folders] = await Promise.all([
-    getFiles({ email }, fileSelect, { id: root.id }, undefined),
+    FileQuery.readMany({ email }, { id: root.id }, { deletedAt: null }, fileSelect),
     getFolders({ email }, { id: root.id }, folderSelect),
   ]);
 

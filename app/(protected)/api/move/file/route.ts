@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { moveFile } from "@/lib/query/file";
+import FileQuery from "@/lib/query/file";
 
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   const { fileId, folderId } = await req.json();
 
   try {
-    await moveFile({ email }, fileId, folderId);
+    await FileQuery.move({ email }, { id: fileId }, { id: folderId }, { name: true });
     return NextResponse.json({ message: "File moved successfully" }, { status: 200 });
   } catch {
     return NextResponse.json({ error: "Something went wrong" }, { status: 500 });

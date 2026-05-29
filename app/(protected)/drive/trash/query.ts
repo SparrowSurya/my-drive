@@ -1,5 +1,5 @@
 import { GroupedContentData } from "@/components/content/types";
-import { getDirectDeletedFiles } from "@/lib/query/file";
+import FileQuery from "@/lib/query/file";
 import { getDirectDeletedFolders } from "@/lib/query/folder";
 import utils from "@/lib/utils";
 import { groupByTimeline } from "@/lib/utils/date";
@@ -41,7 +41,7 @@ export async function getTrashFiles(): Promise<GroupedContentData> {
   }
 
   const [files, folders] = await Promise.all([
-    getDirectDeletedFiles({ email }, fileSelect),
+    FileQuery.readMany({ email }, {}, { deletedAt: { not: null }, directDelete: true }, fileSelect),
     getDirectDeletedFolders({ email }, folderSelect),
   ]);
 

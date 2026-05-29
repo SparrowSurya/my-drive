@@ -1,5 +1,5 @@
 import { FileData, FolderData } from "@/components/content/types";
-import { getRecentFiles } from "@/lib/query/file";
+import FileQuery from "@/lib/query/file";
 import { getRecentFolders } from "@/lib/query/folder";
 import utils from "@/lib/utils";
 import { getServerSession } from "next-auth";
@@ -26,7 +26,12 @@ export async function getFileSuggestions(count?: number): Promise<FileData[]> {
     },
     updatedAt: true,
   } as const;
-  const files = await getRecentFiles({ email }, select, count);
+  const options = {
+    take: count,
+    orderBy: { createdAt: "desc" },
+  } as const;
+  const files = await FileQuery.readMany({ email }, {}, { deletedAt: null }, select, options);
+
   return files.map((f) => utils.map2FileData(email, f));
 }
 

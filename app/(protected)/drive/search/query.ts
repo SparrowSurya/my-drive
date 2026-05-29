@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { FileData, FolderData } from "@/components/content/types";
-import { searchFile } from "@/lib/query/file";
+import FileQuery from "@/lib/query/file";
 import utils from "@/lib/utils";
 import { searchFolder } from "@/lib/query/folder";
 
@@ -28,7 +28,8 @@ export async function queryFiles(query: string): Promise<FileData[]> {
     },
     updatedAt: true,
   } as const;
-  const files = await searchFile({ email }, query, select);
+  const fileWhere = { name: { contains: query } };
+  const files = await FileQuery.readMany({ email }, {}, fileWhere, select);
   return files.map((f) => utils.map2FileData(email, f));
 }
 

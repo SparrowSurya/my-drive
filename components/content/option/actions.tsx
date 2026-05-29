@@ -2,7 +2,7 @@
 
 import { getServerSession } from "next-auth";
 import { restoreFolder, softDeleteFolder, starFolder, unstarFolder, updateFolder } from "@/lib/query/folder";
-import { restoreFile, softDeleteFile, starFile, unstarFile, updateFile } from "@/lib/query/file";
+import FileQuery from "@/lib/query/file";
 import { RenameFolderSchema, RenameFileSchema, FileSoftDeleteSchema, FolderSoftDeleteSchema } from "@/lib/schema";
 
 
@@ -73,7 +73,7 @@ export async function FileRenameAction(state: RenameFileFormState, formData: For
   const oldName = state.fileName;
 
   try {
-    const { name } = await updateFile({ email }, { id: fileId }, { name: fileName }, { name: true });
+    const { name } = await FileQuery.rename({ email }, { id: fileId }, fileName, { name: true });
     return {
       ...result.data,
       success: true,
@@ -118,7 +118,7 @@ export async function FileSoftDeleteAction(
   };
 
   try {
-    const { name } = await softDeleteFile({ email }, { id: fileId }, { name: true });
+    const { name } = await FileQuery.trash({ email }, { id: fileId }, { name: true });
     return {
       ...result.data,
       success: true,
@@ -139,7 +139,7 @@ export async function restoreDeletedFile(id: number): Promise<boolean> {
 
   let success = true;
   try {
-    await restoreFile({ email }, id);
+    await FileQuery.restore({ email }, { id }, { name: true });
   } catch {
     success = false;
   }
@@ -212,12 +212,14 @@ export async function addFileStar(id: number): Promise<boolean> {
   const { email } = session?.user ?? {};
   if (!email) return false;
 
+  let success = true;
   try {
-    await starFile({ email }, id);
-    return true;
+    await FileQuery.star({ email }, { id }, { name: true });
   } catch {
-    return false;
+    success = false;
   }
+
+  return success;
 }
 
 export async function removeFileStar(id: number): Promise<boolean> {
@@ -225,12 +227,14 @@ export async function removeFileStar(id: number): Promise<boolean> {
   const { email } = session?.user ?? {};
   if (!email) return false;
 
+  let success = true;
   try {
-    await unstarFile({ email }, id);
-    return true;
+    await FileQuery.unstar({ email }, { id }, { name: true });
   } catch {
-    return false;
+    success = false;
   }
+
+  return success;
 }
 
 export async function addFolderStar(id: number): Promise<boolean> {

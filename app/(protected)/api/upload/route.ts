@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { addFileWithRelativePath } from "@/lib/query/file";
+import FileQuery from "@/lib/query/file";
 import { FileUploadSchema } from "@/lib/schema";
 import utils from "@/lib/utils";
 
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
   const fileName = rawPath.split("/").pop() || file.name;
 
   try {
-    const newFile = await addFileWithRelativePath({ email }, {
+    const newFile = await FileQuery.uploadPath({ email }, {
       name: fileName,
       data: new Uint8Array(arrayBuf),
       folderId,

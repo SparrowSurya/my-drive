@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { getFile } from "@/lib/query/file";
+import FileQuery from "@/lib/query/file";
 import { FileDownloadSchema } from "@/lib/schema";
 import utils from "@/lib/utils";
 
@@ -25,7 +25,7 @@ export async function GET(
   const fileId  = result.data.id;
   const select = { name: true, data: true, mimeType: true };
   try {
-    const file = await getFile({ email }, { id: fileId }, select);
+    const file = await FileQuery.read({ email }, { id: fileId }, select);
     const bytes = new Uint8Array(file.data);
     return new NextResponse(bytes, {
       headers: {

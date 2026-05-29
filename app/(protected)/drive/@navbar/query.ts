@@ -1,4 +1,4 @@
-import { getStorageUsed } from "@/lib/query/file";
+import FileQuery from "@/lib/query/file";
 import { getServerSession } from "next-auth";
 
 
@@ -8,7 +8,7 @@ export async function storageUsed(): Promise<number> {
   if (!email) return 0;
 
   try {
-    return await getStorageUsed({ email });
+    return await FileQuery.readStorageUsed({ email });
   } catch {}
 
   return 0;

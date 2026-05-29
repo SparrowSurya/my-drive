@@ -2,7 +2,7 @@
 
 import { getServerSession } from "next-auth";
 import { getDeletedChildFolders, getDeletedParentHierarchy, getFolder, getFolders, getParentHierarchy, isFolderDeleted } from "@/lib/query/folder";
-import { getDeletedFiles, getFiles } from "@/lib/query/file";
+import FileQuery from "@/lib/query/file";
 import type { ContentData } from "@/components/content/types";
 import utils from "@/lib/utils";
 
@@ -36,7 +36,7 @@ export async function getFolderContents(id: number): Promise<ContentData[]> {
   }
 
   const [files, folders] = await Promise.all([
-    getFiles({ email }, fileSelect, { id }),
+    FileQuery.readMany({ email }, { id }, { deletedAt: null }, fileSelect),
     getFolders({ email }, { id }, folderSelect),
   ]);
 
@@ -113,7 +113,7 @@ export async function getDeletedFolderContents(id: number): Promise<ContentData[
 
   try {
     const [files, folders] = await Promise.all([
-      getDeletedFiles({ email }, id, fileSelect),
+      FileQuery.readMany({ email }, { id }, {}, fileSelect),
       getDeletedChildFolders({ email }, id, folderSelect),
     ]);
     return [

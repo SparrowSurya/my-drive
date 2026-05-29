@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { GroupedContentData } from "@/components/content/types";
-import { getRecentFiles } from "@/lib/query/file";
+import FileQuery from "@/lib/query/file";
 import utils from "@/lib/utils";
 import { groupByTimeline } from "@/lib/utils/date";
 
@@ -26,7 +26,7 @@ export async function getRecentFilesData(count?: number): Promise<GroupedContent
       },
     },
   } as const;
-  const files = await getRecentFiles({ email }, select, count);
+  const files = await FileQuery.readMany({ email }, {}, { deletedAt: null }, select, { take: count });
   const filesData = files.map((f) => utils.map2FileData(email, f));
   filesData.forEach((f) => f.reason = undefined);
   return groupByTimeline(filesData, (i) => i.updatedAt!);
