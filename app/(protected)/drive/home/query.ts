@@ -1,8 +1,7 @@
-import { FileData, FolderData } from "@/components/content/types";
-import FileQuery from "@/lib/query/file";
-import FolderQuery from "@/lib/query/folder";
-import utils from "@/lib/utils";
 import { getServerSession } from "next-auth";
+import { FileData, FolderData } from "@/components/content/types";
+import { FolderQuery, FileQuery } from "@/lib/query";
+import utils from "@/lib/utils";
 
 
 export async function getFileSuggestions(count?: number): Promise<FileData[]> {

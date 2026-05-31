@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import FolderQuery from "@/lib/query/folder";
+import { FolderQuery } from "@/lib/query";
 import { FolderDownloadSchema } from "@/lib/schema";
 import utils from "@/lib/utils";
 import { zipFiles } from "@/lib/zip";

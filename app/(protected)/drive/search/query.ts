@@ -1,8 +1,7 @@
 import { getServerSession } from "next-auth";
 import { FileData, FolderData } from "@/components/content/types";
-import FileQuery from "@/lib/query/file";
 import utils from "@/lib/utils";
-import FolderQuery from "@/lib/query/folder";
+import { FolderQuery, FileQuery } from "@/lib/query";
 
 
 export async function queryFiles(query: string): Promise<FileData[]> {

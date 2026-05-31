@@ -1,8 +1,7 @@
 "use server";
 
 import { getServerSession } from "next-auth";
-import FolderQuery from "@/lib/query/folder";
-import FileQuery from "@/lib/query/file";
+import { FolderQuery, FileQuery } from "@/lib/query";
 import { RenameFolderSchema, RenameFileSchema, FileSoftDeleteSchema, FolderSoftDeleteSchema } from "@/lib/schema";
 
 

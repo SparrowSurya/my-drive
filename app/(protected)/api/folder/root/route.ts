@@ -1,6 +1,6 @@
-import FolderQuery from "@/lib/query/folder";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import { FolderQuery } from "@/lib/query";
 
 
 export async function GET(): Promise<NextResponse> {

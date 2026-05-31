@@ -1,4 +1,4 @@
-import FileQuery from "@/lib/query/file";
+import { FileQuery } from "@/lib/query";
 import { getServerSession } from "next-auth";
 
 

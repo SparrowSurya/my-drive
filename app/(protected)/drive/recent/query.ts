@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { GroupedContentData } from "@/components/content/types";
-import FileQuery from "@/lib/query/file";
+import { FileQuery } from "@/lib/query";
 import utils from "@/lib/utils";
 import { groupByTimeline } from "@/lib/utils/date";
 
