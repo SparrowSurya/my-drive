@@ -1,6 +1,6 @@
 import { GroupedContentData } from "@/components/content/types";
 import FileQuery from "@/lib/query/file";
-import { getDirectDeletedFolders } from "@/lib/query/folder";
+import FolderQuery from "@/lib/query/folder";
 import utils from "@/lib/utils";
 import { groupByTimeline } from "@/lib/utils/date";
 import { getServerSession } from "next-auth";
@@ -28,21 +28,28 @@ export async function getTrashFiles(): Promise<GroupedContentData> {
         }
       },
     }
-  };
+  } as const;
 
   const folderSelect = {
     id: true,
     name: true,
     updatedAt: false,
     deletedAt: true,
+    parent: {
+      select: {
+        parent: { select: { id: true, name: true } },
+      },
+    },
     user: {
       select: { name: true, email: true },
     }
-  }
+  } as const;
+
+  const where = { deletedAt: { not: null }, directDelete: true };
 
   const [files, folders] = await Promise.all([
-    FileQuery.readMany({ email }, {}, { deletedAt: { not: null }, directDelete: true }, fileSelect),
-    getDirectDeletedFolders({ email }, folderSelect),
+    FileQuery.readMany({ email }, {}, where, fileSelect),
+    FolderQuery.readMany({ email }, where, folderSelect),
   ]);
 
   const filesData = files.map(f => utils.map2FileData(email, f));

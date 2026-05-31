@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { moveFolder } from "@/lib/query/folder";
+import FolderQuery from "@/lib/query/folder";
 
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   const { folderId, targetFolderId } = await req.json();
 
   try {
-    await moveFolder({ email }, folderId, targetFolderId);
+    await FolderQuery.move({ email }, { id: folderId }, { id: targetFolderId }, { id: true });
     return NextResponse.json({ message: "Folder moved successfully" }, { status: 200 });
   } catch {
     return NextResponse.json({ error: "Something went wrong" }, { status: 500 });

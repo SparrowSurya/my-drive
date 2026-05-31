@@ -1,7 +1,7 @@
 "use server";
 
 import { getServerSession } from "next-auth";
-import { getOrCreateRootFolder, createFolder, folderExists, createFileTree, getFolder } from "@/lib/query/folder";
+import FolderQuery from "@/lib/query/folder";
 import FileQuery from "@/lib/query/file";
 import utils from "@/lib/utils";
 import { CreateFolderSchema } from "@/lib/schema";
@@ -31,16 +31,14 @@ export async function createFolderAction(state: CreateFolderFormState, formData:
   };
 
   const { folderName, parentId } = result.data;
-  if (parentId !== 0 && await folderExists({ user: { email }, name: folderName, parent: { parentId } })) return {
-    ...state,
-    errors: { folderName: ["Folder already exists"] },
-  };
 
   try {
-    const id = (parentId === 0) ? (await getOrCreateRootFolder({ email }, { id: true })).id : parentId;
-    const parentFolder = await getFolder({ email }, { id }, { name: true, isRoot: true });
+    const id = (parentId === 0)
+      ? (await FolderQuery.readRoot({ email }, { id: true })).id
+      : parentId;
+    const parentFolder = await FolderQuery.read({ email }, { id }, { name: true, isRoot: true });
     const parentName = parentFolder?.isRoot ? "My Drive" : parentFolder?.name;
-    const { name } = await createFolder({ email }, { id }, { name: folderName }, { name: true });
+    const { name } = await FolderQuery.create({ email }, { id }, { name: folderName }, { name: true });
     return {
       ...result.data,
       success: true,
@@ -64,7 +62,9 @@ export async function uploadFiles(parentId: number, files: {
   if (!email) return "Something went wrong";
 
   try {
-    const id = (parentId === 0) ? (await getOrCreateRootFolder({ email }, { id: true })).id : parentId;
+    const id = (parentId === 0)
+      ? (await FolderQuery.readRoot({ email }, { id: true })).id
+      : parentId;
     const typedFiles = files.map((file) => ({
       file: { ...file, data: new Uint8Array(file.data) },
       folderId: id,
@@ -92,8 +92,10 @@ export async function uploadFolder(parentId: number, files: {
       data: new Uint8Array(file.data),
     }));
     const tree = utils.buildDirectory(typedFiles);
-    const id = (parentId === 0) ? (await getOrCreateRootFolder({ email }, { id: true })).id : parentId;
-    await createFileTree({ email }, { id }, tree);
+    const id = (parentId === 0)
+      ? (await FolderQuery.readRoot({ email }, { id: true })).id
+      : parentId;
+    await FolderQuery.createTree({ email }, { id }, tree);
   } catch {
     return "Something went wrong";
   }

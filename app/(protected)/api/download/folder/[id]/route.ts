@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { getFolder, getFolderContents } from "@/lib/query/folder";
+import FolderQuery from "@/lib/query/folder";
 import { FolderDownloadSchema } from "@/lib/schema";
 import utils from "@/lib/utils";
 import { zipFiles } from "@/lib/zip";
@@ -25,8 +25,8 @@ export async function GET(
   const { email } = session.user;
   const folderId  = result.data.id;
   try {
-    const files = await getFolderContents({ email }, { id: folderId }, { name: true, data: true });
-    const folder = await getFolder({ email }, { id: folderId }, { name: true });
+    const files = await FolderQuery.readChildContents({ email }, { id: folderId }, { name: true, data: true });
+    const folder = await FolderQuery.read({ email }, { id: folderId }, { name: true });
     const zipData = await zipFiles(files);
     const bytes = new Uint8Array(zipData);
     return new NextResponse(bytes, {

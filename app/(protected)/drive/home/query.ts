@@ -1,6 +1,6 @@
 import { FileData, FolderData } from "@/components/content/types";
 import FileQuery from "@/lib/query/file";
-import { getRecentFolders } from "@/lib/query/folder";
+import FolderQuery from "@/lib/query/folder";
 import utils from "@/lib/utils";
 import { getServerSession } from "next-auth";
 
@@ -44,10 +44,14 @@ export async function getFolderSuggestions(count?: number): Promise<FolderData[]
     id: true,
     name: true,
     starred: true,
-    parent: { select: { id: true } },
+    parent: { select: { parent: { select: {id: true, name: true} } } },
     user: { select: { name: true, email: true } },
     updatedAt: true,
   } as const;
-  const folders = await getRecentFolders({ email }, select, count);
+  const options = {
+    take: count,
+    orderBy: { createdAt: "desc" },
+  } as const;
+  const folders = await FolderQuery.readMany({ email }, {}, select, options);
   return folders.map((f) => utils.map2FolderData(email, f));
 }

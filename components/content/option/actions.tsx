@@ -1,7 +1,7 @@
 "use server";
 
 import { getServerSession } from "next-auth";
-import { restoreFolder, softDeleteFolder, starFolder, unstarFolder, updateFolder } from "@/lib/query/folder";
+import FolderQuery from "@/lib/query/folder";
 import FileQuery from "@/lib/query/file";
 import { RenameFolderSchema, RenameFileSchema, FileSoftDeleteSchema, FolderSoftDeleteSchema } from "@/lib/schema";
 
@@ -32,7 +32,7 @@ export async function FolderRenameAction(state: RenameFolderFormState, formData:
   const oldName = state.folderName;
 
   try {
-    const { name } = await updateFolder({ email }, { id: folderId }, { name: folderName }, { name: true });
+    const { name } = await FolderQuery.rename({ email }, { id: folderId }, folderName, { name: true });
     return {
       ...result.data,
       success: true,
@@ -178,7 +178,7 @@ export async function FolderSoftDeleteAction(
   };
 
   try {
-    const { name } = await softDeleteFolder({ email }, folderId);
+    const { name } = await FolderQuery.trash({ email }, { id: folderId }, { name: true });
     return {
       ...result.data,
       success: true,
@@ -199,7 +199,7 @@ export async function restoreDeletedFolder(id: number): Promise<boolean> {
 
   let success = true;
   try {
-    await restoreFolder({ email }, id);
+    await FolderQuery.restore({ email }, { id }, { name: true });
   } catch {
     success = false;
   }
@@ -243,7 +243,7 @@ export async function addFolderStar(id: number): Promise<boolean> {
   if (!email) return false;
 
   try {
-    await starFolder({ email }, id);
+    await FolderQuery.star({ email }, { id }, { name: true });
     return true;
   } catch {
     return false;
@@ -256,7 +256,7 @@ export async function removeFolderStar(id: number): Promise<boolean> {
   if (!email) return false;
 
   try {
-    await unstarFolder({ email }, id);
+    await FolderQuery.unstar({ email }, { id }, { name: true });
     return true;
   } catch {
     return false;

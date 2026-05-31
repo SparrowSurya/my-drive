@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getFolderContents, getPathSegments, getFolderName, folderDeletionStatus, getDeletedFolderContents, getDeletedPathSegments } from "./query";
+import { getFolderContents, getPathSegments, getFolderName, folderDeletionStatus } from "./query";
 import { redirect } from "next/navigation";
 import FolderView from "./view";
 import { ListViewColumn } from "@/components/content/list/types";
@@ -25,36 +25,21 @@ export default async function FolderPage({
   params: Promise<{ id: string }>,
 }>) {
   const id = parseInt((await params).id);
-  if (id === 0) {
-    return redirect("/drive/my-drive");
-  }
+  if (id === 0) redirect("/drive/my-drive");
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isDeleted, directDelete] = await folderDeletionStatus(id);
+  const { deleted: isDeletedFolder } = await folderDeletionStatus(id);
 
-  const data = isDeleted
-    ? await getDeletedFolderContents(id)
-    : await getFolderContents(id);
+  const data = await getFolderContents(id, isDeletedFolder);
 
-  const segments = isDeleted
-    ? (await getDeletedPathSegments(id)).map((segment) => (
-      (segment.name.length === 0) ? {
-        name: "Trash",
-        url: "/drive/trash",
-      } : {
-        name: segment.name,
-        url: `/drive/folder/${segment.id}`,
-      }
-    ))
-    : (await getPathSegments(id)).map((segment) => (
-      (segment.name.length === 0) ? {
-        name: "My Drive",
-        url: "/drive/my-drive",
-      } : {
-        name: segment.name,
-        url: `/drive/folder/${segment.id}`,
-      }
-    ));
+  const segments = [
+    isDeletedFolder
+      ? { name: "Trash", url: "/drive/trash" }
+      : { name: "My Drive", url: "/drive/my-drive" },
+    ...(await getPathSegments(id, isDeletedFolder)).map((e) => ({
+        name: e.name,
+        url: `/drive/folder/${e.id}`,
+    })),
+  ];
 
   const headings: ListViewColumn[] = ["name", "owner", "updatedAt", "fileSize", "elipsis"];
   const filterTypes: FilterType[] = ["mimeType", "updatedAt"];

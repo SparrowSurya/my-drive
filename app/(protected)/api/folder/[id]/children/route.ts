@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { FolderChildrenDataSchema } from "@/lib/schema";
 import utils from "@/lib/utils";
-import { getChildren } from "@/lib/query/folder";
+import FolderQuery from "@/lib/query/folder";
 
 
 export async function GET(
@@ -26,16 +26,17 @@ export async function GET(
   const select = {
     id: true,
     name: true,
-    parent: {
-      select: { id: true },
-    },
+    parent: { select: { parent: { select: {id: true, name: true} } } },
     user: {
       select: { name: true, email: true },
     },
   } as const;
 
   try {
-    const folders = await getChildren({ email }, select, folderId);
+    const parentId = !!folderId
+      ? folderId
+      : (await FolderQuery.readRoot({ email }, { id: true })).id;
+    const folders = await FolderQuery.readChildFolders({ email }, { id: parentId }, {}, select);
     const foldersData = folders.map((f) => utils.map2FolderData(email, f));
     foldersData.forEach((f) => f.reason = undefined);
     return NextResponse.json(foldersData, { status: 200 });

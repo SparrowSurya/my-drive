@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { FileData, FolderData } from "@/components/content/types";
 import FileQuery from "@/lib/query/file";
 import utils from "@/lib/utils";
-import { searchFolder } from "@/lib/query/folder";
+import FolderQuery from "@/lib/query/folder";
 
 
 export async function queryFiles(query: string): Promise<FileData[]> {
@@ -34,8 +34,8 @@ export async function queryFiles(query: string): Promise<FileData[]> {
 }
 
 
-export async function queryFolders(query: string): Promise<FolderData[]> {
-  if (query === "") return [];
+export async function queryFolders(q: string): Promise<FolderData[]> {
+  if (q === "") return [];
 
   const session = await getServerSession();
   const email = session?.user.email;
@@ -45,10 +45,17 @@ export async function queryFolders(query: string): Promise<FolderData[]> {
     id: true,
     name: true,
     starred: true,
-    parent: { select: { id: true } },
+    parent: { select: { parent: { select: {id: true, name: true} } } },
     user: { select: { name: true, email: true } },
     updatedAt: true,
   } as const;
-  const folders = await searchFolder({ email }, query, select);
+
+  const query = {
+    name: { contains: q },
+    deletedAt: null,
+    isRoot: false,
+  };
+
+  const folders = await FolderQuery.readMany({ email }, query, select);
   return folders.map((f) => utils.map2FolderData(email, f));
 }

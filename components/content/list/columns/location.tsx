@@ -4,8 +4,6 @@ import { faFolder, faHardDrive } from "@fortawesome/free-solid-svg-icons";
 import { ListColumnContentBuilderProps, ListColumnHeadingBuilderProps } from "../types";
 import Icon from "@/components/icon";
 import useShowContent from "@/hooks/useShowContent";
-
-
 import usePageView from "@/hooks/usePageView";
 
 
@@ -25,9 +23,7 @@ export function ListColumnLocationContent({ data }: Readonly<ListColumnContentBu
   const { showFolder } = useShowContent();
 
   const icon = !!data.parent ? faFolder : faHardDrive;
-  const location = data.type === "file"
-    ? data.location ?? "My Drive"
-    : !!data.parent ? data.parent : "My Drive";
+  const location = data.location === "" ? "My Drive" : data.location ?? "My Drive";
 
   return (
     <div
