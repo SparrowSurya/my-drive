@@ -18,7 +18,11 @@ type LooseFolder<S extends Prisma.FolderDefaultArgs> = DeepPartial<Prisma.Folder
     name: string;
   } | null;
   parent?: {
-    id: number;
+    parentId?: number;
+    parent?: {
+      id: number;
+      name: string;
+    } | null;
   } | null;
   children?: Array<LooseFolder<S>> | null;
 };
@@ -81,7 +85,9 @@ export function map2FolderData<S extends Prisma.FolderDefaultArgs>(
     updatedAt: extract<Date>(folder, "updatedAt", Date),
     deletedAt: extract<Date>(folder, "deletedAt", Date),
     starred: extract<boolean>(folder, "starred", "boolean"),
-    parentId: extract<number>(folder.parent, "parentId", "number"),
+    parentId: extract<number>(folder.parent, "parentId", "number")
+      ?? extract<number>(folder.parent?.parent, "id", "number"),
+    location: extract<string>(folder.parent?.parent, "name", "string"),
     children: children?.map((f) => map2FolderData(ownerEmail, f)),
   };
 }

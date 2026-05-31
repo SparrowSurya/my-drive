@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { Prisma } from "@/app/generated/prisma";
-import { getOrCreateRootFolder, isFolderDeleted } from "./folder";
+import FolderQuery, { getOrCreateRootFolder, isFolderDeleted } from "./folder";
 import { detectMimeTypeFromBuffer } from "../mime/detection";
 
 
@@ -329,9 +329,7 @@ export async function searchFile<T extends Prisma.FileSelect>(
   });
 }
 
-/**
- * Provide query interface for actual prisma queries.
- */
+/** Singleton query interface for prisma queries for file(s). */
 export default class FileQuery {
 
   /** Upload a single file. */
@@ -460,7 +458,7 @@ export default class FileQuery {
   static async updateMany<S extends Prisma.FileSelect>(
     user: Prisma.UserWhereUniqueInput,
     where: Prisma.FileWhereInput,
-    values: Prisma.FileUpdateInput,
+    values: Prisma.FileUncheckedUpdateInput,
     select: S,
     // TODO: activities action list
   ): Promise<Prisma.FileGetPayload<{ select: S }>[]> {
@@ -522,17 +520,6 @@ export default class FileQuery {
     return await this.updateMany(user, where, { starred: false }, select);
   }
 
-  /** Move specific file. */
-  static async move<S extends Prisma.FileSelect>(
-    user: Prisma.UserWhereUniqueInput,
-    where: Prisma.FileWhereUniqueInput,
-    folder: Prisma.FolderWhereUniqueInput,
-    select: S,
-  ): Promise<Prisma.FileGetPayload<{ select: S }>> {
-    const data = { folder: { connect: folder }, };
-    return await this.update(user, where, data, select);
-  }
-
   /** Move multiple files. */
   static async moveMany<S extends Prisma.FileSelect>(
     user: Prisma.UserWhereUniqueInput,
@@ -540,8 +527,12 @@ export default class FileQuery {
     folder: Prisma.FolderWhereUniqueInput,
     select: S,
   ): Promise<Prisma.FileGetPayload<{ select: S }>[]> {
-    const data = { folder: { connect: folder }, };
-    return await this.updateMany(user, where, data, select);
+    const targetFolder = await prisma.folder.findFirstOrThrow({
+      where: { ...folder, user },
+      select: { id: true }
+    });
+
+    return await this.updateMany(user, where, { folderId: targetFolder.id }, select);
   }
 
   /** Move file to trash */
@@ -594,12 +585,11 @@ export default class FileQuery {
     let isParentDeleted = false;
 
     if (folderId === 0) {
-      const root = await getOrCreateRootFolder(user, { id: true, deletedAt: true });
+      const root = await FolderQuery.readRoot(user, { id: true, deletedAt: true });
       folderId = root.id;
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const [isDeleted, directDelete] = await isFolderDeleted(user, folderId);
-      isParentDeleted = isDeleted;
+      const folder = await FolderQuery.read(user, { id: folderId }, { deletedAt: true });
+      isParentDeleted = folder.deletedAt !== null;
     }
 
     const deletedArgs = isParentDeleted ? {
