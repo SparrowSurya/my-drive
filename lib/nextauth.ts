@@ -1,7 +1,7 @@
 import { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import { createUser, getUniqueUser, updateUser } from "./query/user";
+import UserQuery from "./query/user";
 import { matchPassword } from "./query/auth";
 import { isLoginRoute, isSigninRoute } from "./utils/urls";
 import { LoginSchema, SigninSchema } from "./schema";
@@ -28,13 +28,13 @@ export const authOptions = {
 				password: false,
 			};
 
-			const existingUser = await getUniqueUser({ email }, select);
+			const existingUser = await UserQuery.readSafe({ email }, select);
 			return !!existingUser;
 		},
 		async session(data) {
 			const { email } = data.token;
 			if (email) {
-				const user = await getUniqueUser({ email });
+				const user = await UserQuery.readSafe({ email }, { profilePic: true, name: true });
 				if (user) {
 					return {
 						...data.session,
@@ -64,7 +64,7 @@ export const authOptions = {
 
 				const { name, email, password } = credentials!;
 				const select = { id: true, name: true, email: true, profilePic: true, password: true };
-				const existingUser = await getUniqueUser({ email }, select);
+				const existingUser = await UserQuery.readSafe({ email }, select);
 
 				const url = req?.body?.callbackUrl?.toString() ?? "";;
 				const login = url.length == 0 ? false : isLoginRoute(url);
@@ -110,7 +110,7 @@ export const authOptions = {
 
 					const safeData = { ...result.data, confirmPassword: undefined, authProvider: null };
 					const select = { id: true, name: true,	email: true,	profilePic: true,	password: false };
-					const user = await createUser(safeData, select);
+					const user = await UserQuery.create(safeData, select);
 					return {
 						id: user.id.toString(),
 						name: user.name,
@@ -128,16 +128,16 @@ export const authOptions = {
 			profile: async (profile: Record<string, string>) => {
 				const { name, email, picture } = profile;
 				const select = { id: true, name: true, email: true, profilePic: true };
-				const existingUser = await getUniqueUser({ email }, select);
+				const existingUser = await UserQuery.readSafe({ email }, select);
 				if (existingUser) {
 					if (existingUser.name != name) {
-						await updateUser({ name }, { email });
+						await UserQuery.update({ name }, { email }, { id: true });
 					}
 					return { ...existingUser, name, id: existingUser.id.toString() };
 				}
 
 				const data = { name, email, profilePic: picture, authProvider: "google" };
-				const user = await createUser(data, select);
+				const user = await UserQuery.create(data, select);
 				return { ...user, id: user.id.toString() };
 			},
 		}),
