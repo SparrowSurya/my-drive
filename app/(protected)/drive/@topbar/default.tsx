@@ -1,6 +1,7 @@
 import Image from "next/image";
 import ProfileInfo from "./profile";
 import ContentSearchInput from "./search";
+import { Suspense } from "react";
 
 
 export default async function Header() {
@@ -15,7 +16,9 @@ export default async function Header() {
         />
         <span className="text-2xl text-text">Drive</span>
       </div>
-      <ContentSearchInput />
+      <Suspense fallback={null}>
+        <ContentSearchInput className="col-span-5" />
+      </Suspense>
       <div className="col-span-3 flex flex-row justify-end items-center gap-2">
         <ProfileInfo />
       </div>

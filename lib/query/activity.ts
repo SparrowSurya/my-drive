@@ -17,7 +17,7 @@ export enum ActivityAction {
 export type ContentType = "file" | "folder";
 
 /**
- * Provide a queries interface for actual prisma queries.
+ * Provide query interface for actual prisma queries.
  */
 export default class ActivityQuery {
 

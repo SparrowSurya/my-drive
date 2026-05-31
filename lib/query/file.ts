@@ -520,6 +520,17 @@ export default class FileQuery {
     return await this.updateMany(user, where, { starred: false }, select);
   }
 
+  /** Move specific file. */
+  static async move<S extends Prisma.FileSelect>(
+    user: Prisma.UserWhereUniqueInput,
+    where: Prisma.FileWhereUniqueInput,
+    folder: Prisma.FolderWhereUniqueInput,
+    select: S,
+  ): Promise<Prisma.FileGetPayload<{ select: S }>> {
+    const data = { folder: { connect: folder }, };
+    return await this.update(user, where, data, select);
+  }
+
   /** Move multiple files. */
   static async moveMany<S extends Prisma.FileSelect>(
     user: Prisma.UserWhereUniqueInput,

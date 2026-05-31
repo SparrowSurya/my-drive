@@ -47,7 +47,7 @@ export default function LoginForm() {
 
   return (
     <>
-      { errors?.message && <div className="text-red text-center border-1 border-red py-2 mb-5">{`❗${errors.message}`}</div> }
+      { errors?.message && <div className="text-red text-center border border-red py-2 mb-5">{`❗${errors.message}`}</div> }
       <Form
         onSubmit={handleSubmit}
         className="w-full flex flex-col gap-3 font-poppins"

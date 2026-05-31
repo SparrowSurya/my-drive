@@ -41,3 +41,5 @@ npm run start
 * More sort options on elipsis column
 * File/Folder information
 * Advanced search filters
+* Confirmation email for account activation
+* Pagination/streaming for content view

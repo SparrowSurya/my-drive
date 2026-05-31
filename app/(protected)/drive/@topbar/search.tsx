@@ -9,7 +9,9 @@ import usePageView from "@/hooks/usePageView";
 import { PageView } from "@/contexts/pageView";
 
 
-export default function ContentSearchInput() {
+export type ContentSearchInputProps = React.HTMLAttributes<HTMLFormElement>;
+
+export default function ContentSearchInput(props: Readonly<ContentSearchInputProps>) {
   const fieldName = "query";
   const formRef = useRef<HTMLFormElement| null>(null);
   const router = useRouter()
@@ -28,7 +30,7 @@ export default function ContentSearchInput() {
   };
 
   return (
-    <form ref={formRef} className="col-span-5" onSubmit={onSubmit}>
+    <form {...props} ref={formRef} onSubmit={onSubmit}>
       <div className="flex flex-row items-center bg-surface0 gap-3 p-2 rounded-4xl">
         <Icon icon={faMagnifyingGlass} hover onClick={() => formRef.current?.requestSubmit()} />
         <Input

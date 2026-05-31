@@ -16,6 +16,8 @@ export type EmptyStateProps = {
 export default function EmptyState({ data, isFiltered, className, ...props }: Readonly<EmptyStateProps>) {
   const page = usePageView();
   const pageKey = !!isFiltered ? PageView.search as PageViewType : page;
+  if (!pageKey) return null;
+
   const { image, title, para } = data ?? emptyStates[pageKey];
 
   return (
